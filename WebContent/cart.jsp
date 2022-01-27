@@ -1,11 +1,11 @@
-<%@page import="it.unisa.model.MaterialBean"%>
+<%@page import="materiale.MaterialBean"%>
 <%@page import="java.util.Collection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.Collection"%>
 <%@page import="it.unisa.model.*"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="it.unisa.model.CourseBean"%>
+<%@page import="materiale.*"%>
 <!DOCTYPE html>
 <html>
 <head>

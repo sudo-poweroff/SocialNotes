@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="java.sql.Date,it.unisa.model.*,java.util.Collection,java.util.Iterator"%>
+    pageEncoding="ISO-8859-1" import="java.sql.Date,materiale.*,profilo.*,java.util.Collection,java.util.Iterator"%>
     
 <%@ page import ="java.io.InputStream" %>
 <%@page import="com.mysql.cj.jdbc.Blob"%>  

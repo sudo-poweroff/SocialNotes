@@ -1,7 +1,4 @@
-<%@page import="it.unisa.model.FriendsModelDS"%>
-<%@page import="it.unisa.model.UserModelDS"%>
-<%@page import="it.unisa.model.FriendsBean"%>
-<%@page import="it.unisa.model.UserBean"%>
+<%@page import="profilo.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="javax.sql.DataSource"%>

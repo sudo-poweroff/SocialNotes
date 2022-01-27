@@ -1,7 +1,10 @@
-<%@page import="it.unisa.model.PaymentMethodBean"%>
-<%@page import="it.unisa.model.PaymentMethodModelDS"%>
+<%-- <%@page import="it.unisa.model.PaymentMethodBean"%>
+<%@page import="it.unisa.model.PaymentMethodModelDS"%> --%>
+<%@page import="materiale.MaterialBean"%>
+<%@page import="profilo.PaymentMethodBean"%>
+<%@page import="profilo.PaymentMethodModelDS"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" %>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Iterator"%>

@@ -1,15 +1,10 @@
-<%@page import="it.unisa.model.CourseBean"%>
-<%@page import="it.unisa.model.CourseModelDS"%>
-<%@page import="it.unisa.model.MaterialBean"%>
-<%@page import="it.unisa.model.FeedbackBean"%>
-<%@page import="it.unisa.model.UserBean"%>
+<%@page import="materiale.*"%>
+<%@page import="profilo.*"%>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="java.util.Collection"%>
-<%@page import="it.unisa.model.MaterialModelDS"%>
 <%@page import="java.util.LinkedList"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="it.unisa.model.FeedbackModelDS"%>
-<%@page import="it.unisa.model.UserModelDS"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>

@@ -5,7 +5,7 @@
 <%@page import="java.io.OutputStream"%>
 <%@page import="java.io.InputStream"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="javax.sql.DataSource,it.unisa.model.*"%>
+	pageEncoding="UTF-8" import="javax.sql.DataSource,materiale.*"%>
 <!DOCTYPE html>
 <html>
 <head>

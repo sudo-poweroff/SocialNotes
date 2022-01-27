@@ -1,16 +1,18 @@
-<%@page import="java.io.InputStream"%>
-<%@page import="it.unisa.model.MaterialModelDS"%>
-<%@page import="it.unisa.model.FriendsModelDS"%>
-<%@page import="it.unisa.model.FriendsBean"%>
+<%-- <%@page import="java.io.InputStream"%>
+<%@page import="profilo.*"%>
+<%@page import="materiale.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="com.mysql.cj.jdbc.Blob"%>
-<%@page import="it.unisa.model.MaterialBean"%>
 <%@page import="java.sql.Date"%>
-<%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="java.util.concurrent.TimeUnit"%>--%>
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" import="java.util.*,javax.sql.DataSource,com.mysql.cj.jdbc.Blob,java.sql.Date,java.io.InputStream,
+    profilo.*,materiale.*,javax.sql.DataSource,java.util.concurrent.TimeUnit"%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,10 +1,10 @@
-	<%@page import="it.unisa.model.UserBean"%>
-<%@page import="it.unisa.model.UserModelDS"%>
+	<%@page import="profilo.UserBean"%>
+<%@page import="profilo.UserModelDS"%>
 	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 		pageEncoding="ISO-8859-1"%>
 	<%@page import="javax.sql.DataSource"%>
 	<%@page import="java.util.Collection"%>
-	<%@page import="it.unisa.model.MaterialBean"%>
+	<%@page import="materiale.MaterialBean"%>
 <!DOCTYPE html>
 <html>
 <head>

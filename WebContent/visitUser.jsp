@@ -1,10 +1,9 @@
 <%@page import="java.util.concurrent.TimeUnit"%>
-<%@page import="it.unisa.model.FriendsModelDS"%>
+<%@page import="profilo.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@page import="it.unisa.model.MaterialModelDS"%>
+<%@page import="materiale.*"%>
 <%@page import="java.util.Collection"%>
-<%@page import="it.unisa.model.MaterialBean"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.sql.Date"%>
 <!DOCTYPE html>

@@ -66,7 +66,7 @@ else{
 	String linkHomepage= "homepage_user.jsp";
 	 String encodedURL = response.encodeURL(linkHomepage);
 	 String priceUrl= response.encodeURL("prezzi.jsp");
-	 String provaZipUrl=response.encodeURL("ProvaZip");
+	 String provaZipUrl=response.encodeURL("DownloadZip");
 	 String cartUrl=response.encodeURL("cart.jsp");
 	 %>
 

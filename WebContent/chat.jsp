@@ -1,11 +1,5 @@
-<%@page import="it.unisa.model.FriendsModelDS"%>
-<%@page import="it.unisa.model.UserModelDS"%>
-<%@page import="it.unisa.model.ChatModelDS"%>
-<%@page import="it.unisa.model.ParticipationModelDS"%>
-<%@page import="it.unisa.model.ParticipationBean"%>
-<%@page import="it.unisa.model.ChatBean"%>
-<%@page import="it.unisa.model.FriendsBean"%>
-<%@page import="it.unisa.model.UserBean"%>
+<%@page import="profilo.*"%>
+<%@page import="chat.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="javax.sql.DataSource"%>

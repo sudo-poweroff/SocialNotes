@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html"
-    pageEncoding="ISO-8859-1" import="java.util.*,it.unisa.model.*,java.io.InputStream,javax.sql.DataSource"%>
+    pageEncoding="ISO-8859-1" import="java.util.*,profilo.*,java.io.InputStream,javax.sql.DataSource"%>
 <!doctype html>
 <html lang="en">
   <head>

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import it.unisa.model.UserModelDS;
+import profilo.UserModelDS;
 
 @WebServlet("/RemoveBan")
 public class RemoveBan extends HttpServlet {

@@ -1,5 +1,4 @@
-<%@page import="it.unisa.model.PaymentMethodBean"%>
-<%@page import="it.unisa.model.PaymentMethodModelDS"%>
+<%@page import="profilo.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="javax.sql.DataSource"%>
