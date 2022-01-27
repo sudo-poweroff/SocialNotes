@@ -221,7 +221,7 @@
   
   
     <label for="exampleFormControlTextarea1">Recensione:</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" name="commento" rows="3"></textarea>
+    <textarea class="form-control" id="exampleFormControlTextarea1" name="commento" rows="3" required ></textarea>
     <input type="search" name="username" hidden value="<%=session.getAttribute("username")%>">
     <input type="search" name="codmateriale" hidden value="<%=material.getCodiceMateriale()%>">
   </div>

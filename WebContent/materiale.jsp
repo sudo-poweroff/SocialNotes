@@ -87,7 +87,7 @@ String homeUser = "homepage_user.jsp";
 							<div class="form-group col-md-4">
 								<input type="hidden" name="codice" value="<%=mat.getCodiceMateriale() %>">
 								<input type="hidden" name="username" value="<%=mat.getUsername()%>">
-								<input type="number" class="form-control" name="costo" id="costo" placeholder="Costo" required>&nbsp&nbsp&nbsp&nbsp
+								<input type="number" class="form-control" name="costo" id="costo" placeholder="Costo" required min="0" >&nbsp&nbsp&nbsp&nbsp
 								
 						</div>
 						

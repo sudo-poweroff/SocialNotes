@@ -165,33 +165,39 @@ public class ChangeProfile extends HttpServlet {
 				System.out.println("Errore checkLogin in ChangeProfile");
 			}
 			
-			if(password!=null && !password.trim().equals("") && Validation.validatePassword(password)) {
-				if(confirm_password!=null && !confirm_password.trim().equals("") && Validation.validatePassword(confirm_password)) {
-					if(password.compareTo(confirm_password)==0){
-						try {
-							model_utente.doUpdatePassword(username, confirm_password);
-							success+=" Password aggiornata-";
-							request.setAttribute("success", success);
+			if(bean==null) {//controllo che l'utente abbia inserito la password corretta
+				error+=" Password corrente inserita non corretta-";
+				request.setAttribute("error",error);	
+			}
+			else {
+				if(password!=null && !password.trim().equals("") && Validation.validatePassword(password)) {
+					if(confirm_password!=null && !confirm_password.trim().equals("") && Validation.validatePassword(confirm_password)) {
+						if(password.compareTo(confirm_password)==0){
+							try {
+								model_utente.doUpdatePassword(username, confirm_password);
+								success+=" Password aggiornata-";
+								request.setAttribute("success", success);
+								}
+							catch(SQLException e) {
+								System.out.println("Errore: Password non aggiornata");
+								error+=" Errore password non aggiornata";
+								request.setAttribute("error",error);	
+								
+								e.printStackTrace();
 							}
-						catch(SQLException e) {
-							System.out.println("Errore: Password non aggiornata");
-							error+=" Errore password non aggiornata";
-							request.setAttribute("error",error);	
-							
-							e.printStackTrace();
 						}
 					}
 				}
-			}
-			//aggiorno le varabili di sessione
-			UserModelDS user=new UserModelDS(ds);
-			UserBean b;
-			try {
-				b = user.doRetrieveByUsername(username);
-				session.setAttribute("password",b.getPass());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//aggiorno le varabili di sessione
+				UserModelDS user=new UserModelDS(ds);
+				UserBean b;
+				try {
+					b = user.doRetrieveByUsername(username);
+					session.setAttribute("password",b.getPass());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

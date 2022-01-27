@@ -37,7 +37,11 @@ var date;
 function funzione(){
 	event.preventDefault();
 	 var mess =  document.getElementById("mex").value;
-  
+	 
+  	 if (mess==null||mess===""){//controllo se il messaggio è stato inserito
+ 		alert("Inserisci il testo del messaggio!");
+ 		return;
+ 	 }
    //	alert(chat);
 
 
