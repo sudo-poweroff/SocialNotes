@@ -32,7 +32,7 @@
   String adminURL = "admin.jsp";
   String homeGuest = "homepage.jsp";
   String homeUserURL = "homepage_user.jsp";
-  String notizieURL = "notizie.jsp";
+  String notizieURL = "uploadNews.jsp";
   String editUserURL = "editUser.jsp";
   String graficiURL = "grafici.jsp";
   String materialeURL = "materiale.jsp";

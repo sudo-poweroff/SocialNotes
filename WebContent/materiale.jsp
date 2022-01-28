@@ -41,6 +41,33 @@ String homeUser = "homepage_user.jsp";
 
  <%@include file="header_admin.jsp" %>
  
+ 	<%
+	String error = (String)request.getAttribute("error");
+	if(error!=null){
+		%>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Attenzione!</strong> Errore nell'approvazione del file.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	}
+	%>
+	<%
+	String success = (String)request.getAttribute("success");
+	if(success!=null){
+	%>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+		 Il materiale &egrave; stato approvato correttamente.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	}
+	%>
+ 
     <div class="container">
     	<div class="row">
     	 
@@ -57,7 +84,7 @@ String homeUser = "homepage_user.jsp";
 					long diff=TimeUnit.DAYS.convert(diffInMillies,TimeUnit.MILLISECONDS);
     				
     	%>
-    	<div class="card social-timeline-card">
+    	<div class="card social-timeline-card" style="margin-top:10px">
 					<div class="card-header">
 						<div class="d-flex justify-content-between align-items-center">
 							<div class="d-flex justify-content-between align-items-center">

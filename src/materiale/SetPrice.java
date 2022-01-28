@@ -50,6 +50,9 @@ public class SetPrice extends HttpServlet {
 			System.out.println(coin);
 			userModel.doUpdateCoin(username, coin);
 			material.setPrice(codiceMateriale, price);
+			
+			String success = "Il materiale è stato caricato correttamente";
+			request.setAttribute("success", success);			
 		}catch (SQLException e) {
 			String error = "Spiacenti, la registrazione delle informazioni nel database non Ã¨ andata a buon fine.";
 			request.setAttribute("error", error);
