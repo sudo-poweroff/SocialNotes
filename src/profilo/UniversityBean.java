@@ -7,7 +7,6 @@ public class UniversityBean {
 		this.denominazione="";
 		this.indirizzo="";
 		this.telefono="";
-		this.logo=null;
 		this.descrizione="";
 	}
 	
@@ -52,16 +51,6 @@ public class UniversityBean {
 	}
 	
 	
-	public java.sql.Blob getLogo() {
-		return logo;
-	}
-	
-	
-	public void setLogo(java.sql.Blob blob) {
-		this.logo = blob;
-	}
-	
-	
 	public String getDescrizione() {
 		return descrizione;
 	}
@@ -85,7 +74,7 @@ public class UniversityBean {
 	@Override
 	public String toString() {
 		return "UniversityBean [denominazione=" + denominazione + ", indirizzo=" + indirizzo + ", telefono=" + telefono
-				+ ", email=" + email + ", logo=" + logo + ", descrizione=" + descrizione + "]";
+				+ ", email=" + email + ", descrizione=" + descrizione + "]";
 	}
 
 
@@ -93,6 +82,5 @@ public class UniversityBean {
     private String indirizzo;
     private String telefono; 
     private String email; 
-    private java.sql.Blob logo;
     private String descrizione;
 }

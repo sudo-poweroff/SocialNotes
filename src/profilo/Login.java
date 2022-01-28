@@ -107,8 +107,6 @@ public class Login extends HttpServlet {
 					session.setAttribute("email",bean.getEmail());
 					session.setAttribute("password",bean.getPass());
 					session.setAttribute("dataNascita",bean.getDataNascita());
-					session.setAttribute("matricola",bean.getMatricola());
-					session.setAttribute("ultimoAccesso",bean.getUltimoAccesso());
 					session.setAttribute("coin",bean.getCoin());
 					session.setAttribute("ban",bean.getBan());
 					session.setAttribute("denominazione",bean.getDenominazione());

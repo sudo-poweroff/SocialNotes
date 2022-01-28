@@ -1,8 +1,6 @@
 package profilo;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {
@@ -30,15 +27,7 @@ HttpSession session = request.getSession();
 			String signUpURL = "login.jsp";
 			response.sendRedirect(signUpURL);
 		}else {
-			DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-			Timestamp ultimoAccesso = new Timestamp(System.currentTimeMillis());
-			UserModelDS userModel=new UserModelDS(ds);
-			try {
-				userModel.doUpdateUltimoAccesso((String)session.getAttribute("username"), ultimoAccesso);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			session.invalidate();
 			String homeURL = "homepage.jsp";
 			response.sendRedirect(homeURL);

@@ -2,7 +2,6 @@ package profilo;
 
 import java.sql.Blob;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 
 
@@ -17,8 +16,6 @@ public class UserBean {
 		this.email="";
 		this.pass="";
 		this.dataNascita=null;
-		this.matricola="";
-		this.ultimoAccesso=null;
 		this.coin=0;
 		this.ban=false;
 		this.denominazione="";
@@ -95,27 +92,6 @@ public class UserBean {
 		this.dataNascita = dataNascita;
 	}
 	
-	
-	public String getMatricola() {
-		return matricola;
-	}
-	
-	
-	public void setMatricola(String matricola) {
-		this.matricola = matricola;
-	}
-	
-	
-	public Timestamp getUltimoAccesso() {
-		return ultimoAccesso;
-	}
-	
-	
-	public void setUltimoAccesso(Timestamp ultimoAccesso) {
-		this.ultimoAccesso = ultimoAccesso;
-	}
-	
-	
 	public int getCoin() {
 		return coin;
 	}
@@ -170,9 +146,8 @@ public class UserBean {
 	@Override
 	public String toString() {
 		return "UserBean [username=" + username + ", nome=" + nome + ", cognome=" + cognome + ", img=" + img
-				+ ", email=" + email + ", pass=" + pass + ", dataNascita=" + dataNascita + ", matricola=" + matricola
-				+ ", ultimoAccesso=" + ultimoAccesso + ", coin=" + coin + ", ban=" + ban + ", denominazione="
-				+ denominazione + ", dipName=" + dipName + "]";
+				+ ", email=" + email + ", pass=" + pass + ", dataNascita=" + dataNascita
+				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + "]";
 	}
 
 
@@ -183,8 +158,6 @@ public class UserBean {
     private String email;
     private String pass;
     private Date dataNascita;
-    private String matricola;
-    private Timestamp ultimoAccesso;
     private int coin;
     private boolean ban;
     private String denominazione;

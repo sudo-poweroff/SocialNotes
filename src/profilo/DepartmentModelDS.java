@@ -9,8 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
-import it.unisa.utils.Utility;
 
 public class DepartmentModelDS {
 	
@@ -84,10 +82,7 @@ public class DepartmentModelDS {
 		return departments;
 	}
 	
-	public void doSave(DepartmentBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		//why??
-	}
 
+	
 	private DataSource ds;
 }

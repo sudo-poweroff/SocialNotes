@@ -23,7 +23,7 @@ public class UserModelDS {
 	public UserBean checkLogin(String name,String password)throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Matricola,UltimoAccesso,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Email = ? OR Username=?";
+		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,UltimoAccesso,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Email = ? OR Username=?";
 		//System.out.println("name in usermodel "+name);
 		//System.out.println("pass in usermodel "+password);
 		UserBean bean=new UserBean();
@@ -43,8 +43,6 @@ public class UserModelDS {
 				bean.setEmail(rs.getString("Email"));
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setMatricola(rs.getString("Matricola"));
-				bean.setUltimoAccesso(rs.getTimestamp("UltimoAccesso"));
 				bean.setCoin(rs.getInt("Coin"));
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
@@ -90,8 +88,6 @@ public class UserModelDS {
 				bean.setEmail(rs.getString("Email"));
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setMatricola(rs.getString("Matricola"));
-				bean.setUltimoAccesso(rs.getTimestamp("UltimoAccesso"));
 				bean.setCoin(rs.getInt("Coin"));
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
@@ -133,8 +129,6 @@ public class UserModelDS {
 				bean.setEmail(rs.getString("Email"));
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setMatricola(rs.getString("Matricola"));
-				bean.setUltimoAccesso(rs.getTimestamp("UltimoAccesso"));
 				bean.setCoin(rs.getInt("Coin"));
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
@@ -179,8 +173,6 @@ public class UserModelDS {
 				bean.setEmail(rs.getString("Email"));
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setMatricola(rs.getString("Matricola"));
-				bean.setUltimoAccesso(rs.getTimestamp("UltimoAccesso"));
 				bean.setCoin(rs.getInt("Coin"));
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
@@ -222,8 +214,6 @@ public class UserModelDS {
 				bean.setEmail(rs.getString("Email"));
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setMatricola(rs.getString("Matricola"));
-				bean.setUltimoAccesso(rs.getTimestamp("UltimoAccesso"));
 				bean.setCoin(rs.getInt("Coin"));
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
@@ -367,7 +357,7 @@ public class UserModelDS {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, UltimoAccesso, Coin, Denominazione, DipName,Ban) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?, ?,?)";
+		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?)";
 
 		try {
 			connection = ds.getConnection();
@@ -381,11 +371,10 @@ public class UserModelDS {
 			//	Date dataNascita = item.getDataNascita();
 
 			ps.setDate(6, item.getDataNascita());
-			ps.setTimestamp(7, item.getUltimoAccesso());
-			ps.setInt(8, item.getCoin());
-			ps.setString(9, item.getDenominazione());
-			ps.setString(10, item.getDipName());
-			ps.setBoolean(11, item.getBan());
+			ps.setInt(7, item.getCoin());
+			ps.setString(8, item.getDenominazione());
+			ps.setString(9, item.getDipName());
+			ps.setBoolean(10, item.getBan());
 
 			ps.executeUpdate();
 			System.out.println("Salvato nel Database");
@@ -541,31 +530,6 @@ public class UserModelDS {
 			ps.setString(2, username);
 			ps.executeUpdate();
 			System.out.println("Immagine di profilo aggiornata");
-		} finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(connection!=null)
-					connection.close();
-			}
-		}
-	}
-	
-	public void doUpdateUltimoAccesso(String username,Timestamp ultimoAccesso)throws SQLException{
-		Connection connection = null;
-		PreparedStatement ps = null;
-
-		String sql = "UPDATE Utente SET  UltimoAccesso=? WHERE Username = ?";
-		
-		try {
-			connection = ds.getConnection();
-			ps = connection.prepareStatement(sql);
-			ps.setTimestamp(1, ultimoAccesso);
-			ps.setString(2, username);
-			ps.executeUpdate();
-			System.out.println("Ultimo accesso aggiornato");
 		} finally {
 			try {
 				if(ps!=null)

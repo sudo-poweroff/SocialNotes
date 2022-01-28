@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 
 public class UniversityModelDS {
 	
@@ -34,7 +33,6 @@ public class UniversityModelDS {
 				bean.setIndirizzo(rs.getString("Indirizzo"));
 				bean.setTelefono(rs.getString("Telefono"));
 				bean.setEmail(rs.getString("Email"));
-				bean.setLogo(rs.getBlob("Logo"));
 				bean.setDescrizione(rs.getString("Descrizione"));
 				universities.add(bean);
 			}
@@ -53,11 +51,6 @@ public class UniversityModelDS {
 
 	}
 
-	public void doSave(UniversityBean item) throws SQLException {
-		// TODO Auto-generated method stub
-	}
-
-	
 	
 	private DataSource ds;
 }

@@ -1,13 +1,11 @@
 package profilo;
 
 import com.google.gson.Gson; 
-import com.google.gson.GsonBuilder;  
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Iterator;
 
 
 import javax.servlet.ServletException;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import it.unisa.model.*;
 
 /**
  * Servlet implementation class FindDepartmentAJAX

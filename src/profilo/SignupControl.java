@@ -4,15 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.LinkedList;
-import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,15 +23,8 @@ import it.unisa.model.UserRoleBean;
 import it.unisa.model.UserRoleModelDS;
 import it.unisa.utils.SendEmail;
 import it.unisa.utils.Validation;
-import materiale.FileBean;
-import materiale.FileModelDS;
 import materiale.MaterialBean;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
-import javax.mail.Session;
-import javax.mail.Transport;
 
 
 /**
@@ -116,7 +105,6 @@ public class SignupControl extends HttpServlet {
 		user.setEmail(email);
 		user.setDenominazione(denomonazione);
 		user.setDipName(dipName);
-		user.setUltimoAccesso(ultimoAccesso);
 		user.setDataNascita(dataNascita);
 		user.setCoin(50);
 		user.setBan(false);
@@ -140,7 +128,7 @@ public class SignupControl extends HttpServlet {
 		        String pass = "Despacito21";
 		        String[] to = { user.getEmail() }; // list of recipient email addresses
 		        String subject = "CONFERMA DI AVVENUTA REGISTRAZIONE SU Social Notes";
-		        String body = "Ciao! , "+user.getUsername()+ "  Il team di SocialNotes è lieto di accoglierti sul sito!";
+		        String body = "Ciao! , "+user.getUsername()+ "  Il team di SocialNotes ï¿½ lieto di accoglierti sul sito!";
 				
 		        SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
 		        sendEmail.SendMail();
@@ -167,8 +155,6 @@ public class SignupControl extends HttpServlet {
 			session.setAttribute("email",user.getEmail());
 			session.setAttribute("password",user.getPass());
 			session.setAttribute("dataNascita",user.getDataNascita());
-			session.setAttribute("matricola",user.getMatricola());
-			session.setAttribute("ultimoAccesso",user.getUltimoAccesso());
 			session.setAttribute("coin",user.getCoin());
 			session.setAttribute("ban",user.getBan());
 			session.setAttribute("denominazione",user.getDenominazione());

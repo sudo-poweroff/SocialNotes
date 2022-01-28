@@ -169,7 +169,7 @@
 	</div>
 	<%
 	FeedbackModelDS fModel = new FeedbackModelDS(ds);
-	Collection<FeedbackBean> feeds= fModel.doRetrieveByKeyMaterial(String.valueOf(material.getCodiceMateriale()));
+	Collection<FeedbackBean> feeds= fModel.doRetrieveByKeyMaterial(material.getCodiceMateriale());
 	Iterator<?> it=feeds.iterator();
 
 	while(it.hasNext()){

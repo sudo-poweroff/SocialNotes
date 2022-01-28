@@ -117,7 +117,7 @@ public class FeedbackModelDS  {
 		return 0;
 	}
 	
-	public Collection<FeedbackBean> doRetrieveByKeyMaterial(String codeMaterial) throws SQLException {
+	public Collection<FeedbackBean> doRetrieveByKeyMaterial(int codeMaterial) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Feedback WHERE CodiceMateriale = ?;";
@@ -125,8 +125,8 @@ public class FeedbackModelDS  {
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
-			int codiceMateriale = Integer.parseInt(codeMaterial);
-			ps.setInt(1, codiceMateriale);
+			//int codiceMateriale = Integer.parseInt(codeMaterial);
+			ps.setInt(1,codeMaterial);
 			//Utility.print("doRetrieveAll:"+ps.toString());
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {

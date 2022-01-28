@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
 public class MaterialModelDS {
@@ -510,10 +509,8 @@ public class MaterialModelDS {
 		}
 		return material;
 	}
-	
-	
-	
 
+	
 	public void doSave(MaterialBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -577,5 +574,30 @@ public class MaterialModelDS {
 		}
 	}
 
+	
+	public void doDelete(int codiceMateriale) throws SQLException {
+		Connection connection = null;
+		PreparedStatement ps = null;
+
+		String sql= "DELETE FROM Materiale WHERE CodiceMateriale=? ";
+		try {
+			connection = ds.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, codiceMateriale);
+			ps.executeUpdate();
+		}
+		finally {
+			try {
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(connection!=null)
+					connection.close();
+			}
+		}
+	}
+	
+	
 	private DataSource ds;
 }
