@@ -23,7 +23,7 @@ public class UserModelDS {
 	public UserBean checkLogin(String name,String password)throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,UltimoAccesso,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Email = ? OR Username=?";
+		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Email = ? OR Username=?";
 		//System.out.println("name in usermodel "+name);
 		//System.out.println("pass in usermodel "+password);
 		UserBean bean=new UserBean();

@@ -18,6 +18,19 @@
 <body>
 <%@include file="header_user.jsp" %>
 
+<%
+String cartError = (String)request.getAttribute("cartError");
+if(cartError!=null){
+	%>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+	<strong>Attenzione!</strong> Il file &egrave; gi&agrave; presente nel carrello
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<%
+}
+%>
 
 <%
     String addFriendUrl = "AddFriend";

@@ -3,7 +3,6 @@ package acquisto;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,15 +32,32 @@ public class AddToCart extends HttpServlet {
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		Collection<MaterialBean>cart=(Collection<MaterialBean>)session.getAttribute("cart");
 		String codice=request.getParameter("codice");
+		int code=Integer.parseInt(codice);
 		System.out.println("codice materiale in servlet: "+codice);
-		MaterialModelDS materialModel=new MaterialModelDS(ds);
-		try {
-			MaterialBean material=materialModel.doRetrieveByKey(codice);
-			cart.add(material);
-			session.setAttribute("cart",cart);
+		boolean isPresent=false;
+		if(cart!=null) {
+			for(MaterialBean materiale:cart) {
+				if(materiale.getCodiceMateriale()==code) {
+					System.out.println("Materiale già presente");
+					isPresent=true;
+					String message="Materiale già presente";
+					request.setAttribute("cartError", message);
+					break;
+				}
+			}
+		}
+		if(!isPresent) {
+			MaterialModelDS materialModel=new MaterialModelDS(ds);
+			try {
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+
+				MaterialBean material=materialModel.doRetrieveByKey(codice);
+				cart.add(material);
+				session.setAttribute("cart",cart);
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		String url=(String)request.getParameter("url");
 		System.out.println(url);
