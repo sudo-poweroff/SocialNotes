@@ -10,21 +10,14 @@ import java.util.LinkedList;
 import javax.sql.DataSource;
 
 import it.unisa.utils.Model;
-import it.unisa.utils.Utility;
 
-public class UniversityModelDS implements Model<UniversityBean>{
+public class UniversityModelDS {
 	
 	 public UniversityModelDS(DataSource ds) {
 		 this.ds=ds;
 	 }
 
-	@Override
-	public UniversityBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
 	public Collection<UniversityBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -60,23 +53,10 @@ public class UniversityModelDS implements Model<UniversityBean>{
 
 	}
 
-	@Override
 	public void doSave(UniversityBean item) throws SQLException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	@Override
-	public void doUpdate(UniversityBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(UniversityBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	
 	private DataSource ds;

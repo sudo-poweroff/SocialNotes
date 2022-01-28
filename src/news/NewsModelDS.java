@@ -12,20 +12,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class NewsModelDS implements Model<NewsBean>{
+public class NewsModelDS {
 
 	public NewsModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 	
-	
-	@Override
-	public NewsBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
 	public Collection<NewsBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -59,6 +52,7 @@ public class NewsModelDS implements Model<NewsBean>{
 		}
 		return news;
 	}
+	
 	public NewsBean doRetrieveByCodiceNews(int codiceNews) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -126,7 +120,6 @@ public class NewsModelDS implements Model<NewsBean>{
 	}
 	
 
-	@Override
 	public void doSave(NewsBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -157,17 +150,6 @@ public class NewsModelDS implements Model<NewsBean>{
 		
 	}
 
-	@Override
-	public void doUpdate(NewsBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(NewsBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private DataSource ds;
 }

@@ -12,20 +12,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class FeedbackModelDS implements Model<FeedbackBean> {
+public class FeedbackModelDS  {
 
 	public FeedbackModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 	
 	
-	@Override
-	public FeedbackBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Collection<FeedbackBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -159,7 +152,6 @@ public class FeedbackModelDS implements Model<FeedbackBean> {
 		return feeds;
 	}
 	
-	@Override
 	public void doSave(FeedbackBean item) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -189,17 +181,6 @@ public class FeedbackModelDS implements Model<FeedbackBean> {
 
 	}
 
-	@Override
-	public void doUpdate(FeedbackBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void doDelete(FeedbackBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
 
 	private DataSource ds;
 }

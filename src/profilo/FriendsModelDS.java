@@ -12,21 +12,14 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class FriendsModelDS implements Model<FriendsBean> {
+public class FriendsModelDS {
 
 	public FriendsModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
 
-	@Override
-	public FriendsBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-
-	@Override
 	public Collection<FriendsBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -58,7 +51,6 @@ public class FriendsModelDS implements Model<FriendsBean> {
 		return friends;
 	}
 
-	@Override
 	public void doSave(FriendsBean item) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -83,18 +75,6 @@ public class FriendsModelDS implements Model<FriendsBean> {
 			}
 		}
 			
-		}
-
-		@Override
-		public void doUpdate(FriendsBean item) throws SQLException {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void doDelete(FriendsBean item) throws SQLException {
-			// TODO Auto-generated method stub
-
 		}
 
 

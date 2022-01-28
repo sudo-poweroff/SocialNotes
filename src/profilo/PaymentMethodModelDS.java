@@ -13,13 +13,12 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class PaymentMethodModelDS implements Model<PaymentMethodBean> {
+public class PaymentMethodModelDS {
 
 	public PaymentMethodModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 	
-	@Override
 	public PaymentMethodBean doRetrieveByKey(String code) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -92,7 +91,6 @@ public class PaymentMethodModelDS implements Model<PaymentMethodBean> {
 	}
 	
 	
-	@Override
 	public Collection<PaymentMethodBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -129,7 +127,6 @@ public class PaymentMethodModelDS implements Model<PaymentMethodBean> {
 		return cards;
 	}
 
-	@Override
 	public void doSave(PaymentMethodBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -161,18 +158,6 @@ public class PaymentMethodModelDS implements Model<PaymentMethodBean> {
 		
 	}
 
-	@Override
-	public void doUpdate(PaymentMethodBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(PaymentMethodBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void doDeleteByNumber(String numeroCarta)throws SQLException{
 		Connection connection = null;
 		PreparedStatement ps = null;

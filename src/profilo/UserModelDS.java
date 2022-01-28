@@ -11,19 +11,12 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 
 
-public class UserModelDS implements Model<UserBean> {
+public class UserModelDS {
 
 	public UserModelDS(DataSource ds) {
 		this.ds=ds;
-	}
-
-	@Override
-	public UserBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 
@@ -167,7 +160,6 @@ public class UserModelDS implements Model<UserBean> {
 		return bean;
 	}
 
-	@Override
 	public Collection<UserBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -211,7 +203,6 @@ public class UserModelDS implements Model<UserBean> {
 		return users;
 	}
 
-	
 	public Collection<UserBean> doRetrieveUsers() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -372,8 +363,6 @@ public class UserModelDS implements Model<UserBean> {
 		
 	}
 	
-	
-	@Override
 	public void doSave(UserBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -412,12 +401,6 @@ public class UserModelDS implements Model<UserBean> {
 		}
 	}
 
-	@Override
-	public void doUpdate(UserBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-	
 	public void manageBan(String username,boolean ban) throws SQLException{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -441,7 +424,6 @@ public class UserModelDS implements Model<UserBean> {
 			}
 		}
 	}
-	
 	
 	public void doUpdateCoin(String username,int coin)throws SQLException {
 		Connection con = null;
@@ -469,7 +451,6 @@ public class UserModelDS implements Model<UserBean> {
 		}
 	}
 	
-	
 	public void doUpdatePassword(String username,String newPassword)throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -494,7 +475,6 @@ public class UserModelDS implements Model<UserBean> {
 			}
 		}
 	}
-	
 	
 	public void doUpdateEmail(String username,String newMail)throws SQLException{
 		Connection connection = null;
@@ -522,7 +502,6 @@ public class UserModelDS implements Model<UserBean> {
 		
 	}
 	
-	
 	public void doUpdateDepartment(String username,String newDipName,String newUniversity) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -549,7 +528,6 @@ public class UserModelDS implements Model<UserBean> {
 		}
 	}
 	
-	
 	public void doUpdateImage(String username,InputStream image) throws SQLException{
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -575,7 +553,6 @@ public class UserModelDS implements Model<UserBean> {
 		}
 	}
 	
-	
 	public void doUpdateUltimoAccesso(String username,Timestamp ultimoAccesso)throws SQLException{
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -600,14 +577,6 @@ public class UserModelDS implements Model<UserBean> {
 			}
 		}
 	}
-	
-	
-	@Override
-	public void doDelete(UserBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-	
 	
 	public float getValutazione(String username)throws SQLException {
 		Connection con=null;

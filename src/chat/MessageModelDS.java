@@ -13,19 +13,12 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 
 
-public class MessageModelDS implements Model<MessageBean> {
+public class MessageModelDS {
 	
 	public MessageModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
-	@Override
-	public MessageBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Collection<MessageBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -128,7 +121,6 @@ public class MessageModelDS implements Model<MessageBean> {
 	}
 		
 	
-	@Override
 	public void doSave(MessageBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -158,17 +150,6 @@ public class MessageModelDS implements Model<MessageBean> {
 		}
 	}
 	
-	@Override
-	public void doUpdate(MessageBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(MessageBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private DataSource ds;
 }

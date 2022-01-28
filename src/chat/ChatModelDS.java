@@ -12,13 +12,12 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class ChatModelDS implements Model<ChatBean> {
+public class ChatModelDS{
 
 	public ChatModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 	
-	@Override
 	public ChatBean doRetrieveByKey(String code) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -80,7 +79,6 @@ public class ChatModelDS implements Model<ChatBean> {
 		return null;
 	}
 
-	@Override
 	public Collection<ChatBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -112,7 +110,6 @@ public class ChatModelDS implements Model<ChatBean> {
 	
 	}
 
-	@Override
 	public void doSave(ChatBean item) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection con=null;
@@ -171,18 +168,6 @@ public class ChatModelDS implements Model<ChatBean> {
 			}
 		}
 		return chats;
-	}
-
-	@Override
-	public void doUpdate(ChatBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(ChatBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private DataSource ds;

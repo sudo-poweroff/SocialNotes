@@ -1,6 +1,5 @@
 package materiale;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,13 +12,12 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class MaterialModelDS implements Model<MaterialBean> {
+public class MaterialModelDS {
 	
 	public MaterialModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
-	@Override
 	public MaterialBean doRetrieveByKey(String code) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -128,7 +126,6 @@ public class MaterialModelDS implements Model<MaterialBean> {
 	}
 	
 
-	@Override
 	public Collection<MaterialBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -517,7 +514,6 @@ public class MaterialModelDS implements Model<MaterialBean> {
 	
 	
 
-	@Override
 	public void doSave(MaterialBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -554,18 +550,6 @@ public class MaterialModelDS implements Model<MaterialBean> {
 	}
 	
 
-	@Override
-	public void doUpdate(MaterialBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(MaterialBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public int getQuantitaMaterialeCondiviso(String username)throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;

@@ -12,17 +12,12 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class ContentModelDS implements Model<ContentBean>{
+public class ContentModelDS {
 	
 	public ContentModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
-	@Override
-	public ContentBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/**
 	 * 
 	 * @param codiceNews
@@ -57,7 +52,6 @@ public class ContentModelDS implements Model<ContentBean>{
 		return fileNames;
 	}
 
-	@Override
 	public Collection<ContentBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -88,7 +82,6 @@ public class ContentModelDS implements Model<ContentBean>{
 		return content;
 	}
 
-	@Override
 	public void doSave(ContentBean item) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -111,17 +104,6 @@ public class ContentModelDS implements Model<ContentBean>{
 		}
 	}
 
-	@Override
-	public void doUpdate(ContentBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(ContentBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private DataSource ds;
 }

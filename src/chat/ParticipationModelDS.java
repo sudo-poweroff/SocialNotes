@@ -12,19 +12,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class ParticipationModelDS implements Model<ParticipationBean>{
+public class ParticipationModelDS {
 
 	public ParticipationModelDS(DataSource ds) {
 		this.ds=ds;
 	}
-	
-	@Override
-	public ParticipationBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
+	
 	public Collection<ParticipationBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -55,7 +49,6 @@ public class ParticipationModelDS implements Model<ParticipationBean>{
 		return participation;
 	}
 
-	@Override
 	public void doSave(ParticipationBean item) throws SQLException {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
@@ -84,17 +77,6 @@ public class ParticipationModelDS implements Model<ParticipationBean>{
 		
 	}
 
-	@Override
-	public void doUpdate(ParticipationBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(ParticipationBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private DataSource ds;
 }

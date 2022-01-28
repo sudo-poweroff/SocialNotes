@@ -12,14 +12,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class CourseModelDS implements Model<CourseBean> {
+public class CourseModelDS {
 
 	public CourseModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
 
-	@Override
 	public CourseBean doRetrieveByKey(String code) throws SQLException {
 		// TODO Auto-generated method stub
 		
@@ -115,7 +114,6 @@ public class CourseModelDS implements Model<CourseBean> {
 		return -1;
 	}
 
-	@Override
 	public Collection<CourseBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -146,7 +144,6 @@ public class CourseModelDS implements Model<CourseBean> {
 		return courses;
 	}
 
-	@Override
 	public void doSave(CourseBean item) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -171,17 +168,6 @@ public class CourseModelDS implements Model<CourseBean> {
 		}
 	}
 
-	@Override
-	public void doUpdate(CourseBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void doDelete(CourseBean item) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
 
 	private DataSource ds;
 }

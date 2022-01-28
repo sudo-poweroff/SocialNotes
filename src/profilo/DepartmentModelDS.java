@@ -12,19 +12,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class DepartmentModelDS implements Model<DepartmentBean> {
+public class DepartmentModelDS {
 	
 	public DepartmentModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
-	@Override
-	public DepartmentBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
 	public Collection<DepartmentBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -90,23 +84,10 @@ public class DepartmentModelDS implements Model<DepartmentBean> {
 		return departments;
 	}
 	
-	@Override
 	public void doSave(DepartmentBean item) throws SQLException {
 		// TODO Auto-generated method stub
-		
+		//why??
 	}
 
-	@Override
-	public void doUpdate(DepartmentBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(DepartmentBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	private DataSource ds;
 }

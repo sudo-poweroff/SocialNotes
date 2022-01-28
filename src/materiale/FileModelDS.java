@@ -13,14 +13,13 @@ import javax.sql.DataSource;
 import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
-public class FileModelDS implements Model<FileBean> {
+public class FileModelDS  {
    
 	
 	public FileModelDS(DataSource ds) {
 		this.ds=ds;
 	}
 
-	@Override
 	public FileBean doRetrieveByKey(String fileName) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -89,7 +88,6 @@ public class FileModelDS implements Model<FileBean> {
 		
 	}
 	
-	@Override
 	public Collection<FileBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -125,7 +123,6 @@ public class FileModelDS implements Model<FileBean> {
 		return files;
 	}
 	
-	@Override
 	public void doSave(FileBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -154,18 +151,6 @@ public class FileModelDS implements Model<FileBean> {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void doUpdate(FileBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doDelete(FileBean item) throws SQLException {
-		// TODO Auto-generated method stub
-		
 	}
 
 
