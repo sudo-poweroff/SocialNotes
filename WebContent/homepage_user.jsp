@@ -245,10 +245,11 @@
 										<div class="mb-3">
 											<label>File PDF</label> <input class="form-control" required
 												type="file" id="formFile" name="Contenuto"
+												onchange="return fileValidation()"
 												accept=".pdf,.doc,.docx,.odt,.ppt,.pptx"> <br>
 											<label>Immagine anteprima del materiale</label> <input
 												class="form-control" type="file" id="formFile" required
-												name="Anteprima" accept=".jpeg,.png,.jpg,.PNG">
+												name="Anteprima" accept=".jpeg,.png,.jpg,.PNG" onchange="return fileValidation()">
 										</div>
 
 										<br>

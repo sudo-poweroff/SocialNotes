@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -255,15 +257,34 @@ public class ChangeProfile extends HttpServlet {
 		String eliminaCarta=request.getParameter("numcartaDelete");
 		if(eliminaCarta!=null && !eliminaCarta.trim().equals("") && eliminaCarta.length()==16) {
 			PaymentMethodModelDS pay=new PaymentMethodModelDS(ds);
+			Collection<PaymentMethodBean> metodiDiPagamentoUtente = new LinkedList<PaymentMethodBean>();
+			//Controllo che l'utente abbia la carta che sta cercando di rimuovere
 			try {
-				pay.doDeleteByNumber(eliminaCarta);
-				success+=" Metodo di pagamento eliminato-";
-				request.setAttribute("success", success);
-			} catch (SQLException e) {
-				System.out.println("Metodo di pagamento non eliminato");
-				error+=" Errore: metodo di pagamento non eliminato-";
-				request.setAttribute("error",error);
+				metodiDiPagamentoUtente = pay.doRetrieveByUsername(username);
+			}catch(SQLException e) {
 				e.printStackTrace();
+			}
+			boolean haveCard=false;
+			for(PaymentMethodBean carte : metodiDiPagamentoUtente) {
+				if(carte.getNumeroCarta().equals(eliminaCarta))
+					haveCard=true;
+			}
+			if(haveCard) {
+				try {
+					pay.doDeleteByNumber(eliminaCarta);
+					success+=" Metodo di pagamento eliminato-";
+					request.setAttribute("success", success);
+				} catch (SQLException e) {
+					System.out.println("Metodo di pagamento non eliminato");
+					error+=" Errore: metodo di pagamento non eliminato-";
+					request.setAttribute("error",error);
+					e.printStackTrace();
+				}
+			}
+			//L'utente non ha la carta che sta cercando di eliminare
+			else {
+				error+=" Errore: Numero di carta che stai cercando di eliminare errato";
+				request.setAttribute("error",error);
 			}
 		}
 		
