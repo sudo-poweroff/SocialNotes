@@ -114,7 +114,7 @@
 						<div class="text-muted h7 mb-2">
 							<i class="fa fa-clock-o"></i><%=diff %> days ago
 						</div>
-						<a class="card-link" href="viewFile.jsp?filename=<%=mat.getFileName()%>"><h5 class="card-title"><%=mat.getDescrizione() %></h5> </a> 
+						<a class="card-link" href="viewFile.jsp?idfile=<%=mat.getIdFile()%>"><h5 class="card-title"><%=mat.getDescrizione() %></h5> </a> 
 						<img src="PrintAnteprima?codice=<%=mat.getCodiceMateriale() %>" height="500px" width="500px"
 							class="img-fluid">
 					</div>
