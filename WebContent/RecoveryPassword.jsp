@@ -55,12 +55,27 @@
     <form class="form-signin" action="RecoveryPass" method="POST" >
       <a href="<%=link %>"><img class="d-block mx-auto mb-4" src="img/logo.png" alt="SocialNotes" width="140" height="140"></a>
       <h1 class="h3 mb-3 font-weight-normal">Recupero Password</h1>
-      <label for="inputUser" class="sr-only">Username</label>
-      <input type="text" name="inputUser" id="inputUser" class="form-control" placeholder="username" required autofocus>
-
       
+		<%
+      if(session.getAttribute("pin")!=null){
+      %>
+      
+	  <h2 class="h3 mb-3 font-weight-normal">Inserisci nuovamente il tuo Username e il pin che ti abbiamo inviato via mail</h2>
+	  <label for="inputUser" class="sr-only">Username</label>
+      <input type="text" name="inputUser" id="inputUser" class="form-control" placeholder="username" required autofocus>
+	  <br>
+      <label for="inputPin" class="sr-only">Pin</label>
+      <input type="text" name="inputPin" id="inputPin" class="form-control" placeholder="PIN" required autofocus>
+     
       <br>
-
+	<%
+      }else{
+	%>
+	   <label for="inputUser" class="sr-only">Username</label>
+      <input type="text" name="inputUser" id="inputUser" class="form-control" placeholder="username" required autofocus>
+		<br>
+      <%} %>
+	
       <button class="btn btn-lg btn-principale btn-block" type="submit">Recupera password</button>
       <button class="bottoneindietro" onclick="history.back()">Torna indietro</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2021 SocialNotes</p>
