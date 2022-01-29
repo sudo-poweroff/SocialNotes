@@ -10,7 +10,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
 public class PaymentMethodModelDS {

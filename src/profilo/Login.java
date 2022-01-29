@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import it.unisa.model.UserRoleModelDS;
 import it.unisa.utils.Validation;
 import materiale.MaterialBean;
 
@@ -45,9 +44,9 @@ public class Login extends HttpServlet {
 		System.out.println("SSSSSS:"+session.getId());
 		if(session.getAttribute("username")!=null){
 			String username=(String)session.getAttribute("username");
-			UserRoleModelDS role=new UserRoleModelDS(ds);
+			UserModelDS role=new UserModelDS(ds);
 			try {
-				int userRole=role.doRetrieveByUsername(username);
+				int userRole=role.getRole(username);
 				if(userRole==1) {
 					String link = "admin.jsp";
 					String encodedURL = response.encodeRedirectURL(link);
@@ -111,8 +110,8 @@ public class Login extends HttpServlet {
 					session.setAttribute("ban",bean.getBan());
 					session.setAttribute("denominazione",bean.getDenominazione());
 					session.setAttribute("dipName",bean.getDipName());
-					UserRoleModelDS role=new UserRoleModelDS(ds);
-					int userRole=role.doRetrieveByUsername(bean.getUsername());
+					UserModelDS role=new UserModelDS(ds);
+					int userRole=role.getRole(bean.getUsername());
 					
 					session.setAttribute("role", userRole);
 					Collection<MaterialBean>cart=new LinkedList<MaterialBean>();

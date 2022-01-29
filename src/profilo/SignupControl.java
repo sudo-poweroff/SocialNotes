@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -19,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import it.unisa.model.UserRoleBean;
-import it.unisa.model.UserRoleModelDS;
 import it.unisa.utils.SendEmail;
 import it.unisa.utils.Validation;
 import materiale.MaterialBean;
@@ -71,9 +68,6 @@ public class SignupControl extends HttpServlet {
 		String denomonazione = request.getParameter("uni");
 		String dipName = request.getParameter("corso");
 		
-	    java.util.Date javaDate = new java.util.Date();
-	    long javaTime = javaDate.getTime();
-		Timestamp ultimoAccesso = new Timestamp(javaTime);
 		System.out.println("data:"+nascita);
 		Date dataNascita = Date.valueOf(nascita);
 		
@@ -108,21 +102,16 @@ public class SignupControl extends HttpServlet {
 		user.setDataNascita(dataNascita);
 		user.setCoin(50);
 		user.setBan(false);
+		user.setRuolo(0);
 		String path=getServletContext().getResource("/img/avatar7.png").getPath();
 		File file=new File(path);
 		InputStream image=new FileInputStream(file);
 		
 		UserModelDS model= new UserModelDS(ds);
-		UserRoleBean role=new UserRoleBean();
-		role.setIdRuolo(2);
-		role.setUsername(username);
-		UserRoleModelDS roleModel=new UserRoleModelDS(ds);
 	
 		
 			try {
 				model.doSave(user);
-				roleModel.doSave(role);
-				
 				
 			    String from = "socialnotes2021@gmail.com";
 		        String pass = "Despacito21";
@@ -159,7 +148,7 @@ public class SignupControl extends HttpServlet {
 			session.setAttribute("ban",user.getBan());
 			session.setAttribute("denominazione",user.getDenominazione());
 			session.setAttribute("dipName",user.getDipName());
-			session.setAttribute("role",role.getIdRuolo());
+			session.setAttribute("role",user.getRuolo());
 			System.out.println("Ruolo in sessione:"+session.getAttribute("role"));
 		    System.out.println("ID SESSIONE:"+session.getId());
 			Collection<MaterialBean>cart=new LinkedList<MaterialBean>();

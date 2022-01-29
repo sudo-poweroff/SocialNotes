@@ -277,7 +277,7 @@
 
             <div class="grid hidden-form hidden">
               <div class="grid__item one-quarter">
-                Universit√†
+                Universit&agrave;†
               </div>
               <!--
  -->

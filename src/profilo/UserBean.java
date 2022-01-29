@@ -132,6 +132,16 @@ public class UserBean {
 	}
 
 	
+	public int getRuolo() {
+		return ruolo;
+	}
+
+
+	public void setRuolo(int ruolo) {
+		this.ruolo = ruolo;
+	}
+
+
 	public boolean isEmpty() {
 		return (this.username.compareTo(""))==0;
 	}
@@ -162,4 +172,5 @@ public class UserBean {
     private boolean ban;
     private String denominazione;
     private String dipName;
+    private int ruolo;
 }

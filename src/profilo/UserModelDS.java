@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -23,7 +22,7 @@ public class UserModelDS {
 	public UserBean checkLogin(String name,String password)throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Email = ? OR Username=?";
+		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password,Ruolo FROM Utente WHERE Email = ? OR Username=?";
 		//System.out.println("name in usermodel "+name);
 		//System.out.println("pass in usermodel "+password);
 		UserBean bean=new UserBean();
@@ -47,6 +46,7 @@ public class UserModelDS {
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
+				bean.setRuolo(rs.getInt("Ruolo"));
 			}
 			else {
 				System.out.println("Utente non loggato");
@@ -92,6 +92,7 @@ public class UserModelDS {
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
+				bean.setRuolo(rs.getInt("Ruolo"));
 			}
 			else
 				return null;
@@ -133,6 +134,7 @@ public class UserModelDS {
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
+				bean.setRuolo(rs.getInt("Ruolo"));
 			}
 			else
 				return null;
@@ -177,6 +179,7 @@ public class UserModelDS {
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
+				bean.setRuolo(rs.getInt("Ruolo"));
 				users.add(bean);
 			}
 			if(rs!=null)
@@ -198,7 +201,7 @@ public class UserModelDS {
 	public Collection<UserBean> doRetrieveUsers() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Utente,Copre WHERE Utente.Username=Copre.Username AND IDRuolo!=1;";
+		String selectSQL="SELECT * FROM Utente WHERE Ruolo=0;";
 		Collection<UserBean> users=new LinkedList<UserBean>();
 		try {
 			con=ds.getConnection();
@@ -218,6 +221,7 @@ public class UserModelDS {
 				bean.setBan(rs.getBoolean("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
+				bean.setRuolo(rs.getInt("Ruolo"));
 				users.add(bean);
 			}
 			if(rs!=null)
@@ -249,46 +253,46 @@ public class UserModelDS {
 				+ "Select CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Feedback\n"
 				+ "GROUP BY CodiceMateriale;";
-		
+
 		String dropViewFeedbackuserSQL = "DROP VIEW IF EXISTS FeedbackUser;";
 		String viewFeedbackuserSQL = "CREATE VIEW FeedbackUser AS\n"
 				+ "SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.dipName, Img\n"
 				+ "FROM Materiale LEFT JOIN FeedbackMedia ON Materiale.CodiceMateriale = FeedbackMedia.CodiceMateriale RIGHT JOIN Utente ON Materiale.Username = Utente.Username\n"
 				+ "group by Utente.Username;";
-		
 
-		
-		
+
+
+
 		String selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser;";
-		
-		if (rating == 0) {
-		
-		if ((ratingOrder.compareTo("DESC")==0)) {
-		selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)  ORDER BY feedback DESC;";
-		}
-		if ((ratingOrder.compareTo("ASC")==0)) {
-			selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) ORDER BY feedback ASC;";
-			}
-		if ((ratingOrder.compareTo("novalue")==0)) {
-			selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?);";
-			}
-		
-		
-		}else {
-			
 
-		
-		if ((ratingOrder.compareTo("DESC")==0)) {
-			selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback DESC;";
+		if (rating == 0) {
+
+			if ((ratingOrder.compareTo("DESC")==0)) {
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)  ORDER BY feedback DESC;";
+			}
+			if ((ratingOrder.compareTo("ASC")==0)) {
+				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) ORDER BY feedback ASC;";
+			}
+			if ((ratingOrder.compareTo("novalue")==0)) {
+				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?);";
+			}
+
+
+		}else {
+
+
+
+			if ((ratingOrder.compareTo("DESC")==0)) {
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback DESC;";
 			}
 			if ((ratingOrder.compareTo("ASC")==0)) {
 				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback ASC;";
-				}
+			}
 
 
 			if ((ratingOrder.compareTo("novalue")==0)) {
 				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback;";
-				}
+			}
 
 
 		}
@@ -298,12 +302,12 @@ public class UserModelDS {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
 
-            
-		   dropViewFeedbackmedia = con.prepareStatement(dropViewFeedbackmediaSQL);
-		   viewFeedbackmedia = con.prepareStatement(viewFeedbackmediaSQL);
-		   dropViewFeedbackuser = con.prepareStatement(dropViewFeedbackuserSQL);
-		   viewFeedbackuser = con.prepareStatement(viewFeedbackuserSQL);
-		   
+
+			dropViewFeedbackmedia = con.prepareStatement(dropViewFeedbackmediaSQL);
+			viewFeedbackmedia = con.prepareStatement(viewFeedbackmediaSQL);
+			dropViewFeedbackuser = con.prepareStatement(dropViewFeedbackuserSQL);
+			viewFeedbackuser = con.prepareStatement(viewFeedbackuserSQL);
+
 			if(rating!=0) {
 				ps.setInt(4, rating);
 				ps.setString(1, '%'+str+'%');
@@ -314,29 +318,29 @@ public class UserModelDS {
 				ps.setString(2, '%'+str+'%');
 				ps.setString(3, '%'+str+'%');
 			}
-			
+
 			dropViewFeedbackmedia.execute();
 			viewFeedbackmedia.execute();
 			dropViewFeedbackuser.execute();
 			viewFeedbackuser.execute();
-			
+
 			ResultSet rs=ps.executeQuery();
 
 			while(rs.next()) {
-				
-							UserBean bean=new UserBean();
-							
-							bean.setUsername(rs.getString("Username"));
-							bean.setNome(rs.getString("Nome"));
-							bean.setCognome(rs.getString("Cognome"));
-						    bean.setImg(rs.getBlob("Img"));
-							bean.setDenominazione(rs.getString("Denominazione"));
-							bean.setDipName(rs.getString("dipName"));
-							
-							
-							collectionBean.add(bean);
-						}
-					
+
+				UserBean bean=new UserBean();
+
+				bean.setUsername(rs.getString("Username"));
+				bean.setNome(rs.getString("Nome"));
+				bean.setCognome(rs.getString("Cognome"));
+				bean.setImg(rs.getBlob("Img"));
+				bean.setDenominazione(rs.getString("Denominazione"));
+				bean.setDipName(rs.getString("dipName"));
+
+
+				collectionBean.add(bean);
+			}
+
 		}
 		finally {
 			try {
@@ -348,16 +352,16 @@ public class UserModelDS {
 					con.close();
 			}
 		}
-		
+
 		return collectionBean;
-		
+
 	}
-	
+
 	public void doSave(UserBean item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?)";
+		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban,Ruolo) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?,?)";
 
 		try {
 			connection = ds.getConnection();
@@ -375,6 +379,7 @@ public class UserModelDS {
 			ps.setString(8, item.getDenominazione());
 			ps.setString(9, item.getDipName());
 			ps.setBoolean(10, item.getBan());
+			ps.setInt(11, item.getRuolo());
 
 			ps.executeUpdate();
 			System.out.println("Salvato nel Database");
@@ -413,7 +418,7 @@ public class UserModelDS {
 			}
 		}
 	}
-	
+
 	public void doUpdateCoin(String username,int coin)throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -439,13 +444,13 @@ public class UserModelDS {
 			}
 		}
 	}
-	
+
 	public void doUpdatePassword(String username,String newPassword)throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
 		String sql = "UPDATE Utente SET Pass = AES_ENCRYPT(?,'despacito') WHERE Username = ?";
-		
+
 		try {
 			connection = ds.getConnection();
 			ps = connection.prepareStatement(sql);
@@ -464,13 +469,13 @@ public class UserModelDS {
 			}
 		}
 	}
-	
+
 	public void doUpdateEmail(String username,String newMail)throws SQLException{
 		Connection connection = null;
 		PreparedStatement ps = null;
 
 		String sql = "UPDATE Utente SET  Email= ? WHERE Username = ?";
-		
+
 		try {
 			connection = ds.getConnection();
 			ps = connection.prepareStatement(sql);
@@ -488,15 +493,15 @@ public class UserModelDS {
 					connection.close();
 			}
 		}
-		
+
 	}
-	
+
 	public void doUpdateDepartment(String username,String newDipName,String newUniversity) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
 		String sql = "UPDATE Utente SET  dipName= ?,Denominazione=? WHERE Username = ?";
-		
+
 		try {
 			connection = ds.getConnection();
 			ps = connection.prepareStatement(sql);
@@ -516,13 +521,13 @@ public class UserModelDS {
 			}
 		}
 	}
-	
+
 	public void doUpdateImage(String username,InputStream image) throws SQLException{
 		Connection connection = null;
 		PreparedStatement ps = null;
 
 		String sql = "UPDATE Utente SET  Img=? WHERE Username = ?";
-		
+
 		try {
 			connection = ds.getConnection();
 			ps = connection.prepareStatement(sql);
@@ -541,20 +546,20 @@ public class UserModelDS {
 			}
 		}
 	}
-	
+
 	public float getValutazione(String username)throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
 		String sql="SELECT avg(Valutazione) as Media FROM Materiale,Feedback WHERE Materiale.CodiceMateriale=Feedback.CodiceMateriale and Feedback.CodiceMateriale in (select Materiale.CodiceMateriale from Materiale where Username=?);";
+		float media=0;
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
 			ps.setString(1, username);
 			rs=ps.executeQuery();
 			if(rs.next()) 
-				return rs.getFloat("Media");
-			return 0;
+				media=rs.getFloat("Media");
 		}finally {
 			try {
 				if(rs!=null)
@@ -567,8 +572,38 @@ public class UserModelDS {
 					con.close();
 			}
 		}
+		return media;
 	}
-	
+
+
+	public int getRole(String username) throws SQLException{
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT Ruolo FROM Utente WHERE Username=?;";
+		int ruolo=-1;
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, username);
+			rs=ps.executeQuery();
+			if(rs.next())
+				ruolo=rs.getInt("Ruolo");
+		}finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+		return ruolo;
+	}
+
 
 	private DataSource ds;
 }

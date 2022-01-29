@@ -9,10 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.model.UserRoleBean;
-import it.unisa.utils.Utility;
-import materiale.MaterialBean;
-import profilo.UserBean;
 
 public class PurchaseModelDS {
 	private DataSource ds;

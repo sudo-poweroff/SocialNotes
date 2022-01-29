@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="javax.sql.DataSource"%>
-<%@page import="it.unisa.model.UserRoleModelDS"%>
+<%@page import="profilo.UserModelDS"%>
 <!doctype html>
 <html lang="en">
   <head>
@@ -36,9 +36,9 @@
 	  
 	    DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		String username=(String)session.getAttribute("username");
-		UserRoleModelDS role=new UserRoleModelDS(ds);
+		UserModelDS role=new UserModelDS(ds);
 		try {
-			int userRole=role.doRetrieveByUsername(username);
+			int userRole=role.getRole(username);
 			if(userRole==1) {
 				link = "admin.jsp";
 				String encodedURL = response.encodeRedirectURL(link);
