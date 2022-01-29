@@ -142,8 +142,8 @@ if(collection!=null&&collection.size()>0){
 	 <%
 	while(it.hasNext()){
 		NewsBean nbean=(NewsBean)it.next();
-		Collection<String> fileNames = cmodel.doRetrieveByCodiceNews(nbean.getCodiceNews());
-		String fileName = null; //Per passarmela dopo nella showNews.jsp
+		Collection<Integer> files = cmodel.doRetrieveByCodiceNews(nbean.getCodiceNews());
+		int idFile = -1; //Per passarmela dopo nella showNews.jsp
 		%>
 		
 		  <tr>
@@ -156,14 +156,14 @@ if(collection!=null&&collection.size()>0){
 							
 					    <div class="card-horizontal">
 					        <div class="img-square-wrapper">
-					        	<% if(fileNames!=null&&fileNames.size()>0){
-					        		Iterator<?> itfiles = fileNames.iterator();
+					        	<% if(files!=null&&files.size()>0){
+					        		Iterator<?> itfiles = files.iterator();
 					        		if(itfiles.hasNext()){
-					        			fileName = (String)itfiles.next();	
-					        			FileBean fb = fmodel.doRetrieveByKey(fileName);
+					        			idFile = (int)itfiles.next();	
+					        			FileBean fb = fmodel.doRetrieveByKey(idFile);
 					        			if(fb!=null){
 					        				%>
-					        				<img class="img-resp" src="PrintNewsImage?filename=<%=fb.getFilename()%>"   alt="News">
+					        				<img class="img-resp" src="PrintNewsImage?idfile=<%=fb.getIdFile()%>"   alt="News">
 					        			<%
 					        			}
 					        		}
@@ -179,7 +179,7 @@ if(collection!=null&&collection.size()>0){
 					            <h4 class="card-title"><%=nbean.getTitolo() %></h4>
 					            <p class="card-text"><%=nbean.getArgomento() %></p>
 					            <br>
-					            <a href="<%=showNewsUrl %><%="?newsId="+nbean.getCodiceNews()+"&newsImage="+fileName%>" class="btn btn-principale stretched-link">Vai alla notizia</a>
+					            <a href="<%=showNewsUrl %><%="?newsId="+nbean.getCodiceNews()+"&newsImage="+idFile%>" class="btn btn-principale stretched-link">Vai alla notizia</a>
 					            <!-- stretched link rende tutta la card un link -->
 					        </div>
 					    </div>

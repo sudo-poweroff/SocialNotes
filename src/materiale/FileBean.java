@@ -7,12 +7,14 @@ public class FileBean {
 	private String formato;
 	private InputStream contenuto;
 	private int dimensione;
+	private int idFile;
 	
 	public FileBean() {
 		this.filename="";
 		this.formato="";
 		this.contenuto=null;
 		this.dimensione=0;
+		this.idFile=-1;
 	}
 
 	
@@ -50,6 +52,16 @@ public class FileBean {
 	}
 	
 	
+	public int getIdFile() {
+		return idFile;
+	}
+
+
+	public void setIdFile(int idFile) {
+		this.idFile = idFile;
+	}
+
+
 	public boolean isEmpty() {
 		return this.filename.compareTo("")==0;
 	}
@@ -57,14 +69,17 @@ public class FileBean {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return this.filename.compareTo(((FileBean)obj).getFilename())==0;
+		return this.idFile==((FileBean)obj).getIdFile();
 	}
+
 
 	@Override
 	public String toString() {
 		return "FileBean [filename=" + filename + ", formato=" + formato + ", contenuto=" + contenuto + ", dimensione="
-				+ dimensione + "]";
+				+ dimensione + ", idFile=" + idFile + "]";
 	}
+
+	
 
 
 }

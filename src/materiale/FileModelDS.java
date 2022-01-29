@@ -10,7 +10,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
 public class FileModelDS  {
@@ -20,23 +19,23 @@ public class FileModelDS  {
 		this.ds=ds;
 	}
 
-	public FileBean doRetrieveByKey(String fileName) throws SQLException {
+	public FileBean doRetrieveByKey(int IdFile) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Files WHERE FileName=?;";
+		String selectSQL="SELECT * FROM Files WHERE IdFile=?;";
 		FileBean bean=new FileBean();
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
-			ps.setString(1, fileName);
+			ps.setInt(1, IdFile);
 			ResultSet rs=ps.executeQuery();
 			if(rs.next()) {
+				bean.setIdFile(rs.getInt("IdFile"));
 				bean.setFilename(rs.getString("FileName"));
 				System.out.println(bean.getFilename());
 				bean.setFormato(rs.getString("Formato"));			
 				bean.setContenuto(rs.getBlob("Contenuto").getBinaryStream());
 				if(bean.getContenuto()!=null)
-				System.out.println("ciao33");
 				bean.setDimensione(rs.getInt("Dimensione"));
 				
 			}
@@ -58,35 +57,6 @@ public class FileModelDS  {
 		
 	}
 	
-	public boolean isPresent(String fileName) throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		ResultSet rs=null;
-		String sql="SELECT Filename FROM Files WHERE FileName=?;";
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(sql);
-			ps.setString(1, fileName);
-			rs=ps.executeQuery();
-			if(rs.next())
-				return true;
-			else
-				return false;
-		}finally{
-			try {
-				if(rs!=null)
-					rs.close();
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-			
-		}
-		
-	}
 	
 	public Collection<FileBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
@@ -100,6 +70,7 @@ public class FileModelDS  {
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {
 				FileBean bean=new FileBean();
+				bean.setIdFile(rs.getInt("IdFile"));
 				bean.setFilename(rs.getString("FileName"));
 				bean.setFormato(rs.getString("Formato"));
 				bean.setContenuto((InputStream)rs.getBlob("Contenuto"));
@@ -149,6 +120,34 @@ public class FileModelDS  {
 				if (connection != null) {
 					connection.close();
 				}
+			}
+		}
+	}
+	
+	
+	public int doRetrieveKey()throws SQLException{
+		Connection con=null;
+		PreparedStatement ps=null;
+		String sql="SELECT IdFile FROM Files ORDER BY IdFile;";
+		ResultSet rs=null;
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			rs=ps.executeQuery();
+			if(rs.last()) {
+				return rs.getInt("IdFile");
+			}
+			return -1;
+		}finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
 			}
 		}
 	}

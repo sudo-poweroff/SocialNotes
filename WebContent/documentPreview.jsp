@@ -128,8 +128,11 @@ if(cartError!=null){
                             <img src="PrintAnteprima?codice=<%=material.getCodiceMateriale() %>" class="img-center">
                         
                     </div>
+                    <%	FileModelDS fileModel=new FileModelDS(ds);
+                    	FileBean file=fileModel.doRetrieveByKey(material.getIdFile());
+                    %>
                     <div class="block-body text-center">
-                        <h3 class="heading heading-5 strong-600 text-capitalize"><%=material.getFileName() %></h3>
+                        <h3 class="heading heading-5 strong-600 text-capitalize"><%=file.getFilename() %></h3>
                   	    <div class="widget-26-job-starred">
 	             			<canvas class="myCanvas" data-rating="<%=feed %>" width="100" height="20">not support the canvas tag.</canvas>
 	            		</div>

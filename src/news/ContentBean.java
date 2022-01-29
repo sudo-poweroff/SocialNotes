@@ -4,7 +4,7 @@ public class ContentBean {
 
 	public ContentBean() {
 		this.codiceNews=-1;
-		this.fileName="";
+		this.idFile=-1;
 	}
 	
 	
@@ -17,14 +17,14 @@ public class ContentBean {
 		this.codiceNews = codiceNews;
 	}
 	
-	
-	public String getFileName() {
-		return fileName;
+
+	public int getIdFile() {
+		return idFile;
 	}
-	
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+
+
+	public void setIdFile(int idFile) {
+		this.idFile = idFile;
 	}
 
 
@@ -35,16 +35,16 @@ public class ContentBean {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return this.codiceNews==((ContentBean)obj).getCodiceNews()&&this.fileName.compareTo(((ContentBean)obj).getFileName())==0;
+		return this.codiceNews==((ContentBean)obj).getCodiceNews()&&this.idFile==((ContentBean)obj).getIdFile();
 	}
 
 	
 	@Override
 	public String toString() {
-		return "ContentBean [codiceNews=" + codiceNews + ", fileName=" + fileName + "]";
+		return "ContentBean [codiceNews=" + codiceNews + ", idFile=" + idFile + "]";
 	}
 
 
 	private int codiceNews;
-	private String fileName;
+	private int idFile;
 }

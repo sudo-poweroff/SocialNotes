@@ -2,10 +2,7 @@ package materiale;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -73,7 +70,6 @@ public class FileUploadServlet extends HttpServlet {
 				//continuo inserimento dati
 				material.setCodiceCorso(codiceCorso);
 				material.setUsername((String)session.getAttribute("username"));
-				material.setFileName(filePart.getSubmittedFileName());
 				is=materialPart.getInputStream();
 				material.setAnteprima(is);	
 				
@@ -87,6 +83,8 @@ public class FileUploadServlet extends HttpServlet {
 		MaterialModelDS materialModel=new MaterialModelDS(ds);
 		try {
 			fileModel.doSave(file);
+			int idFile=fileModel.doRetrieveKey();
+			material.setIdFile(idFile);
 			materialModel.doSave(material);
 			String success = "Il materiale è stato caricato correttamente!";
 			request.setAttribute("success", success);

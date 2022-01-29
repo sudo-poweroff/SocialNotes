@@ -15,7 +15,7 @@ public class MaterialBean {
 		this.hidden=true;
 		this.codiceCorso=-1;
 		this.username="";
-		this.fileName="";
+		this.idFile=-1;
 		this.anteprima=null;
 	}
 	
@@ -109,14 +109,14 @@ public class MaterialBean {
 		this.username = username;
 	}
 	
-	
-	public String getFileName() {
-		return fileName;
+
+	public int getIdFile() {
+		return idFile;
 	}
-	
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+
+
+	public void setIdFile(int idFile) {
+		this.idFile = idFile;
 	}
 
 
@@ -135,8 +135,11 @@ public class MaterialBean {
 	public String toString() {
 		return "MaterialBean [codiceMateriale=" + codiceMateriale + ", dataCaricamento=" + dataCaricamento
 				+ ", keywords=" + keywords + ", costo=" + costo + ", descrizione=" + descrizione + ", hidden=" + hidden
-				+ ", codiceCorso=" + codiceCorso + ", username=" + username + ", fileName=" + fileName +"]";
+				+ ", codiceCorso=" + codiceCorso + ", username=" + username + ", idFile=" + idFile + ", anteprima="
+				+ anteprima + "]";
 	}
+
+
 
 
 	private int codiceMateriale;
@@ -147,6 +150,6 @@ public class MaterialBean {
     private boolean hidden;
     private int codiceCorso;
     private String username;
-    private String fileName;
+    private int idFile;
     private InputStream anteprima;
 }

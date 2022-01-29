@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
 public class ContentModelDS {
@@ -24,11 +23,11 @@ public class ContentModelDS {
 	 * @return Restituisce una collezione di stringhe corrispondenti ai nomi dei file che ha quella news
 	 * @throws SQLException
 	 */
-	public Collection<String> doRetrieveByCodiceNews(int codiceNews)throws SQLException{
+	public Collection<Integer> doRetrieveByCodiceNews(int codiceNews)throws SQLException{
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Contenuto WHERE CodiceNews = ? ;";
-		Collection<String> fileNames=new LinkedList<String>();
+		String selectSQL="SELECT IdFile FROM Contenuto WHERE CodiceNews = ? ;";
+		Collection<Integer> fileNames=new LinkedList<Integer>();
 		try {
 			con=ds.getConnection();	
 			ps=con.prepareStatement(selectSQL);
@@ -36,7 +35,7 @@ public class ContentModelDS {
 			Utility.print("doRetrieveByCodiceNews:"+ps.toString());
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {
-				fileNames.add(rs.getString("FileName"));
+				fileNames.add(rs.getInt("IdFile"));
 			}
 		}
 		finally {
@@ -65,7 +64,7 @@ public class ContentModelDS {
 			while(rs.next()) {
 				ContentBean bean=new ContentBean();
 				bean.setCodiceNews(rs.getInt("CodiceNews"));
-				bean.setFileName(rs.getString("FileName"));
+				bean.setIdFile(rs.getInt("IdFile"));
 				content.add(bean);
 			}
 		}
@@ -85,12 +84,12 @@ public class ContentModelDS {
 	public void doSave(ContentBean item) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
-		String sql="INSERT INTO Contenuto (CodiceNews,Filename) values (?,?);";
+		String sql="INSERT INTO Contenuto (CodiceNews,IdFile) values (?,?);";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
 			ps.setInt(1, item.getCodiceNews());
-			ps.setString(2, item.getFileName());
+			ps.setInt(2, item.getIdFile());
 			ps.executeUpdate();
 		}finally {
 			try {

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.sql.DataSource;
-import javax.swing.text.html.parser.ContentModel;
 
 import materiale.FileBean;
 import materiale.FileModelDS;
@@ -67,17 +66,13 @@ public class NewsUploadServlet extends HttpServlet {
 		ContentModelDS contentModel=new ContentModelDS(ds);
 		try {
 			ContentBean content=new ContentBean();
-			if(!fileModel.isPresent(file.getFilename()))
 				fileModel.doSave(file);
-			//System.out.println("Ho salvato il file");
 			newsModel.doSave(news);
-			//System.out.println("Ho salvato la news");
-			content.setFileName(file.getFilename());
+			int idFile=fileModel.doRetrieveKey();
 			int codiceNews=newsModel.doRetrieveKey();
-			//System.out.println(codiceNews);
+			content.setIdFile(idFile);
 			content.setCodiceNews(codiceNews);
 			contentModel.doSave(content);
-			//System.out.println("Ho salvato la riga in Contenuto");
 			String success = "Caricamento news effettuato";
 			request.setAttribute("success", success);
 		} 

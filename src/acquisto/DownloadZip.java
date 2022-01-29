@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +51,7 @@ public class DownloadZip extends HttpServlet {
 				while(it.hasNext()) {
 					MaterialBean material=(MaterialBean)it.next();
 					try {
-						FileBean file=fileModel.doRetrieveByKey(material.getFileName());
+						FileBean file=fileModel.doRetrieveByKey(material.getIdFile());
 						fileList.add(file);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block

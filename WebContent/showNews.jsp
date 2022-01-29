@@ -98,8 +98,9 @@ p, li, li a {
 	response.sendRedirect(encodedURL);
   }
   int id = Integer.parseInt(idNews);
+  int idFile=Integer.parseInt(imageNews);
   NewsBean nbean = model.doRetrieveByCodiceNews(id);
-  FileBean fb = fmodel.doRetrieveByKey(imageNews);
+  FileBean fb = fmodel.doRetrieveByKey(idFile);
   %>
                         
 	 <div class="container">
@@ -117,7 +118,7 @@ p, li, li a {
 	                    <%
 	                    		if(fb!=null){
 					      %>
-					        		<img class="img-thumbnail md-margin-bottom-10" src="PrintNewsImage?filename=<%=fb.getFilename()%>"  width="300" height="182" alt="SocialNotes News">
+					        		<img class="img-thumbnail md-margin-bottom-10" src="PrintNewsImage?idfile=<%=fb.getIdFile()%>"  width="300" height="182" alt="SocialNotes News">
 					        			<%
 					
 					        	}else{

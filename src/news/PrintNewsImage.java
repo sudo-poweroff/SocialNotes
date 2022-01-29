@@ -34,12 +34,13 @@ public class PrintNewsImage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("image/png");
-		String filename=request.getParameter("filename");
+		String id=request.getParameter("idfile");
+		int idFile=Integer.parseInt(id);
 		//System.out.println("Nome del file preso dalla request: "+filename);
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		try{
 			FileModelDS filemodel=new FileModelDS(ds);
-			FileBean bean=filemodel.doRetrieveByKey(filename);
+			FileBean bean=filemodel.doRetrieveByKey(idFile);
 			
 			//Blob image=bean.getAnteprima();
 			//InputStream is=image.getBinaryStream();
