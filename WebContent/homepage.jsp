@@ -217,19 +217,30 @@ section .section-title{
 <body>
 
 <%
-String linkAdmin = "admin.jsp";
-String link = "homepage_user.jsp";
+String linkUsersManager = "homepageUsersManager.jsp";
+String linkNotesManager = "homepageNotesManager.jsp";
+String linkNewsManager = "homepageNewsManager.jsp";
+String linkHomePageUser = "homepage_user.jsp";
 if (session.getAttribute("username")!=null){
 	
 	if (((int)session.getAttribute("role"))==1){
-		 String encodedURL = response.encodeRedirectURL(linkAdmin);
+		 String encodedURL = response.encodeRedirectURL(linkUsersManager);
+		 response.sendRedirect(encodedURL);
+		 return;
+	}else if (((int)session.getAttribute("role"))==2){
+		 String encodedURL = response.encodeRedirectURL(linkNotesManager);
+		 response.sendRedirect(encodedURL);
+		 return;
+	}else if (((int)session.getAttribute("role"))==3){
+		 String encodedURL = response.encodeRedirectURL(linkNewsManager);
+		 response.sendRedirect(encodedURL);
+		 return;
+	}else if (((int)session.getAttribute("role"))==0){
+		 String encodedURL = response.encodeRedirectURL(linkHomePageUser);
 		 response.sendRedirect(encodedURL);
 		 return;
 	}
 	
-	 String encodedURL = response.encodeRedirectURL(link);
-	 response.sendRedirect(encodedURL);
-	 return;
 }
     	
 %>

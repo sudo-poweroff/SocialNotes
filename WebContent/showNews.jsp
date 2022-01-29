@@ -80,9 +80,15 @@ p, li, li a {
   }else{
 	  synchronized(session) {
 	 
-	  %>
-	  <jsp:include page="header_user.jsp"></jsp:include>
-	 <%  
+		  if (((int)session.getAttribute("role"))==3){
+			  %>
+			  <jsp:include page="headerNewsManager.jsp"></jsp:include>
+			 <% 
+			  }else if (((int)session.getAttribute("role"))==0){
+				  %>
+				  <jsp:include page="header_user.jsp"></jsp:include>
+				 <%   
+			  }
 	  }
   } %>
   
