@@ -34,6 +34,41 @@ ctx.fillStyle = my_gradient;
     ctx.restore();
 }
 
+function fileValidation(){
+	        const fi = document.getElementById('formFile');
+        // Check if any file is selected.
+        //console.log("verifico dimensione file");
+        if (fi.files.length > 0) {
+            for (var i = 0; i <= fi.files.length - 1; i++) {
+  
+                const fsize = fi.files.item(i).size;
+                const file = Math.round((fsize / 1024));
+                // The size of the file.
+                //console.log("dimensione file:"+fsize);
+                if (file >= (1024*50)) {
+                    alert(
+                      "Dimensione file eccessiva, seleziona un file che sia grande al massimo 50MB");
+                      return false;
+                }
+                
+            }
+        }
+        //vede se il file è del tipo corretto
+		            var fileInput = 
+                document.getElementById('formFile');
+            var filePath = fileInput.value;
+          
+            // Allowing file type
+            var allowedExtensions = 
+/(\.doc|\.docx|\.odt|\.pdf|\.ppt|\.pptx|\.jpeg|\.png|\.jpg|\.PNG)$/i;
+              
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Tipo del file non valido');
+                fileInput.value = '';
+                return false;
+            } 
+}
+
 
 
 

@@ -88,19 +88,23 @@ $(document).ready(function() {
  
  String adminURL = "admin.jsp";
  String showNewsUrl = "showNews.jsp";
- 
    if(session.getAttribute("username")==null){
 	  System.out.println("L'utente non è loggato");
 	  %>
 	  <jsp:include page="header.jsp"></jsp:include>
 	  <% 
   }else{
-	  if (((int)session.getAttribute("role"))==1){
+	  
+	  
+	  
+	  if ((((int)session.getAttribute("role"))!=3)&&(((int)session.getAttribute("role"))!=0)){
+		  
 		  adminURL = response.encodeURL(adminURL);
 		  response.sendRedirect(adminURL);
 		  return;
 		  
 	  }
+
                 
 	  synchronized(session) {
 	  System.out.println("ID SESSIONE NEWS:"+session.getId());
@@ -108,9 +112,17 @@ $(document).ready(function() {
 	  System.out.println("Data creazione "+ dataSessione);
 	   
 	  showNewsUrl = response.encodeURL(showNewsUrl);
+	  
+	  
+	  if (((int)session.getAttribute("role"))==3){
 	  %>
-	  <jsp:include page="header_user.jsp"></jsp:include>
-	 <%  
+	  <jsp:include page="headerNewsManager.jsp"></jsp:include>
+	 <% 
+	  }else if (((int)session.getAttribute("role"))==0){
+		  %>
+		  <jsp:include page="header_user.jsp"></jsp:include>
+		 <%   
+	  }
 	  }
   } %>
 
