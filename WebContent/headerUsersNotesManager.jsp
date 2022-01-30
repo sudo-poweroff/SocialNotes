@@ -20,13 +20,11 @@
 
 <%
    String homeLink = "homepageNewsManager.jsp";
-   String viewNewsUploadedLink = "news.jsp";
    String logoutLink = "Logout";
    
    if (session.getAttribute("username")!=null){
-	   if (((int)session.getAttribute("role"))==2){
+	   if ((((int)session.getAttribute("role"))==2)||(((int)session.getAttribute("role"))==1)){
 	   homeLink = response.encodeRedirectUrl(homeLink);
-	   viewNewsUploadedLink = response.encodeRedirectUrl(viewNewsUploadedLink);
 	   logoutLink = response.encodeRedirectUrl(logoutLink);
 	   }else{
 		   homeLink = response.encodeRedirectUrl(homeLink);
@@ -39,7 +37,7 @@
 %>
 
 <nav class="navbar navbar-expand-lg navbar-dark colore-principale justify-content-end">
-        <a class="navbar-brand" href="homepage.jsp" ><img src="img/LogoDefinitivo1.png" height="25" width="150"></a>
+        <a class="navbar-brand" href=<%=homeLink %> ><img src="img/LogoDefinitivo1.png" height="25" width="150"></a>
         <button class="navbar-toggler my-1" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

@@ -24,6 +24,7 @@
   <body>
   <%
   String home = "homepage.jsp";
+  String linkReport ="report.jsp";
 	if (session.getAttribute("username")==null){
 		  response.sendRedirect("login.jsp");
 		  return;
@@ -33,7 +34,7 @@
   	response.sendRedirect(encodeHomeURL);
   	return;
   }
-
+      linkReport = response.encodeRedirectURL(linkReport);
 	  DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 	  MaterialModelDS material=new MaterialModelDS(ds);
 	  UserModelDS user=new UserModelDS(ds);
@@ -135,7 +136,7 @@
 						</div>
 						
 							<div class="form-group col-md-3">
-								<a style="color:red" href="">Segnala Materiale</a>
+								<a style="color:red" href="report.jsp;jsessionid=<%=session.getId() %>?codice=<%=mat.getCodiceMateriale()%>">Segnala Materiale</a>
 						</div>
 						
 						
