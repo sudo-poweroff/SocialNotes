@@ -251,13 +251,13 @@ public class UserModelDS {
 
 		String dropViewFeedbackmediaSQL = "DROP VIEW IF EXISTS FeedbackMedia;";
 		String viewFeedbackmediaSQL = "CREATE VIEW FeedbackMedia AS\n"
-				+ "Select CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+				+ "Select CodiceMateriale,  ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Feedback\n"
 				+ "GROUP BY CodiceMateriale;";
 
 		String dropViewFeedbackuserSQL = "DROP VIEW IF EXISTS FeedbackUser;";
 		String viewFeedbackuserSQL = "CREATE VIEW FeedbackUser AS\n"
-				+ "SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.dipName, Img\n"
+				+ "SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.Ruolo, Utente.dipName, Img\n"
 				+ "FROM Materiale LEFT JOIN FeedbackMedia ON Materiale.CodiceMateriale = FeedbackMedia.CodiceMateriale RIGHT JOIN Utente ON Materiale.Username = Utente.Username\n"
 				+ "group by Utente.Username;";
 

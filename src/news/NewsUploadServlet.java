@@ -82,7 +82,7 @@ public class NewsUploadServlet extends HttpServlet {
 			//Mando una alert 
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/uploadNews.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/homepageNewsManager.jsp;jsessionid="+session.getId());
 		dispatcher.forward(request, response);
 	}
 
