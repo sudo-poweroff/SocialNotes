@@ -17,7 +17,7 @@ public class UserBean {
 		this.pass="";
 		this.dataNascita=null;
 		this.coin=0;
-		this.ban=false;
+		this.ban=null;
 		this.denominazione="";
 		this.dipName="";
 	}
@@ -102,12 +102,12 @@ public class UserBean {
 	}
 	
 	
-	public boolean getBan() {
+	public Date getBan() {
 		return ban;
 	}
 	
 	
-	public void setBan(boolean ban) {
+	public void setBan(Date ban) {
 		this.ban = ban;
 	}
 	
@@ -169,7 +169,7 @@ public class UserBean {
     private String pass;
     private Date dataNascita;
     private int coin;
-    private boolean ban;
+    private Date ban;
     private String denominazione;
     private String dipName;
     private int ruolo;

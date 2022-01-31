@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="javax.sql.DataSource"%>
+<%@page import="java.sql.Date"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Iterator"%>
 <!DOCTYPE html>
@@ -57,7 +58,8 @@ String homeUser = "homepage_user.jsp";
 					while(it.hasNext()){
 						UserBean bean=(UserBean)it.next();
 						String ban;
-						if(bean.getBan())
+						Date dataAttuale=new Date(System.currentTimeMillis());
+						if(bean.getBan().after(dataAttuale))
 							ban="Bloccato";
 						else
 							ban="Sbloccato";

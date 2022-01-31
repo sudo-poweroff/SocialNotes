@@ -1,4 +1,4 @@
-package it.unisa.control;
+package profilo;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-
-import profilo.UserModelDS;
 
 @WebServlet("/RemoveBan")
 public class RemoveBan extends HttpServlet {
@@ -32,7 +30,7 @@ public class RemoveBan extends HttpServlet {
 		String username=request.getParameter("username");
 		UserModelDS user =new UserModelDS(ds);
 		try {
-			user.manageBan(username, false);
+			user.manageBan(username,null);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

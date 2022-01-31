@@ -100,19 +100,6 @@
   response.sendRedirect(response.encodeUrl("homepage.jsp"));
 
 } %>
-<%
-String cartError = (String)request.getAttribute("cartError");
-if(cartError!=null){
-	%>
-		<div class="alert alert-danger alert-dismissible fade show" role="alert">
-	<strong>Attenzione!</strong> Il file &egrave; gi&agrave; presente nel carrello
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		<span aria-hidden="true">&times;</span>
-	</button>
-</div>
-<%
-}
-%>
 <br>
 <br>
 <div class="container">
@@ -182,7 +169,6 @@ if(cartError!=null){
                 <h5>&nbsp;<b>Data: </b><%=material.getDataCaricamento() %></h5>
                 <h5>&nbsp;<b>Corso: </b><%=course.getNome() %></h5>
                 <h5>&nbsp;<b>Universita': </b><%=user.getDenominazione() %></h5>
-                <h5>&nbsp;<b>Coin: </b><%=material.getCosto() %></h5>
 	            </div>
 	           <br>
             </div>

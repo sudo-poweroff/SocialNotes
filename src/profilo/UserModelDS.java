@@ -2,6 +2,7 @@ package profilo;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ public class UserModelDS {
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
 				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getBoolean("Ban"));
+				bean.setBan(rs.getDate("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
@@ -89,7 +90,7 @@ public class UserModelDS {
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
 				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getBoolean("Ban"));
+				bean.setBan(rs.getDate("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
@@ -131,7 +132,7 @@ public class UserModelDS {
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
 				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getBoolean("Ban"));
+				bean.setBan(rs.getDate("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
@@ -176,7 +177,7 @@ public class UserModelDS {
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
 				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getBoolean("Ban"));
+				bean.setBan(rs.getDate("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
@@ -218,7 +219,7 @@ public class UserModelDS {
 				bean.setPass(rs.getString("Pass"));
 				bean.setDataNascita(rs.getDate("DataNascita"));
 				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getBoolean("Ban"));
+				bean.setBan(rs.getDate("Ban"));
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
@@ -268,13 +269,13 @@ public class UserModelDS {
 		if (rating == 0) {
 
 			if ((ratingOrder.compareTo("DESC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)  ORDER BY feedback DESC;";
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0 ORDER BY feedback DESC;";
 			}
 			if ((ratingOrder.compareTo("ASC")==0)) {
-				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) ORDER BY feedback ASC;";
+				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0 ORDER BY feedback ASC;";
 			}
 			if ((ratingOrder.compareTo("novalue")==0)) {
-				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?);";
+				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0;";
 			}
 
 
@@ -283,15 +284,15 @@ public class UserModelDS {
 
 
 			if ((ratingOrder.compareTo("DESC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback DESC;";
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback DESC;";
 			}
 			if ((ratingOrder.compareTo("ASC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback ASC;";
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback ASC;";
 			}
 
 
 			if ((ratingOrder.compareTo("novalue")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? ORDER BY feedback;";
+				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback;";
 			}
 
 
@@ -378,7 +379,7 @@ public class UserModelDS {
 			ps.setInt(7, item.getCoin());
 			ps.setString(8, item.getDenominazione());
 			ps.setString(9, item.getDipName());
-			ps.setBoolean(10, item.getBan());
+			ps.setDate(10, item.getBan());
 			ps.setInt(11, item.getRuolo());
 
 			ps.executeUpdate();
@@ -395,7 +396,7 @@ public class UserModelDS {
 		}
 	}
 
-	public void manageBan(String username,boolean ban) throws SQLException{
+	public void manageBan(String username,Date ban) throws SQLException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -403,7 +404,7 @@ public class UserModelDS {
 		try {
 			con = ds.getConnection();
 			ps = con.prepareStatement(sql);
-			ps.setBoolean(1, ban);
+			ps.setDate(1, ban);
 			ps.setString(2, username);
 			ps.executeUpdate();
 			System.out.println("Ban aggiornato");

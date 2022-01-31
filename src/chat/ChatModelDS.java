@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Model;
 import it.unisa.utils.Utility;
 
 public class ChatModelDS{
@@ -28,6 +27,7 @@ public class ChatModelDS{
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
+			ps.setInt(1, codice);
 			//Utility.print("doRetrieveAll:"+ps.toString());
 			ResultSet rs=ps.executeQuery();
 			if(rs.next()) {
