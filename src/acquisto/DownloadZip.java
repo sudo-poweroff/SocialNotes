@@ -86,7 +86,9 @@ public class DownloadZip extends HttpServlet {
 								}
 						}
 					}
-					cart.clear();
+					/*
+					 * Acquisto fatto,non è più necessario farlo qua in buyMaterial
+					 * cart.clear();
 					UserModelDS userModel=new UserModelDS(ds);
 					String username=(String)session.getAttribute("username");
 					userModel.doUpdateCoin(username, coin-totale);
@@ -96,7 +98,7 @@ public class DownloadZip extends HttpServlet {
 					request.setAttribute("success", success);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e.printStackTrace(); */
 				}
 				finally{
 					output.close();

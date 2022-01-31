@@ -1,5 +1,5 @@
 <%@page import="materiale.*"%>
-<%@page import="profilo.*"%>
+<%@page import="profilo.*,acquisto.*"%>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.LinkedList"%>
@@ -89,7 +89,6 @@
 	CourseModelDS courseModel=new CourseModelDS(ds);
 	String codiceCorso=""+material.getCodiceCorso();
 	CourseBean course=courseModel.doRetrieveByKey(codiceCorso);
-	
 	String addCartLink ="AddToCart";
 	String addFeedback = "AddFeedback";
 	if(session.getAttribute("username")!=null){
@@ -142,11 +141,34 @@ if(cartError!=null){
                                
                                <% if (session.getAttribute("username")!=null) { %>
                                 <div class="col-8">
+                                
+                                		<%	//verifico se l'utente ha già comprato quel materiale
+					
+											PurchaseModelDS acquistiModel = new PurchaseModelDS(ds);
+											Collection<PurchaseBean> acquistiEffettuati = acquistiModel.doRetrieveByUsername((String)session.getAttribute("username"));
+											
+											boolean acquistato=false;
+											for(PurchaseBean acquisto : acquistiEffettuati){
+												if(acquisto.getCodiceMateriale()==material.getCodiceMateriale())
+													acquistato=true;												
+											}
+											
+											if(acquistato){
+											
+											%>
+											<button type="button" class="btn btn-block btn-primary btn-circle btn-icon-left" id="scarica">
+							<a href="storicoMateriale.jsp" style="color:white">Visualizza tra gli acquisti </a>
+								</button>
+						<%
+						}else{
+						%>
+                                
                                     <button type="button" class="btn btn-block btn-primary btn-circle btn-icon-left" id="scarica">
                                         <a href="<%=addCartLink %>?codice=<%=material.getCodiceMateriale() %>&url=documentPreview.jsp" style="color:white">Aggiungi al carello <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
   <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
 </svg></a>
                                     </button>
+                                    <%} %>
                                 </div>
                                 <%} %>
                             </div>
