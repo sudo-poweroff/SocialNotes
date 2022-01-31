@@ -66,7 +66,7 @@ else{
 	String linkHomepage= "homepage_user.jsp";
 	 String encodedURL = response.encodeURL(linkHomepage);
 	 String priceUrl= response.encodeURL("prezzi.jsp");
-	 String provaZipUrl=response.encodeURL("DownloadZip");
+	 String visualizzaMaterialeUrl=response.encodeURL("storicoMateriale.jsp");
 	 String cartUrl=response.encodeURL("cart.jsp");
 	 %>
 
@@ -76,7 +76,7 @@ else{
 			String tot=request.getParameter("tot");
 			int totale=Integer.parseInt(tot);
 			int coin=(int)session.getAttribute("coin");
-			if(totale==0){
+			if(request.getAttribute("emptyCart")!=null){
 				
 				
 				
@@ -97,29 +97,8 @@ else{
 	<%		
 			}
 			
-			else if(totale<=coin) {
-				//Salva l'acquisto di tutto il materiale
-				Collection<MaterialBean> cart=(Collection<MaterialBean>)session.getAttribute("cart");
-				String username = (String)session.getAttribute("username"); 
-				DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-				PurchaseModelDS purchaseModel = new PurchaseModelDS(ds);
-				if(cart!=null&&cart.size()>0){
-					Iterator<?> it=cart.iterator();
-					while(it.hasNext()) {
-						PurchaseBean purchaseBean = new PurchaseBean();
-					
-						MaterialBean material=(MaterialBean)it.next();
-						purchaseBean.setCodiceMateriale(material.getCodiceMateriale());
-						purchaseBean.setUsername(username);						
-						purchaseBean.setDataAcquisto(new Date(System.currentTimeMillis()));
-						try {
-							purchaseModel.doSave(purchaseBean);
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-					}
-					
-				}
+			else if(request.getAttribute("success")!=null) {
+				
 		
 		%>
 		<div style="border-radius: 200px; height: 200px; width: 200px; background: #F8FAF5; margin: 0 auto;">
@@ -128,16 +107,16 @@ else{
 
 		<h1>Acquisto ultimato</h1>
 		<p>
-			Effettua il download!
+			Ora puoi effettuare il download!
 		</p>
 		<br>
-		<button class="btn btn-principale btn-lg" onclick="window.location.href='<%=provaZipUrl%>?tot=<%=totale%>'">Scarica i tuoi appunti</button>
+		<button class="btn btn-principale btn-lg" onclick="window.location.href='<%=visualizzaMaterialeUrl%>'">Visualizza i tuoi acquisti</button>
 		<br>
 		<br>
 		<button class="btn btn-light btn-lg" onclick="window.location.href='<%=encodedURL%>'">Vai alla Home</button>
 		<%
 			}
-			else{
+			else if(request.getAttribute("notEnoughCoins")!=null){
 		%>
 		<div style="border-radius: 200px; height: 200px; width: 200px; background: #F8FAF5; margin: 0 auto;">
 			<i style="color:red">&#10060;</i>

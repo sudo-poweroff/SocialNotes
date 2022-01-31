@@ -23,7 +23,7 @@
 	CourseModelDS cModel=new CourseModelDS(ds);
 	MaterialModelDS material = new MaterialModelDS(ds);
 	
-	String buyMaterialUrl = "buyMaterial.jsp";
+	String buyMaterialUrl = "buyMaterial";
 	String RemoveFromCart = "RemoveFromCart";
 	String documentPreviewUrl = "documentPreview.jsp";
 	documentPreviewUrl = response.encodeURL(documentPreviewUrl);
