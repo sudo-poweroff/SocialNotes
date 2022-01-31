@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/segnalazioni_eff.css" />
 </head>
 <body>
-<%@ include file="header.jsp"%>
+<%@ include file="headerUsersNotesManager.jsp"%>
 <br>
 <h2><b>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;SEGNALAZIONI EFFETTUATE</b></h2>
 
@@ -82,7 +82,7 @@
 </div>
 
 
-<br>
+<br><br><br><br>
 <%@ include file="footer.jsp"%>
 </body>
 </html>

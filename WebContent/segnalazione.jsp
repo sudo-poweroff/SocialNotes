@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/segnalazione.css" />
 </head>
 <body>
-<%@ include file="header.jsp"%>
+<%@ include file="headerUsersNotesManager.jsp"%>
 <br>
 <h2><b>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;SEGNALAZIONI ARCHIVIATE</b></h2>
 
@@ -83,7 +83,7 @@
 </div>
 
 
-<br>
+<br><br><br><br><br><br><br><br><br>
 <%@ include file="footer.jsp"%>
 </body>
 </html>

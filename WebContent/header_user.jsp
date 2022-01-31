@@ -43,6 +43,7 @@
 	String logoutLink = "homepage.jsp";
 	String search = "searchFriend.jsp";
 	String cartLink="cart.jsp";
+	String acquistiLink = "storicoMateriale.jsp";
 	int coin = 0;
 	int numeroElementi=0;
 	 String adminURL = "admin.jsp";
@@ -65,6 +66,7 @@
 		changeLink = response.encodeURL(changeLink);
 		search = response.encodeURL(search);
 		cartLink=response.encodeURL(cartLink);
+		acquistiLink = response.encodeURL(acquistiLink);
 		if ((session.getAttribute("cart")!=null)){
 		Collection<MaterialBean>carrello=(Collection<MaterialBean>)session.getAttribute("cart");
 		if(carrello!=null){
@@ -145,6 +147,7 @@
 					<li class="nav-item active"><a class="nav-link"
 						href="<%=homeLink %>"> Home <span class="sr-only">(current)</span>
 					</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=acquistiLink %>">Storico acquisti</a></li>
 					<li class="nav-item"><a class="nav-link" href="<%=newsLink %>">News</a></li>
 
 					<li class="nav-item"><a class="nav-link"

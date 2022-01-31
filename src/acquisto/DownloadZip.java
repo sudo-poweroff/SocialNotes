@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 import materiale.FileBean;
 import materiale.FileModelDS;
 import materiale.MaterialBean;
+import materiale.MaterialModelDS;
 import profilo.UserModelDS;
 
 @WebServlet("/DownloadZip")
@@ -35,26 +36,40 @@ public class DownloadZip extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+
+	}
+
+  
+   
+
+
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		if(session==null) {
-			response.sendRedirect("homepage.jsp");
+			response.sendRedirect(response.encodeURL("homepage.jsp"));
 		}
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-		Collection<MaterialBean>cart=(Collection<MaterialBean>)session.getAttribute("cart");
+		MaterialModelDS mModel = new MaterialModelDS(ds);
+		
+		
+		String[] materials = request.getParameterValues("materiale");
+		
+		
 		List<FileBean> fileList = new ArrayList<FileBean>();
 		FileModelDS fileModel=new FileModelDS(ds);
-		int coin=(int)session.getAttribute("coin");
-		String tot=request.getParameter("tot");
-		int totale=Integer.parseInt(tot);
-			if(cart!=null&&cart.size()>0){
-				Iterator<?> it=cart.iterator();
-				while(it.hasNext()) {
-					MaterialBean material=(MaterialBean)it.next();
+
+			if(materials!=null){
+				for(String m: materials) {
+					MaterialBean material=null;
 					try {
+						material = mModel.doRetrieveByKey(m);
+	
 						FileBean file=fileModel.doRetrieveByKey(material.getIdFile());
 						fileList.add(file);
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
+						System.out.println("Errore nella restituzione di file");
 						e.printStackTrace();
 					}
 				}
@@ -103,16 +118,9 @@ public class DownloadZip extends HttpServlet {
 				finally{
 					output.close();
 				}
-			} 
-
-	}
-
-  
-   
-
-
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			}else {
+				response.sendRedirect(response.encodeURL("storicoMateriale.jsp"));
+			}
 	}
 
 }

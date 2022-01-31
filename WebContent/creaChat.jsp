@@ -75,7 +75,7 @@ Collection<FriendsBean> f=friends.doRetrieveByUsername(username);
 
 
 %>
-<div class="col-md-8">
+
 <form method="POST" action="<%=ChatCreateServlet%>">
   <div class="form-group">
       <label for="exampleFormControlTextarea1">Titolo</label>
@@ -145,7 +145,7 @@ Collection<FriendsBean> f=friends.doRetrieveByUsername(username);
       <button type="reset" class="btn btn-primary mb-2" style="background-color:#9697e7;">Reset</button>
     </div>
 </form>
-</div>
+
 <div class="col-md-2"></div>
 </div>
 </div>
