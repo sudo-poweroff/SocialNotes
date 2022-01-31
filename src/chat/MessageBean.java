@@ -9,7 +9,6 @@ public class MessageBean {
 		this.testo="";
 		this.dataInvio=null;
 		this.username="";
-		this.fileName="";
 		this.chatID=-1;
 	}
 	
@@ -54,16 +53,6 @@ public class MessageBean {
 	}
 	
 	
-	public String getFileName() {
-		return fileName;
-	}
-	
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	
 	public int getChatID() {
 		return chatID;
 	}
@@ -89,6 +78,5 @@ public class MessageBean {
     private String testo;
     private Timestamp dataInvio;
     private String username;
-    private String fileName;
     private int chatID;
 }

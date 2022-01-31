@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="javax.sql.DataSource,acquisto.*,materiale.*,java.util.Collection,java.util.Iterator,java.sql.SQLException,java.sql.Date"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,7 +98,28 @@ else{
 			}
 			
 			else if(totale<=coin) {
-				
+				//Salva l'acquisto di tutto il materiale
+				Collection<MaterialBean> cart=(Collection<MaterialBean>)session.getAttribute("cart");
+				String username = (String)session.getAttribute("username"); 
+				DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+				PurchaseModelDS purchaseModel = new PurchaseModelDS(ds);
+				if(cart!=null&&cart.size()>0){
+					Iterator<?> it=cart.iterator();
+					while(it.hasNext()) {
+						PurchaseBean purchaseBean = new PurchaseBean();
+					
+						MaterialBean material=(MaterialBean)it.next();
+						purchaseBean.setCodiceMateriale(material.getCodiceMateriale());
+						purchaseBean.setUsername(username);						
+						purchaseBean.setDataAcquisto(new Date(System.currentTimeMillis()));
+						try {
+							purchaseModel.doSave(purchaseBean);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					
+				}
 		
 		%>
 		<div style="border-radius: 200px; height: 200px; width: 200px; background: #F8FAF5; margin: 0 auto;">

@@ -9,6 +9,8 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
+import materiale.FeedbackBean;
+
 
 public class PurchaseModelDS {
 	private DataSource ds;
@@ -17,7 +19,39 @@ public class PurchaseModelDS {
 		this.ds = ds;
 	}
 	
+	public Collection<PurchaseBean> doRetrieveAll()throws SQLException{
+		Connection con=null;
+		PreparedStatement ps=null;
+		String selectSQL="SELECT * FROM Acquisto;";
+		Collection<PurchaseBean> purchases=new LinkedList<PurchaseBean>();
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(selectSQL);
+			//Utility.print("doRetrieveAll:"+ps.toString());
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				PurchaseBean bean=new PurchaseBean();
+				bean.setCodiceMateriale(rs.getInt("CodiceMateriale"));
+				bean.setUsername(rs.getString("Username"));
+				bean.setDataAcquisto(rs.getDate("DataAcquisto"));
+				purchases.add(bean);
+			}
+		}
+		finally {
+			try {
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+		return purchases;
+	}
+	
 	public Collection<PurchaseBean> doRetrieveByUsername(String username)throws SQLException{
+
 		Connection con=null;
 		PreparedStatement ps=null;		
 		String selectSQL="SELECT * FROM Acquisto WHERE username = ?;";
@@ -48,4 +82,29 @@ public class PurchaseModelDS {
 		}
 		return purchases;
 	}
-}
+	public void doSave(PurchaseBean item) throws SQLException{
+		Connection con=null;
+		PreparedStatement ps=null;
+		//ResultSet rs=null;
+		String sql="INSERT INTO Acquisto (Username, CodiceMateriale, DataAcquisto) VALUES (?,?,?)";
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, item.getUsername());
+			ps.setInt(2, item.getCodiceMateriale());
+			ps.setDate(3, item.getDataAcquisto());
+			ps.executeUpdate();
+	
+	
+		}finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} finally {
+				if (con != null) {
+					con.close();
+				}
+			}
+		}
+		}
+	}
