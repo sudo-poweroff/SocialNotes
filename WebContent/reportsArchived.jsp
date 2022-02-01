@@ -12,6 +12,7 @@
 <link rel="icon" href="img/favicon.ico">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="css/segnalazione.css" />
+<link rel="stylesheet" href="css/errorSearch.css">
 </head>
 <body>
 <%	if((session.getAttribute("username")!=null)&&(((int)session.getAttribute("role"))==1)){
@@ -29,9 +30,7 @@ response.sendRedirect(response.encodeUrl("homepage.jsp"));
 <div class="page-content page-container" id="page-content">
     <div class="padding">
         <div class="row">
-            <div class="col-sm-8">
-                <div class="container-fluid d-flex justify-content-center">
-                    <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
+
                     <%
 	                    DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 	                	ReportModelDS report=new ReportModelDS(ds);
@@ -42,6 +41,9 @@ response.sendRedirect(response.encodeUrl("homepage.jsp"));
 	                			ReportBean rep=(ReportBean)it.next();
                     
                     %>
+                                <div class="col-sm-8">
+                <div class="container-fluid d-flex justify-content-center">
+                    <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
                     	
                         <div class="list-item" data-id="13" data-item-sortable-id="0" draggable="true" role="option" aria-grabbed="false" style="">
                              <div><a  data-abc="true"><span class="w-40 avatar gd-danger"><img src="PrintImage?username=<%=rep.getUsername() %>" alt="haloo"></span></a></div>
@@ -52,10 +54,28 @@ response.sendRedirect(response.encodeUrl("homepage.jsp"));
                             
                         </div>
                         
-                        <%}} %>
+                        <%} %>
                     </div>
                 </div>
             </div>
+                                   					<% 
+			}else{
+			%>
+	    <div class="col-md-12 col-sm-12">
+        <div class="card shadow-lg border-0 rounded-lg mt-5 mx-auto" style="width: 70%;">
+            <h3 class="card-header display-1 text-muted text-center">
+                :-)
+            </h3>
+			<br>
+            <span class="card-subtitle mb-2 text-muted text-center">
+                Nessuna segnalazione presente.
+            </span>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br>
+	  <%} %>
         </div>
     </div>
 </div>

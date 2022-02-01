@@ -46,22 +46,8 @@ public class Login extends HttpServlet {
 		if(session.getAttribute("username")!=null){
 			String username=(String)session.getAttribute("username");
 			UserModelDS role=new UserModelDS(ds);
-			try {
-				int userRole=role.getRole(username);
-				if(userRole==1) {
-					String link = "admin.jsp";
-					String encodedURL = response.encodeRedirectURL(link);
-					response.sendRedirect(encodedURL);
-				}
-				else{
-					String link = "homepage_user.jsp";
-					String encodedURL = response.encodeRedirectURL(link);
-					response.sendRedirect(encodedURL);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
+			
+			response.sendRedirect("homepage.jsp");
 
 		}
 		else {

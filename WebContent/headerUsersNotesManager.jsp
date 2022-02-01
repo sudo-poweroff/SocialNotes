@@ -19,13 +19,18 @@
 
 
 <%
-   String homeLink = "homepageNewsManager.jsp";
+   String homeLink = "homepage.jsp";
    String logoutLink = "Logout";
    
    if (session.getAttribute("username")!=null){
-	   if ((((int)session.getAttribute("role"))==2)||(((int)session.getAttribute("role"))==1)){
-	   homeLink = response.encodeRedirectUrl(homeLink);
-	   logoutLink = response.encodeRedirectUrl(logoutLink);
+	   if((int)session.getAttribute("role")==1){
+		   homeLink = response.encodeRedirectUrl("homepageUsersManager.jsp");
+		   logoutLink = response.encodeRedirectUrl(logoutLink);
+	   }
+	   else
+	   	if ((int)session.getAttribute("role")==2){
+	   		homeLink = response.encodeRedirectUrl("homepageNotesManager.jsp");
+	   		logoutLink = response.encodeRedirectUrl(logoutLink);
 	   }else{
 		   homeLink = response.encodeRedirectUrl(homeLink);
 		   response.sendRedirect(homeLink);

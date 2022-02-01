@@ -19,7 +19,7 @@
 
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
+<link rel="stylesheet" href="css/errorSearch.css">
   </head>
   <body>
   <%
@@ -150,12 +150,32 @@
 				
 				<br>
 				<hr>
-				<%}} %>
+				<%} %>
+				
+					<% 
+			}else{
+			%>
+	    <div class="col-md-12 col-sm-12">
+        <div class="card shadow-lg border-0 rounded-lg mt-5 mx-auto" style="width: 70%;">
+            <h3 class="card-header display-1 text-muted text-center">
+                :-(
+            </h3>
+			<br>
+            <span class="card-subtitle mb-2 text-muted text-center">
+                Nessun materiale da approvare.
+            </span>
+        </div>
+    </div>
+
+	  <%} %>
 				
 			
     	</div>
     	</div>
-   
+
+       <br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br>
     <br>
 <%@include file="footer.jsp" %>
   </body>
