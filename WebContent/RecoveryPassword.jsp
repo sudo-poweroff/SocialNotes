@@ -31,19 +31,7 @@
 	    DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		String username=(String)session.getAttribute("username");
 		UserModelDS role=new UserModelDS(ds);
-		try {
-			int userRole=role.getRole(username);
-			if(userRole==1) {
-				link = "admin.jsp";
-				String encodedURL = response.encodeRedirectURL(link);
-				response.sendRedirect(encodedURL);
-			}
-			else{
-				link = "homepage_user.jsp";
-				String encodedURL = response.encodeRedirectURL(link);
-				response.sendRedirect(encodedURL);
-			}
-		}catch(SQLException e){}
+		
 		
 		
 	}

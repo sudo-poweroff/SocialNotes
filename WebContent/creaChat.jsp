@@ -19,7 +19,7 @@
 </head>
 <body>
 <%
-String adminURL = "admin.jsp";
+String homepageURL = "homepage.jsp";
 String ChatCreateServlet = "ChatCreateServlet";
    if(session.getAttribute("username")==null){
 	 
@@ -31,9 +31,9 @@ String ChatCreateServlet = "ChatCreateServlet";
 	  
 	  <%
    }else{
-	   if (((int)session.getAttribute("role"))==1){
-			  adminURL = response.encodeURL(adminURL);
-			  response.sendRedirect(adminURL);
+	   if (((int)session.getAttribute("role"))!=0){
+		   homepageURL = response.encodeURL(homepageURL);
+			  response.sendRedirect(homepageURL);
 			  return;
 		  }
 	     ChatCreateServlet = response.encodeURL(ChatCreateServlet);

@@ -12,7 +12,6 @@
 <body>
 
 <%
-String adminURL = "admin.jsp";
 String choosePaymentUrl = "choosePayment.jsp";
    if(session.getAttribute("username")==null){
 	  %>
@@ -21,9 +20,9 @@ String choosePaymentUrl = "choosePayment.jsp";
 	  
 	  <%
    }else{
-		  if (((int)session.getAttribute("role"))==1){
-			  adminURL = response.encodeURL(adminURL);
-			  response.sendRedirect(adminURL);
+		  if (((int)session.getAttribute("role"))!=0){
+			  
+			  response.sendRedirect(response.encodeURL("homepage.jsp"));
 			  return;
 		  }
 		  

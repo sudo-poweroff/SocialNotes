@@ -157,7 +157,7 @@ if(cartError!=null){
 											
 											%>
 											<button type="button" class="btn btn-block btn-primary btn-circle btn-icon-left" id="scarica">
-							<a href="storicoMateriale.jsp" style="color:white">Visualizza tra gli acquisti </a>
+							<a href="<%=response.encodeURL("storicoMateriale.jsp")%>" style="color:white">Visualizza tra gli acquisti </a>
 								</button>
 						<%
 						}else{

@@ -38,10 +38,7 @@ if(cartError!=null){
     String chatCreateUrl = "ChatCreateServlet";
     String documentPreviewUrl = "documentPreview.jsp";
     String addCartUrl = "AddToCart";
-    if((session.getAttribute("username"))!=null){
-    	if(((int)session.getAttribute("role"))==1){
-    		response.sendRedirect(response.encodeURL("admin.jsp"));
-    	}
+    if(((session.getAttribute("username"))!=null)&&(((int)session.getAttribute("role"))==0)){
     	chatCreateUrl = response.encodeURL(chatCreateUrl);
     	addFriendUrl = response.encodeURL(addFriendUrl);
     	removeFriendUrl = response.encodeURL(removeFriendUrl);
@@ -254,7 +251,7 @@ not support the canvas tag.</canvas>
 						if(acquistato){
 						
 						%>
-							<a href="storicoMateriale.jsp" style="color:#9697e7">Visualizza tra gli acquisti </a>
+							<a href="<%=response.encodeURL("storicoMateriale.jsp")%>" style="color:#9697e7">Visualizza tra gli acquisti </a>
 						
 						<%
 						}else{

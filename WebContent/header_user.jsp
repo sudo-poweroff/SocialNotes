@@ -50,9 +50,9 @@
 	
 	//Sessione: non posso fare la sendRedirect probabilmente perchè questo header viene incluso in jsp dove già ne viene fatta un'altra
 	 if(session.getAttribute("username")!=null){
-		  if (((int)session.getAttribute("role"))==1){
-			  adminURL = response.encodeURL(adminURL);
-			  response.sendRedirect(adminURL);
+		  if (((int)session.getAttribute("role"))!=0){
+			  homeLink = response.encodeURL(homeLink);
+			  response.sendRedirect(homeLink);
 			  return;
 		  }
 		 

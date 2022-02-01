@@ -14,7 +14,18 @@
 <link rel="stylesheet" type="text/css" href="css/segnalazioni_eff.css" />
 </head>
 <body>
-<%@ include file="headerUsersNotesManager.jsp"%>
+
+
+<% 
+
+	if((session.getAttribute("username")!=null)&&(((int)session.getAttribute("role"))==1)){
+%>
+<jsp:include page="headerUsersNotesManager.jsp"></jsp:include>
+<%}else{ 
+
+  response.sendRedirect(response.encodeUrl("homepage.jsp"));
+
+} %>
 <br>
 <h2><b>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;SEGNALAZIONI EFFETTUATE</b></h2>
 

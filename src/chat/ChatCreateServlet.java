@@ -33,7 +33,7 @@ public class ChatCreateServlet extends HttpServlet {
 	
 		HttpSession session = request.getSession(false);
 		String loginURL = "login.jsp";
-		 String adminURL = "admin.jsp";
+		 String homepageURL = "homepage.jsp";
 		 String chat = "chat.jsp";
 		
 		if (session==null) {
@@ -42,9 +42,9 @@ public class ChatCreateServlet extends HttpServlet {
 			return;
 		}if (session!=null) {
 			if ((session.getAttribute("username"))!=null) {
-				if (((int)session.getAttribute("role"))==1) {
-					  adminURL = response.encodeURL(adminURL);
-					  response.sendRedirect(adminURL);
+				if (((int)session.getAttribute("role"))!=0) {
+					homepageURL = response.encodeURL(homepageURL);
+					  response.sendRedirect(homepageURL);
 					  return;
 				}
 					

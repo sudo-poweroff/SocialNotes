@@ -22,13 +22,10 @@
 
 <%
 
-    if((session.getAttribute("username"))!=null){
-    	if (((int)session.getAttribute("role"))!=1){
-    		response.sendRedirect(response.encodeURL("homepage_user.jsp"));
-    		return;
-    	}
+if(((session.getAttribute("username"))!=null)&&(((int)session.getAttribute("role"))==1)){
+
 %>     
-   <jsp:include page="header_admin.jsp"></jsp:include>
+   <jsp:include page="headerUsersNotesManager.jsp"></jsp:include>
 <% 
     }else{
     

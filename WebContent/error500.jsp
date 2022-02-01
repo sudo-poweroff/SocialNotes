@@ -12,15 +12,9 @@
 </head>
 <body>
 <% 
-  String homepageUrl = "homepage_user.jsp";
-  String homepageUrlAdmin = "admin.jsp";
-  String link = "homepage.jsp";
-  if ((session.getAttribute("username"))!=null){
-	  if (((int)session.getAttribute("role"))==1){
-		  link = response.encodeURL(homepageUrlAdmin);
-	  }
-		  link = response.encodeURL(homepageUrl);
-  }
+String link = "homepage.jsp";
+
+link = response.encodeURL(link);
 %>
 <!--dust particel-->
 <div>

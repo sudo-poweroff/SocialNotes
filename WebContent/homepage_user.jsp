@@ -338,7 +338,8 @@
 						if(acquistato){
 						
 						%>
-							<a href="storicoMateriale.jsp" style="color:#9697e7">Visualizza tra gli acquisti </a>
+			
+							<a href="<%=response.encodeURL("storicoMateriale.jsp")%>" style="color:#9697e7">Visualizza tra gli acquisti </a>
 						
 						<%
 						}else{

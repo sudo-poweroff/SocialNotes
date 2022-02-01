@@ -72,7 +72,7 @@
 </head>
 <body>
 <%
-String adminURL = "admin.jsp";
+String homepageURL = "homepage.jsp";
 String creaChatURL = "creaChat.jsp";
 
    if(session.getAttribute("username")==null){
@@ -85,9 +85,9 @@ String creaChatURL = "creaChat.jsp";
 	  
 	  <%
    }else{
-	   if (((int)session.getAttribute("role"))==1){
-			  adminURL = response.encodeURL(adminURL);
-			  response.sendRedirect(adminURL);
+	   if (((int)session.getAttribute("role"))!=0){
+		   homepageURL = response.encodeURL(homepageURL);
+			  response.sendRedirect(homepageURL);
 			  return;
 		  }
 	   
