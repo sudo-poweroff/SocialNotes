@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="profilo.*"%>
+<%@page import="javax.sql.DataSource"%>
+<%@page import="java.sql.Date"%>
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.Iterator"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +16,7 @@
 
 </head>
 <body>
-<%@ include file="header.jsp"%>
+ <%@include file="headerUsersNotesManager.jsp" %>
 <br>
 <div class="container mt-3 mb-4">
 <div class="col-lg-9 mt-4 mt-lg-0">
@@ -24,18 +29,37 @@
                 <th>Utente</th>
                 <th class="text-center">Durata Ban</th>
                 <th class="action text-right">Azione</th>
+                 <th class="action text-right">Stato</th>
               </tr>
             </thead>
             <tbody>
+            <%
+            	String visitUserLink=response.encodeURL("visitUserAdmin.jsp");
+	            String setBanLink=response.encodeURL("SetBan");
+	        	String removeBanLink=response.encodeURL("RemoveBan");
+	            DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+	        	UserModelDS model=new UserModelDS(ds);
+	        	Collection<UserBean> users=model.doRetrieveUsers();
+	            if(users!=null&&users.size()>0){
+					Iterator<?> it=users.iterator();
+					while(it.hasNext()){
+						UserBean bean=(UserBean)it.next();
+						String ban;
+						Date dataAttuale=new Date(System.currentTimeMillis());
+						if(bean.getBan()!=null&&bean.getBan().after(dataAttuale))
+							ban="Bloccato";
+						else
+							ban="Sbloccato";
+            %>
               <tr class="candidates-list">
                 <td class="title">
                   <div class="thumb">
-                    <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
+                    <img class="img-fluid" src="PrintImage?username=<%=bean.getUsername() %>" alt="haloo">
                   </div>
                   <div class="candidate-list-details">
                     <div class="candidate-list-info">
                       <div class="candidate-list-title">
-                        <h5 class="mb-0"><a href="#">Brooke Kelly</a></h5>
+                        <h5 class="mb-0"><a href="<%=visitUserLink %>?friendname=<%=bean.getUsername()%>"><%=bean.getUsername() %> - <%=bean.getNome() %> <%=bean.getCognome() %></a></h5>
                       </div>
                       <div class="candidate-list-option">
                         
@@ -43,18 +67,28 @@
                     </div>
                   </div>
                 </td>
+                  
                 <td class="candidate-list-favourite-time text-center">
+                <form method="post" action="<%=setBanLink %>?username=<%=bean.getUsername() %>">
                  <a class="candidate-list-favourite order-2 text-danger" ><i class="fas fa-user-clock"></i></a>
                  
-                  <input type="text" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">
+                  <input type="date" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10" required>
+                    <button style="margin-left:30px" type="submit"><i class="fas fa-lock"></i></button>             
+                     </form>
+                    </td>
+                    <td> 
+                    <a href="<%=removeBanLink %>?username=<%=bean.getUsername() %>" class="text-info" data-toggle="tooltip" title="" data-original-title="unban"><i class="fas fa-lock-open"></i></a>
+                 
+                  
                 </td>
-                <td>
-                 <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                    <li><a href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="ban"><i class="fas fa-lock"></i></a></li>
-                    <li><a href="#" class="text-info" data-toggle="tooltip" title="" data-original-title="unban"><i class="fas fa-lock-open"></i></a></li>
-                  </ul>
+                  <td class="candidate-list-favourite-time text-center">
+                 
+                  <span class="candidate-list-time order-1"><%=ban %></span>
                 </td>
+               
               </tr>
+              
+              <%}} %>
               <tr class="candidates-list">
                 <td class="title">
                   <div class="thumb">
@@ -71,10 +105,11 @@
                     </div>
                   </div>
                 </td>
+              
                 <td class="candidate-list-favourite-time text-center">
                 <a class="candidate-list-favourite order-2 text-danger" ><i class="fas fa-user-clock"></i></a>
                  <input type="text" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">
-                </td>
+                 </td>
                 <td>
                 <ul class="list-unstyled mb-0 d-flex justify-content-end">
                  <li><a href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="ban"><i class="fas fa-lock"></i></a></li>
@@ -100,7 +135,8 @@
                 </td>
                 <td class="candidate-list-favourite-time text-center">
                 <a class="candidate-list-favourite order-2 text-danger" ><i class="fas fa-user-clock"></i></a>
-<input type="text" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">                </td>
+<input type="date" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">                
+</td>
                 <td>
                  <ul class="list-unstyled mb-0 d-flex justify-content-end">
                      <li><a href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="ban"><i class="fas fa-lock"></i></a></li>
@@ -126,8 +162,9 @@
                 </td>
                 <td class="candidate-list-favourite-time text-center">
                 <a class="candidate-list-favourite order-2 text-danger" ><i class="fas fa-user-clock"></i></a>
-<input type="text" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">                </td>
-                <td>
+				<input type="text" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10">                
+				<!-- </td>
+                <td>-->
                 <ul class="list-unstyled mb-0 d-flex justify-content-end">
                  <li><a href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="ban"><i class="fas fa-lock"></i></a></li>
                     <li><a href="#" class="text-info" data-toggle="tooltip" title="" data-original-title="unban"><i class="fas fa-lock-open"></i></a></li>
@@ -162,15 +199,6 @@
             </tbody>
           </table>
           <div class="text-center mt-3 mt-sm-3">
-            <ul class="pagination justify-content-center mb-0">
-              <li class="page-item disabled"> <span class="page-link">Prev</span> </li>
-              <li class="page-item active" aria-current="page"><span class="page-link">1 </span> <span class="sr-only">(current)</span></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">...</a></li>
-              <li class="page-item"><a class="page-link" href="#">25</a></li>
-              <li class="page-item"> <a class="page-link" href="#">Next</a> </li>
-            </ul>
           </div>
         </div>
       </div>

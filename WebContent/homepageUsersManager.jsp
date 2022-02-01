@@ -34,7 +34,7 @@
     <div class="card">
       <img src="img/segnalazioni.png" class="card-img-top" alt="...">
       <div class="card-body">
-        <a href=<%=response.encodeURL("segnalazioni_eff.jsp") %>><h5 class="card-title">Visualizza segnalazioni</h5></a>
+        <a href=<%=response.encodeURL("reports.jsp") %>><h5 class="card-title">Visualizza segnalazioni</h5></a>
         <p class="card-text">visualizza tutte le segnalazioni riporate dai notes manager</p>
       </div>
     </div>
@@ -43,7 +43,7 @@
     <div class="card">
       <img src="img/archivioReport.jpg" class="card-img-top" alt="...">
       <div class="card-body">
-        <a href=<%=response.encodeURL("segnalazione.jsp") %>><h5 class="card-title">Visualizza segnalazioni archiviate</h5></a>
+        <a href=<%=response.encodeURL("reportsArchived.jsp") %>><h5 class="card-title">Visualizza segnalazioni archiviate</h5></a>
         <p class="card-text">visualizza tutte le segnalazioni che hai già gestito</p>
       </div>
     </div>
@@ -52,7 +52,7 @@
     <div class="card">
       <img src="img/users.png" class="card-img-top" alt="...">
       <div class="card-body">
-       <a href=<%=response.encodeURL("segnalazione.jsp") %>> <h5 class="card-title">Visualizza Utenti</h5></a>
+       <a href=<%=response.encodeURL("userBanned.jsp") %>> <h5 class="card-title">Visualizza Utenti</h5></a>
         <p class="card-text">Visualizza tutti gli studenti bannati e non bannati</p>
       </div>
     </div>

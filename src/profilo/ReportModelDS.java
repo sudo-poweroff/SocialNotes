@@ -146,16 +146,16 @@ public class ReportModelDS {
 		}
 	}
 	
-	public void removeReport(int codiceSegnalazione) throws SQLException {
+	public void removeReport(String username) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="DELETE FROM Segnalazione WHERE CodiceSegnalazioe = ?;";
+		String sql="DELETE FROM Segnalazione WHERE Username = ?;";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
-			ps.setInt(1, codiceSegnalazione);
+			ps.setString(1,username);
 			ps.executeUpdate();
-			System.out.println("Amico eliminato");
+			System.out.println("Segnalazione eliminata");
 		}finally {
 			try {
 				if(ps!=null)
@@ -171,13 +171,13 @@ public class ReportModelDS {
 	public void archiveReport(int codiceSegnalazione) throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="UPDATE Segnalazione SET Stato = 1 WHERE CodiceSegnalazioe = ?;";
+		String sql="UPDATE Segnalazione SET Stato = 1 WHERE CodiceSegnalazione = ?;";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
 			ps.setInt(1, codiceSegnalazione);
 			ps.executeUpdate();
-			System.out.println("Amico eliminato");
+			System.out.println("Segnalazione archiviata");
 		}finally {
 			try {
 				if(ps!=null)

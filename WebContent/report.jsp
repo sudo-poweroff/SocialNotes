@@ -198,4 +198,4 @@
 
 </body>
 <script src="js/homepage_user.js"></script>
-</
+</html>

@@ -202,7 +202,7 @@ public class UserModelDS {
 	public Collection<UserBean> doRetrieveUsers() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Utente WHERE Ruolo=0;";
+		String selectSQL="SELECT * FROM Utente WHERE Ruolo=0 ORDER BY Ban DESC;";
 		Collection<UserBean> users=new LinkedList<UserBean>();
 		try {
 			con=ds.getConnection();
