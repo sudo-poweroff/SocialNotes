@@ -84,6 +84,8 @@
 	        return false;
 	      }
 	}
+	
+	
 	</script>
 
   <script>
@@ -433,11 +435,15 @@
                    <div class="form-group">
                      <label class="col-sm-3 control-label">Titolare Carta</label>
                      <div class="col-sm-9">
-                       <input type="text" class="form-control" name="nomecarta" placeholder="Nome titolare"></input>
+                       <input type="text" class="form-control" name="nomecarta" placeholder="Nome titolare" onblur="allLetter(this)"></input>
+                        <div class="valid-feedback">Formato valido.</div>
+                		<div class="invalid-feedback">Formato non valido.</div>
                        <p class="help-block">Nome che appare sulla carta</p>
                      </div>
                      <div class="col-sm-9">
-                       <input type="text" class="form-control" name="cognomecarta" placeholder="Cognome titolare"></input>
+                       <input type="text" class="form-control" name="cognomecarta" placeholder="Cognome titolare" onblur="allLetter(this)"></input>
+                        <div class="valid-feedback">Formato valido.</div>
+                		<div class="invalid-feedback">Formato non valido.</div>
                        <p class="help-block">Cognome che appare sulla carta</p>
                      </div>
                    </div>
@@ -465,7 +471,6 @@
                        </select>
                        <span class="divider">/</span>
                        <select class="form-control" name="year">
-                         <option value="2021">2021</option>
                          <option value="2022">2022</option>
                          <option value="2023">2023</option>
                          <option value="2024">2024</option>
@@ -478,7 +483,7 @@
                      </div>
                      <label class="col-sm-3 control-label">CVC</label>
                      <div class="col-sm-9">
-                       <input type="text" class="form-control" style="width: 120px;" placeholder="CVC" maxlength="3">
+                       <input type="text" class="form-control" style="width: 120px;" placeholder="CVC" maxlength="3" minlength="3">
                        <p class="help-block">Le 3 cifre che trovi sul retro della carta.</p>
                      </div>
                    </div>
