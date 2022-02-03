@@ -6,7 +6,7 @@ function formValidation(){
   var pwd = document.registrazione.password;
   var uemail = document.registrazione.email;
   var nascita = document.registrazione.nascita;
-
+if(validaUniversita()){
   if(allLetter(nome)){
     if(allLetter(cognome)){
       if(usernameValidation(username,3,12)){
@@ -20,6 +20,7 @@ function formValidation(){
       }
     }
   }
+ }
   return false;
 }
 
@@ -70,7 +71,7 @@ function passwordValidation(passid,mx,my){
   var passid_len = passid.value.length;
   //Per la lunghezza della password modificare anche i valori nell' espressione regolare 5,12
   var pwdformat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,12}$/;
-  if (passid_len == 0 ||passid_len >= my || passid_len < mx || !passid.value.match(pwdformat)){
+  if (passid_len == 0 ||passid_len >= my || passid_len <= mx || !passid.value.match(pwdformat)){
     passid.classList.add("is-invalid");
     passid.focus();
     return false;
@@ -141,7 +142,7 @@ function validateDate(nascita){
     var anno = parseInt(parti[0], 10);
 	//alert("anno:"+anno+"mese:"+mese+"giorno:"+giorno);
 	
-	if(nascita.value==""||nascita.value==null||(giorno<=0||giorno>=32)||(mese<=0||mese>=13)||(anno<1900||anno>2021)){
+	if(nascita.value==""||nascita.value==null||(giorno<=0||giorno>=32)||(mese<=0||mese>=13)||(anno<1900||anno>2022)){
 		nascita.classList.add("is-invalid");		
 		return false;	
 	}
@@ -215,5 +216,20 @@ function getXmlHttpRequest() {
 		}
 	}
 	return xhr;
+}
+
+function validaUniversita(){
+	var uni =  document.getElementById("uni").value;
+	var corso =  document.getElementById("corso").value;
+	if(uni==null||uni===""){
+		alert("Inserisci un' universita' !");
+		return false;
+	}
+	if(corso==null||corso===""){
+		alert("Inserisci un corso di studi!");
+		return false;
+	}
+	return true;
+	
 }
 

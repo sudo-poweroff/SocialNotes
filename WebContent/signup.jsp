@@ -120,7 +120,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                   <label for="uni">Universit&agrave;:</label>
-                  <select class="custom-select d-block w-100" id="uni" name="uni">
+                  <select class="custom-select d-block w-100" id="uni" name="uni" required>
                     <option value="">Scegli...</option>
                     
                     <%
@@ -150,7 +150,7 @@
        
               <div class="col-md-6 mb-3">
                   <label for="corso">Corso di studi:</label>
-                  <select class="custom-select d-block w-100" id="corso" name="corso">
+                  <select class="custom-select d-block w-100" id="corso" name="corso" required>
               
                    
                    
