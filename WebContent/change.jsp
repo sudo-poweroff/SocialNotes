@@ -171,6 +171,20 @@
 		} 
 		%>
 		
+		<%
+		String errorData = (String)request.getAttribute("errorData");
+		if(errorData!=null){
+		%>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  			<strong>Ops!</strong> Si &egrave verificato un errore:<%=errorData%>
+  			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    		<span aria-hidden="true">&times;</span>
+ 			 </button>
+		</div>
+		<%
+		} 
+		%>
+		
 
 		
       <div class="soft-double portable--hard">
@@ -460,6 +474,7 @@
                      <label class="col-sm-3 control-label">Data scadenza</label>
                      <div class="col-sm-9 form-inline">
                        <select class="form-control" name="month">
+                       	 <option value="">scegli</option>
                          <option value="01">01</option>
                          <option value="02">02</option>
                          <option value="03">03</option>
@@ -471,6 +486,7 @@
                        </select>
                        <span class="divider">/</span>
                        <select class="form-control" name="year">
+                       	 <option value="">scegli</option>
                          <option value="2022">2022</option>
                          <option value="2023">2023</option>
                          <option value="2024">2024</option>

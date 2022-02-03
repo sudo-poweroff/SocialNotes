@@ -204,7 +204,7 @@ public class ChangeProfile extends HttpServlet {
 		}
 		
 		
-//AGGIUNTI NUOVA CARTA
+//AGGIUNTA NUOVA CARTA
 		PaymentMethodModelDS model_carta= new PaymentMethodModelDS(ds);
 		
 		String nomecarta = request.getParameter("nomecarta");
@@ -247,6 +247,10 @@ public class ChangeProfile extends HttpServlet {
 								e.printStackTrace();
 							}
 						}
+					}
+					else {
+						String errorData="Inserisci la data di scadenza della carta";
+						request.setAttribute("errorData",errorData);	
 					}
 				}
 			}
