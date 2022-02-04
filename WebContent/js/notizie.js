@@ -1,6 +1,20 @@
 function readURL(input) {
   if (input.files && input.files[0]) {
-
+	
+	    var fileInput = 
+            document.getElementById('picture');
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+/(\.jpeg|\.png|\.jpg|\.PNG)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Tipo del file non valido');
+            fileInput.value = '';
+            return false;
+        } 
+	
     var reader = new FileReader();
 
     reader.onload = function(e) {
@@ -17,6 +31,7 @@ function readURL(input) {
   } else {
     removeUpload();
   }
+  
 }
 
 function removeUpload() {

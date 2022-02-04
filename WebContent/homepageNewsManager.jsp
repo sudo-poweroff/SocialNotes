@@ -13,6 +13,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="js/notizie.js" charset="utf-8"></script>
+
   </head>
   <body>
   <%
@@ -68,7 +69,7 @@ String home = "homepage.jsp";
 <div class="file-upload">
 <form method="post" action=<%="NewsUploadServlet;jsessionid="+session.getId()%> enctype="multipart/form-data">
 	  <div class="image-upload-wrap">
-	    <input class="file-upload-input" name="img" type='file' onchange="readURL(this);" accept="image/*" required/>
+	    <input class="file-upload-input" name="img" type='file' id="picture" onchange="readURL(this);" accept=".jpeg,.png,.jpg,.PNG" required/>
 	    <div class="drag-text">
 	      <h3>TRASCINA E RILASCIA UNA FOTO</h3>
 	    </div>
