@@ -81,36 +81,7 @@ public class ChatModelDS{
 		return null;
 	}
 
-	public Collection<ChatBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Chat;";
-		Collection<ChatBean> chats=new LinkedList<ChatBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				ChatBean bean=new ChatBean();
-				bean.setChatID(rs.getInt("ChatID"));
-				bean.setTitolo(rs.getString("Titolo"));
-				chats.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return chats;
 	
-	}
 
 	public void doSave(ChatBean item) throws SQLException {
 		if(item==null)

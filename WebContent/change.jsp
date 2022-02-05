@@ -85,6 +85,23 @@
 	      }
 	}
 	
+	function fileValidation(){
+        var fileInput = 
+            document.getElementById('picture');
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+/(\.jpeg|\.png|\.jpg|\.PNG)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Tipo del file non valido');
+            fileInput.value = '';
+            return false;
+        } 
+		
+	}
+	
 	
 	</script>
 
@@ -233,7 +250,7 @@
               
                 <input type="hidden" name="_csrf_token" id="-csrf-token" value="1440526831-01-FIiAtX3_sdMNiFb34GXRG49qaUBWsxonFotdT79C_3s=">
 
-                <input type="file" name="picture" class="profile-picture"></input>
+                <input type="file" name="picture" id="picture" class="profile-picture" onchange="return fileValidation()" accept=".jpeg,.png,.jpg,.PNG"></input>
 
                 <div class="grid__item one-quarter">
 
@@ -483,6 +500,10 @@
                          <option value="06">06</option>
                          <option value="07">07</option>
                          <option value="08">08</option>
+                         <option value="09">09</option>
+                         <option value="10">10</option>
+                         <option value="11">11</option>
+                         <option value="12">12</option>
                        </select>
                        <span class="divider">/</span>
                        <select class="form-control" name="year">
