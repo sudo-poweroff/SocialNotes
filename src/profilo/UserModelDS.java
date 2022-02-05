@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 
 
 
+
 public class UserModelDS {
 
 	public UserModelDS(DataSource ds) {
@@ -21,6 +22,8 @@ public class UserModelDS {
 
 
 	public UserBean checkLogin(String name,String password)throws SQLException {
+		if(name==null||name.equals("")||password==null||password.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password,Ruolo FROM Utente WHERE Email = ? OR Username=?";
@@ -72,6 +75,8 @@ public class UserModelDS {
 	}
 
 	public UserBean doRetrieveByUsername(String name)throws SQLException{
+		if(name==null||name.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Utente WHERE Username = ?";
@@ -114,6 +119,8 @@ public class UserModelDS {
 	}
 
 	public UserBean doRetrieveByEmail(String Email)throws SQLException{
+		if(Email==null||Email.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Utente WHERE Email = ?";
@@ -242,6 +249,8 @@ public class UserModelDS {
 	}
 
 	public Collection<UserBean>  doRetrieveByParametersUser(String str,String ratingOrder, int rating) throws SQLException {
+		if(str==null|| ratingOrder==null||ratingOrder.equals("")||rating<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		PreparedStatement viewFeedbackmedia = null;
@@ -359,6 +368,8 @@ public class UserModelDS {
 	}
 
 	public void doSave(UserBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -397,6 +408,8 @@ public class UserModelDS {
 	}
 
 	public void manageBan(String username,Date ban) throws SQLException{
+		if(username==null||username.equals("")||ban.after(new Date(System.currentTimeMillis())))
+			throw new NullPointerException();
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -421,6 +434,8 @@ public class UserModelDS {
 	}
 
 	public void doUpdateCoin(String username,int coin)throws SQLException {
+		if(username==null||username.equals("")||coin<=0)
+			throw new NullPointerException();
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql="UPDATE Utente SET Coin=? WHERE Username=?";
@@ -447,6 +462,8 @@ public class UserModelDS {
 	}
 
 	public void doUpdatePassword(String username,String newPassword)throws SQLException {
+		if(username==null||username.equals("")||newPassword==null||newPassword.equals(""))
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -472,6 +489,8 @@ public class UserModelDS {
 	}
 
 	public void doUpdateEmail(String username,String newMail)throws SQLException{
+		if(username==null||username.equals("")||newMail==null||newMail.equals(""))
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -498,6 +517,8 @@ public class UserModelDS {
 	}
 
 	public void doUpdateDepartment(String username,String newDipName,String newUniversity) throws SQLException {
+		if(username==null||username.equals("")||newDipName==null||newDipName.equals("")||newUniversity==null||newUniversity.equals(""))
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -524,6 +545,8 @@ public class UserModelDS {
 	}
 
 	public void doUpdateImage(String username,InputStream image) throws SQLException{
+		if(username==null||username.equals("")||image==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -549,6 +572,8 @@ public class UserModelDS {
 	}
 
 	public float getValutazione(String username)throws SQLException {
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -578,6 +603,8 @@ public class UserModelDS {
 
 
 	public int getRole(String username) throws SQLException{
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;

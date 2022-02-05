@@ -18,6 +18,8 @@ public class ChatModelDS{
 	}
 	
 	public ChatBean doRetrieveByKey(String code) throws SQLException {
+		if(code==null||code.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		
@@ -111,10 +113,10 @@ public class ChatModelDS{
 	}
 
 	public void doSave(ChatBean item) throws SQLException {
-		// TODO Auto-generated method stub
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
-		//ResultSet rs=null;
 		String sql="INSERT INTO Chat (Titolo) VALUES (?)";
 		try {
 			con=ds.getConnection();
@@ -137,6 +139,8 @@ public class ChatModelDS{
 	}
 	
 	public Collection<ChatBean> doRetrieveChatName(String username) throws SQLException {
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		

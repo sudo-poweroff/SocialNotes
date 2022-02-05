@@ -15,7 +15,7 @@ public class NewsModelDS {
 	public NewsModelDS(DataSource ds) {
 		this.ds=ds;
 	}
-	
+
 
 	public Collection<NewsBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
@@ -50,8 +50,10 @@ public class NewsModelDS {
 		}
 		return news;
 	}
-	
+
 	public NewsBean doRetrieveByCodiceNews(int codiceNews) throws SQLException {
+		if(codiceNews<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM News WHERE CodiceNews = ?";
@@ -89,7 +91,7 @@ public class NewsModelDS {
 		}
 		return bean;
 	}
-	
+
 	public int doRetrieveKey()throws SQLException{
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -116,9 +118,11 @@ public class NewsModelDS {
 			}
 		}
 	}
-	
+
 
 	public void doSave(NewsBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -145,7 +149,7 @@ public class NewsModelDS {
 					connection.close();
 			}
 		}
-		
+
 	}
 
 

@@ -51,7 +51,8 @@ public class PurchaseModelDS {
 	}
 	
 	public Collection<PurchaseBean> doRetrieveByUsername(String username)throws SQLException{
-
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;		
 		String selectSQL="SELECT * FROM Acquisto WHERE username = ?;";
@@ -83,6 +84,8 @@ public class PurchaseModelDS {
 		return purchases;
 	}
 	public void doSave(PurchaseBean item) throws SQLException{
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		//ResultSet rs=null;

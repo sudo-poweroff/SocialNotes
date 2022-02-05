@@ -18,6 +18,8 @@ public class MaterialModelDS {
 	}
 
 	public MaterialBean doRetrieveByKey(String code) throws SQLException {
+		if(code==null||code.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Materiale WHERE CodiceMateriale=?;";
@@ -102,6 +104,8 @@ public class MaterialModelDS {
 	
 	
 	public void setPrice(int codiceMateriale,int price)throws SQLException {
+		if(codiceMateriale<0||price<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="UPDATE Materiale SET Costo=?,Hidden=0 WHERE CodiceMateriale=?";
@@ -164,6 +168,8 @@ public class MaterialModelDS {
 	}
 	
 	public Collection<MaterialBean>  doRetrieveByString(String str) throws SQLException {
+		if(str==null||str.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 
@@ -208,6 +214,8 @@ public class MaterialModelDS {
 	
 	
 	public Collection<MaterialBean>  doRetrieveByUsername(String username) throws SQLException {
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -254,6 +262,8 @@ public class MaterialModelDS {
 	
 	
 	public Collection<MaterialBean>  doRetrieveByParameters(String str,String date,String ratingOrder, int rating) throws SQLException {
+		if(str==null||str.equals("")||date==null||date.equals("")||ratingOrder==null||ratingOrder.equals("")||rating<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		PreparedStatement view = null;
@@ -428,6 +438,8 @@ public class MaterialModelDS {
 	}
 	
 	public int doRetrieveFeedback(int code) throws SQLException {
+		if(code<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		PreparedStatement view = null;
@@ -512,6 +524,8 @@ public class MaterialModelDS {
 
 	
 	public void doSave(MaterialBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -548,6 +562,8 @@ public class MaterialModelDS {
 	
 
 	public int getQuantitaMaterialeCondiviso(String username)throws SQLException {
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -576,6 +592,8 @@ public class MaterialModelDS {
 
 	
 	public void doDelete(int codiceMateriale) throws SQLException {
+		if(codiceMateriale<0)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 

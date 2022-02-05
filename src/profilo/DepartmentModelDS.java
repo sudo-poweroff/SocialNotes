@@ -50,6 +50,8 @@ public class DepartmentModelDS {
 	}
 
 	public Collection<DepartmentBean> doRetrieveByDenominazione(String denominazione) throws SQLException{
+		if(denominazione==null||denominazione.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Dipartimento WHERE Denominazione = ?;";

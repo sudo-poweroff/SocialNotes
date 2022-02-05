@@ -70,28 +70,6 @@ try {
 			if(request.getParameter("ratingOrder")!=null)
 				ratOrder=(String)request.getParameter("ratingOrder");
 			
-		/*	if ((date.compareTo("novalue")==0)&&(date.compareTo("novalue")==0)&&(rating==0)) {
-				date = "ASC";
-				ratOrder = "ASC";
-				rating = 0;
-			}else if ((date.compareTo("novalue")==0)&&(ratOrder.compareTo("novalue")==0)&&(rating!=0)) {
-				date = "ASC";
-				ratOrder = "ASC";
-				rating = 0;
-			}else if ((date.compareTo("novalue")==0)&&(ratOrder.compareTo("novalue")!=0)&&(rating==0)) {
-				date = "ASC";
-				rating = 0;
-			}else if ((date.compareTo("novalue")==0)&&(ratOrder.compareTo("novalue")!=0)&&(rating!=0)) {
-				// CIAAO;
-				date = "ASC";
-			}else if ((date.compareTo("novalue")!=0)&&(ratOrder.compareTo("novalue")==0)&&(rating==0)) {
-				ratOrder = "ASC";
-				rating = 0;
-			}else if ((date.compareTo("novalue")!=0)&&(ratOrder.compareTo("novalue")==0)&&(rating!=0)) {
-				ratOrder = "ASC";
-			}else if ((date.compareTo("novalue")!=0)&&(ratOrder.compareTo("novalue")!=0)&&(rating==0)) {
-				rating = 0;
-			} */
 			
 			System.out.println("VALORI :"+ str +" "+ratOrder+" "+rating);
 			

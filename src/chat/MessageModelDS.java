@@ -52,6 +52,8 @@ public class MessageModelDS {
 	
 	
 	public Collection<MessageBean> doRetrieveByChatID(int chatID) throws SQLException {
+		if(chatID<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT * FROM Messaggio WHERE ChatID=? ORDER BY DataInvio;";
@@ -86,6 +88,8 @@ public class MessageModelDS {
 	
 	
 	public Collection<MessageBean> doRetrieveLatestMessages(Timestamp orario,int chatID) throws SQLException {
+		if(orario==null||chatID<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT * FROM Messaggio WHERE DataInvio>? AND ChatID=? ORDER BY DataInvio;";
@@ -121,6 +125,8 @@ public class MessageModelDS {
 		
 	
 	public void doSave(MessageBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 

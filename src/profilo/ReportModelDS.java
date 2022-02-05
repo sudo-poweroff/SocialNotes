@@ -121,6 +121,8 @@ public class ReportModelDS {
 	}
 	
 	public void doSave (ReportBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		//ResultSet rs=null;
@@ -147,6 +149,8 @@ public class ReportModelDS {
 	}
 	
 	public void removeReport(String username) throws SQLException {
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="DELETE FROM Segnalazione WHERE Username = ?;";
@@ -169,6 +173,8 @@ public class ReportModelDS {
 	}
 	
 	public void archiveReport(int codiceSegnalazione) throws SQLException {
+		if(codiceSegnalazione<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="UPDATE Segnalazione SET Stato = 1 WHERE CodiceSegnalazione = ?;";

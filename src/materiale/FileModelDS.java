@@ -20,6 +20,8 @@ public class FileModelDS  {
 	}
 
 	public FileBean doRetrieveByKey(int IdFile) throws SQLException {
+		if(IdFile<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Files WHERE IdFile=?;";
@@ -95,6 +97,8 @@ public class FileModelDS  {
 	}
 	
 	public void doSave(FileBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 

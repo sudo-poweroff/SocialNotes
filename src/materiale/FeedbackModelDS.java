@@ -53,6 +53,8 @@ public class FeedbackModelDS  {
 	}
 	
 	public int getFeedbackByUsername (String username) throws SQLException{
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT Nome,feedback from FeedbackUser WHERE Username = ?;";
@@ -117,6 +119,8 @@ public class FeedbackModelDS  {
 	}
 	
 	public Collection<FeedbackBean> doRetrieveByKeyMaterial(int codeMaterial) throws SQLException {
+		if(codeMaterial<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT * FROM Feedback WHERE CodiceMateriale = ?;";
@@ -152,6 +156,8 @@ public class FeedbackModelDS  {
 	}
 	
 	public void doSave(FeedbackBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		//ResultSet rs=null;

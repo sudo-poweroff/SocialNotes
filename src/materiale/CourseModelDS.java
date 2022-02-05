@@ -19,8 +19,8 @@ public class CourseModelDS {
 
 
 	public CourseBean doRetrieveByKey(String code) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		if(code==null||code.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -69,6 +69,8 @@ public class CourseModelDS {
 
 
 	public int doRetrieveByName(String name)  {
+		if(name==null||name.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -144,6 +146,8 @@ public class CourseModelDS {
 	}
 
 	public void doSave(CourseBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		//ResultSet rs=null;

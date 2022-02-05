@@ -24,6 +24,8 @@ public class ContentModelDS {
 	 * @throws SQLException
 	 */
 	public Collection<Integer> doRetrieveByCodiceNews(int codiceNews)throws SQLException{
+		if(codiceNews<0)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String selectSQL="SELECT IdFile FROM Contenuto WHERE CodiceNews = ? ;";
@@ -82,6 +84,8 @@ public class ContentModelDS {
 	}
 
 	public void doSave(ContentBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql="INSERT INTO Contenuto (CodiceNews,IdFile) values (?,?);";

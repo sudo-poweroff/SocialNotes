@@ -17,8 +17,10 @@ public class PaymentMethodModelDS {
 	public PaymentMethodModelDS(DataSource ds) {
 		this.ds=ds;
 	}
-	
+
 	public PaymentMethodBean doRetrieveByKey(String code) throws SQLException {
+		if(code==null||code.equals("")||code.length()!=16)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT * FROM MetodoPagamento WHERE NumeroCarta=?;";
@@ -52,8 +54,10 @@ public class PaymentMethodModelDS {
 		return bean;
 	}
 
-	
+
 	public Collection<PaymentMethodBean> doRetrieveByUsername(String username) throws SQLException{
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT * FROM MetodoPagamento WHERE Username=?;";
@@ -88,8 +92,8 @@ public class PaymentMethodModelDS {
 		}
 		return cards;
 	}
-	
-	
+
+
 	public Collection<PaymentMethodBean> doRetrieveAll() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -127,6 +131,8 @@ public class PaymentMethodModelDS {
 	}
 
 	public void doSave(PaymentMethodBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -154,10 +160,12 @@ public class PaymentMethodModelDS {
 				}
 			}
 		}
-		
+
 	}
 
 	public void doDeleteByNumber(String numeroCarta)throws SQLException{
+		if(numeroCarta==null||numeroCarta.equals("")||numeroCarta.length()!=16)
+			throw new NullPointerException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 		String sql="DELETE FROM MetodoPagamento WHERE NumeroCarta=?";
@@ -180,6 +188,6 @@ public class PaymentMethodModelDS {
 			}
 		}
 	}
-	
+
 	private DataSource ds;
 }

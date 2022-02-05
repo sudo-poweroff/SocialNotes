@@ -51,6 +51,8 @@ public class FriendsModelDS {
 	}
 
 	public void doSave(FriendsBean item) throws SQLException {
+		if(item==null)
+			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="INSERT INTO Amicizia (Username1,Username2,DataInizio) values (?,?,?);";
@@ -78,6 +80,8 @@ public class FriendsModelDS {
 
 
 		public void doDeleteFriend(String friend,String user) throws SQLException{
+			if(friend==null||friend.equals("")||user==null||user.equals(""))
+				throw new NullPointerException();
 			Connection con=null;
 			PreparedStatement ps=null;
 			String sql="DELETE FROM Amicizia WHERE (Username1=? AND Username2=?) OR (Username1=? AND Username2=?);";
@@ -104,6 +108,8 @@ public class FriendsModelDS {
 
 
 		public boolean isFriend(String friend,String user)throws SQLException{
+			if(friend==null||friend.equals("")||user==null||user.equals(""))
+				throw new NullPointerException();
 			Connection con=null;
 			PreparedStatement ps=null;
 			ResultSet rs=null;
@@ -138,6 +144,8 @@ public class FriendsModelDS {
 
 
 		public int getNumerFriends(String username) throws SQLException{
+			if(username==null||username.equals(""))
+				throw new NullPointerException();
 			Connection con=null;
 			PreparedStatement ps=null;
 			ResultSet rs=null;
@@ -167,6 +175,8 @@ public class FriendsModelDS {
 
 
 		public Collection<FriendsBean> doRetrieveByUsername(String username) throws SQLException{
+			if(username==null||username.equals(""))
+				throw new NullPointerException();
 			Connection con=null;
 			PreparedStatement ps=null;
 			ResultSet rs=null;
