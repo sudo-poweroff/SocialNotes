@@ -20,8 +20,11 @@
 </head>
 <body>
 <%
-	if (session.getAttribute("username")==null)
-		  response.sendRedirect("login.jsp");
+	System.out.println(session.getAttribute("username"));
+	if (session.getAttribute("username")==null){
+		  response.sendRedirect(response.encodeURL("login.jsp"));
+		  return;
+	}
 	String username=(String)session.getAttribute("username");
 	DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 %>

@@ -155,7 +155,7 @@ if(collection!=null&&collection.size()>0){
 	while(it.hasNext()){
 		NewsBean nbean=(NewsBean)it.next();
 		Collection<Integer> files = cmodel.doRetrieveByCodiceNews(nbean.getCodiceNews());
-		int idFile = -1; //Per passarmela dopo nella showNews.jsp
+		int idFile = 0; //Per passarmela dopo nella showNews.jsp
 		%>
 		
 		  <tr>
