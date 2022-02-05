@@ -75,150 +75,150 @@ public class FriendsModelDS {
 
 			}
 		}
-			
-		}
+
+	}
 
 
-		public void doDeleteFriend(String friend,String user) throws SQLException{
-			if(friend==null||friend.equals("")||user==null||user.equals(""))
-				throw new NullPointerException();
-			Connection con=null;
-			PreparedStatement ps=null;
-			String sql="DELETE FROM Amicizia WHERE (Username1=? AND Username2=?) OR (Username1=? AND Username2=?);";
+	public void doDeleteFriend(String friend,String user) throws SQLException{
+		if(friend==null||friend.equals("")||user==null||user.equals(""))
+			throw new NullPointerException();
+		Connection con=null;
+		PreparedStatement ps=null;
+		String sql="DELETE FROM Amicizia WHERE (Username1=? AND Username2=?) OR (Username1=? AND Username2=?);";
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, friend);
+			ps.setString(2, user);
+			ps.setString(3, user);
+			ps.setString(4, friend);
+			ps.executeUpdate();
+			System.out.println("Amico eliminato");
+		}finally {
 			try {
-				con=ds.getConnection();
-				ps=con.prepareStatement(sql);
-				ps.setString(1, friend);
-				ps.setString(2, user);
-				ps.setString(3, user);
-				ps.setString(4, friend);
-				ps.executeUpdate();
-				System.out.println("Amico eliminato");
-			}finally {
-				try {
-					if(ps!=null)
-						ps.close();
-				}
-				finally {
-					if(con!=null)
-						con.close();
-				}
-			}
-		}
-
-
-		public boolean isFriend(String friend,String user)throws SQLException{
-			if(friend==null||friend.equals("")||user==null||user.equals(""))
-				throw new NullPointerException();
-			Connection con=null;
-			PreparedStatement ps=null;
-			ResultSet rs=null;
-			String sql="SELECT Username1 FROM Amicizia WHERE (Username1=? AND Username2=?) OR (Username1=? AND Username2=?);";
-			try {
-				con=ds.getConnection();
-				ps=con.prepareStatement(sql);
-				ps.setString(1, friend);
-				ps.setString(2, user);
-				ps.setString(3, user);
-				ps.setString(4, friend);
-				rs=ps.executeQuery();
-				if(rs.next()) {
-					System.out.println("Sono amici");
-					return true;
-				}
-				return false;
-			}finally {
-				try {
-					if(rs!=null)
-						rs.close();
-					if(ps!=null)
-						ps.close();
-				}
-				finally {
-					if(con!=null)
-						con.close();
-				}
-			}
-
-		}
-
-
-		public int getNumerFriends(String username) throws SQLException{
-			if(username==null||username.equals(""))
-				throw new NullPointerException();
-			Connection con=null;
-			PreparedStatement ps=null;
-			ResultSet rs=null;
-			String sql="SELECT count(*) as NumeroAmici FROM Amicizia WHERE Username1=? 	OR Username2=?";
-			try {
-				con=ds.getConnection();
-				ps=con.prepareStatement(sql);
-				ps.setString(1, username);
-				ps.setString(2, username);
-				rs=ps.executeQuery();
-				if(rs.next()) 
-					return rs.getInt("NumeroAmici");
-				return -1;
-			}finally {
-				try {
-					if(rs!=null)
-						rs.close();
-					if(ps!=null)
-						ps.close();
-				}
-				finally {
-					if(con!=null)
-						con.close();
-				}
-			}
-		}
-
-
-		public Collection<FriendsBean> doRetrieveByUsername(String username) throws SQLException{
-			if(username==null||username.equals(""))
-				throw new NullPointerException();
-			Connection con=null;
-			PreparedStatement ps=null;
-			ResultSet rs=null;
-			String sql="SELECT * FROM Amicizia WHERE Username1=? 	OR Username2=?  ORDER BY DataInizio desc LIMIT 10;";
-			Collection<FriendsBean> friends=new LinkedList<FriendsBean>();
-			try {
-				con=ds.getConnection();
-				ps=con.prepareStatement(sql);
-				//Utility.print("doRetrieveAll:"+ps.toString());
-				ps.setString(1, username);
-				ps.setString(2, username);
-				rs=ps.executeQuery();
-				while(rs.next()) {
-					FriendsBean bean=new FriendsBean();
-					if(rs.getString("Username2").compareTo(username)==0) {
-						bean.setUsername1(rs.getString("Username1"));
-						bean.setUsername2(rs.getString("Username2"));
-					}
-					else {
-						bean.setUsername1(rs.getString("Username2"));
-						bean.setUsername2(rs.getString("Username1"));
-					}
-					bean.setDataInizio(rs.getDate("DataInizio"));
-					friends.add(bean);
-				}
+				if(ps!=null)
+					ps.close();
 			}
 			finally {
-				try {
-					if(rs!=null)
-						rs.close();
-					if(ps!=null)
-						ps.close();
-				}
-				finally {
-					if(con!=null)
-						con.close();
-				}
+				if(con!=null)
+					con.close();
 			}
-			return friends;
-
 		}
-
-
-		private DataSource ds;
 	}
+
+
+	public boolean isFriend(String friend,String user)throws SQLException{
+		if(friend==null||friend.equals("")||user==null||user.equals(""))
+			throw new NullPointerException();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT Username1 FROM Amicizia WHERE (Username1=? AND Username2=?) OR (Username1=? AND Username2=?);";
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, friend);
+			ps.setString(2, user);
+			ps.setString(3, user);
+			ps.setString(4, friend);
+			rs=ps.executeQuery();
+			if(rs.next()) {
+				System.out.println("Sono amici");
+				return true;
+			}
+
+		}finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+		return false;
+	}
+
+
+	public int getNumberFriends(String username) throws SQLException{
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT count(*) as NumeroAmici FROM Amicizia WHERE Username1=? 	OR Username2=?";
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, username);
+			ps.setString(2, username);
+			rs=ps.executeQuery();
+			if(rs.next()) 
+				return rs.getInt("NumeroAmici");
+			return -1;
+		}finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+	}
+
+
+	public Collection<FriendsBean> doRetrieveByUsername(String username) throws SQLException{
+		if(username==null||username.equals(""))
+			throw new NullPointerException();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT * FROM Amicizia WHERE Username1=? 	OR Username2=?  ORDER BY DataInizio desc LIMIT 10;";
+		Collection<FriendsBean> friends=new LinkedList<FriendsBean>();
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			//Utility.print("doRetrieveAll:"+ps.toString());
+			ps.setString(1, username);
+			ps.setString(2, username);
+			rs=ps.executeQuery();
+			while(rs.next()) {
+				FriendsBean bean=new FriendsBean();
+				if(rs.getString("Username2").compareTo(username)==0) {
+					bean.setUsername1(rs.getString("Username1"));
+					bean.setUsername2(rs.getString("Username2"));
+				}
+				else {
+					bean.setUsername1(rs.getString("Username2"));
+					bean.setUsername2(rs.getString("Username1"));
+				}
+				bean.setDataInizio(rs.getDate("DataInizio"));
+				friends.add(bean);
+			}
+		}
+		finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+		return friends;
+
+	}
+
+
+	private DataSource ds;
+}

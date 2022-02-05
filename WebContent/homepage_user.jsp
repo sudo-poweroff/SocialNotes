@@ -83,7 +83,7 @@
   }
   DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
   FriendsModelDS friends=new FriendsModelDS(ds);
-  int numeroAmici=friends.getNumerFriends(username);
+  int numeroAmici=friends.getNumberFriends(username);
   MaterialModelDS material=new MaterialModelDS(ds);
   int quantitaMateriale=material.getQuantitaMaterialeCondiviso(username);
   Collection<FriendsBean> f=friends.doRetrieveByUsername(username);
@@ -216,7 +216,7 @@
 									</div>
 									<div class="right">
 										<a style="color:black"  href="<%=visitUserLink%>?friendname=<%=bean.getUsername1() %>" ><h3><%=bean.getUsername1() %></h3></a>
-										<p><%=friends.getNumerFriends(bean.getUsername1()) %> Friends</p>
+										<p><%=friends.getNumberFriends(bean.getUsername1()) %> Friends</p>
 									</div>
 								</li>
 								
