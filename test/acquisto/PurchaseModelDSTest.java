@@ -23,9 +23,9 @@ import org.junit.Test;
 
 
 public class PurchaseModelDSTest extends DataSourceBasedDBTestCase  {
-
 	
-
+	private DataSource ds;
+	private PurchaseModelDS purchase;
 	
 	
 	@Override
@@ -124,7 +124,7 @@ public class PurchaseModelDSTest extends DataSourceBasedDBTestCase  {
 		}
 	}
 	
-	
+//TEST doSave	
 	@Test
 	public void testDoSave() throws Exception{
 		PurchaseBean bean=new PurchaseBean();
@@ -167,7 +167,4 @@ public class PurchaseModelDSTest extends DataSourceBasedDBTestCase  {
 	}
 
 	
-	private DataSource ds;
-	private PurchaseModelDS purchase;
-
 }

@@ -27,8 +27,6 @@ public class UserModelDS {
 		Connection con=null;
 		PreparedStatement ps=null;
 		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password,Ruolo FROM Utente WHERE Email = ? OR Username=?";
-		//System.out.println("name in usermodel "+name);
-		//System.out.println("pass in usermodel "+password);
 		UserBean bean=new UserBean();
 		try {
 			con=ds.getConnection();
@@ -70,7 +68,6 @@ public class UserModelDS {
 					con.close();
 			}
 		}
-		//System.out.println(bean.toString());
 		return bean;
 	}
 
