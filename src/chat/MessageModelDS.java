@@ -18,38 +18,6 @@ public class MessageModelDS {
 		this.ds=ds;
 	}
 
-	public Collection<MessageBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Messaggio;";
-		Collection<MessageBean> messages=new LinkedList<MessageBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				MessageBean bean=new MessageBean();
-				bean.setIdMessaggio(rs.getInt("IDMessaggio"));
-				bean.setTesto(rs.getString("Testo"));
-				bean.setDataInvio(rs.getTimestamp("DataInvio"));
-				bean.setUsername(rs.getString("Username"));
-				bean.setChatID(rs.getInt("ChatID"));
-				messages.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return messages;
-	}
-	
 	
 	public Collection<MessageBean> doRetrieveByChatID(int chatID) throws SQLException {
 		if(chatID<0)

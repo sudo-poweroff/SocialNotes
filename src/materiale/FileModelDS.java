@@ -60,41 +60,6 @@ public class FileModelDS  {
 	}
 	
 	
-	public Collection<FileBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Files;";
-		Collection<FileBean> files=new LinkedList<FileBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				FileBean bean=new FileBean();
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setFilename(rs.getString("FileName"));
-				bean.setFormato(rs.getString("Formato"));
-				bean.setContenuto((InputStream)rs.getBlob("Contenuto"));
-				bean.setDimensione(rs.getInt("Dimensione"));
-				files.add(bean);
-				
-		
-				
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return files;
-	}
 	
 	public void doSave(FileBean item) throws SQLException {
 		if(item==null)

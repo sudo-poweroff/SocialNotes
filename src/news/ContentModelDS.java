@@ -53,35 +53,6 @@ public class ContentModelDS {
 		return fileNames;
 	}
 
-	public Collection<ContentBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Contenuto;";
-		Collection<ContentBean> content=new LinkedList<ContentBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				ContentBean bean=new ContentBean();
-				bean.setCodiceNews(rs.getInt("CodiceNews"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				content.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return content;
-	}
 
 	public void doSave(ContentBean item) throws SQLException {
 		if(item==null)

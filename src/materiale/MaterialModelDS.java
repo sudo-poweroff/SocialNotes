@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Utility;
 
 public class MaterialModelDS {
 	
@@ -71,7 +70,6 @@ public class MaterialModelDS {
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
-			//Utility.print("doRetrieveAll:"+ps.toString());
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {
 				MaterialBean bean=new MaterialBean();
@@ -128,44 +126,6 @@ public class MaterialModelDS {
 		}
 	}
 	
-
-	public Collection<MaterialBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Materiale;";
-		Collection<MaterialBean> material=new LinkedList<MaterialBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				MaterialBean bean=new MaterialBean();
-				bean.setCodiceMateriale(rs.getInt("CodiceMateriale"));
-				bean.setDataCaricamento(rs.getDate("DataCaricamento"));
-				bean.setKeywords(rs.getString("Keywords"));
-				bean.setCosto(rs.getInt("Costo"));
-				bean.setDescrizione(rs.getString("Descrizione"));
-				bean.setHidden(rs.getBoolean("Hidden"));
-				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
-				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
-				material.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return material;
-	}
 	
 	public Collection<MaterialBean>  doRetrieveByString(String str) throws SQLException {
 		if(str==null||str.equals(""))
@@ -492,7 +452,6 @@ public class MaterialModelDS {
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
-			//Utility.print("doRetrieveAll:"+ps.toString());
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {
 				MaterialBean bean=new MaterialBean();

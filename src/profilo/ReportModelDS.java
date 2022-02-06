@@ -18,39 +18,6 @@ public class ReportModelDS {
 		this.ds = ds;
 	}
 	
-	public Collection<ReportBean> doRetrieveAll() throws SQLException{
-		
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Segnalazione;";
-		Collection<ReportBean> reports=new LinkedList<ReportBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				ReportBean bean=new ReportBean();
-                bean.setCodiceSegnalazione(rs.getInt("CodiceSegnalazione"));
-                bean.setMotivo(rs.getString("Motivo"));
-                bean.setStato(rs.getInt("Stato"));
-                bean.setUsername(rs.getString("Username"));
-                reports.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		
-		
-		return reports;
-	}
 	
 	public Collection<ReportBean> doRetrieveArchived() throws SQLException{
 		

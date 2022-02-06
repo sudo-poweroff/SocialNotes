@@ -115,35 +115,6 @@ public class CourseModelDS {
 		return -1;
 	}
 
-	public Collection<CourseBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Corso;";
-		Collection<CourseBean> courses=new LinkedList<CourseBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				CourseBean bean=new CourseBean();
-				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
-				bean.setNome(rs.getString("Nome"));
-				courses.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return courses;
-	}
 
 	public void doSave(CourseBean item) throws SQLException {
 		if(item==null)

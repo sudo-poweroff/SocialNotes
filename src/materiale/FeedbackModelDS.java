@@ -18,40 +18,6 @@ public class FeedbackModelDS  {
 	}
 	
 	
-	public Collection<FeedbackBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Feedback;";
-		Collection<FeedbackBean> feeds=new LinkedList<FeedbackBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			//Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				FeedbackBean bean=new FeedbackBean();
-				bean.setCodiceMateriale(rs.getInt("CodiceMateriale"));
-				bean.setUsername(rs.getString("Username"));
-				bean.setDataFeed(rs.getTimestamp("DataFeed"));
-				bean.setCommento(rs.getString("Commento"));
-				bean.setValutazione(rs.getInt("Valutazione"));
-				feeds.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return feeds;
-
-	}
-	
 	public int getFeedbackByUsername (String username) throws SQLException{
 		if(username==null||username.equals(""))
 			throw new NullPointerException();

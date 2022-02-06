@@ -164,47 +164,6 @@ public class UserModelDS {
 		return bean;
 	}
 
-	public Collection<UserBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Utente;";
-		Collection<UserBean> users=new LinkedList<UserBean>();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			//Utility.print("doRetrieveAll:"+ps.toString());
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				UserBean bean=new UserBean();
-				bean.setUsername(rs.getString("Username"));
-				bean.setNome(rs.getString("Nome"));
-				bean.setCognome(rs.getString("Cognome"));
-				bean.setImg(rs.getBlob("Img"));
-				bean.setEmail(rs.getString("Email"));
-				bean.setPass(rs.getString("Pass"));
-				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getDate("Ban"));
-				bean.setDenominazione(rs.getString("Denominazione"));
-				bean.setDipName(rs.getString("DipName"));
-				bean.setRuolo(rs.getInt("Ruolo"));
-				users.add(bean);
-			}
-			if(rs!=null)
-				rs.close();
-		}
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return users;
-	}
 
 	public Collection<UserBean> doRetrieveUsers() throws SQLException {
 		Connection con=null;

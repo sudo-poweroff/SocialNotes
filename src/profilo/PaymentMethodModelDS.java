@@ -94,42 +94,6 @@ public class PaymentMethodModelDS {
 	}
 
 
-	public Collection<PaymentMethodBean> doRetrieveAll() throws SQLException {
-		Connection con=null;
-		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM MetodoPagamento;";
-		Collection<PaymentMethodBean> cards=new LinkedList<PaymentMethodBean>();
-		ResultSet rs=null;
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(selectSQL);
-			Utility.print("doRetrieveAll:"+ps.toString());
-			rs=ps.executeQuery();
-			while(rs.next()) {
-				PaymentMethodBean bean=new PaymentMethodBean();
-				bean.setNumeroCarta(rs.getString("NumeroCarta"));
-				bean.setDataScadenza(rs.getDate("DataScadenza"));
-				bean.setNomeIntestatario(rs.getString("NomeIntestatario"));
-				bean.setCognomeIntestatario(rs.getString("CognomeIntestatario"));
-				bean.setUsername(rs.getString("Username"));
-				cards.add(bean);
-			}
-		}
-		finally {
-			try {
-				if(rs!=null)
-					rs.close();
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return cards;
-	}
-
 	public void doSave(PaymentMethodBean item) throws SQLException {
 		if(item==null)
 			throw new NullPointerException();
