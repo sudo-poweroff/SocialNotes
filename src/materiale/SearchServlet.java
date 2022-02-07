@@ -97,9 +97,9 @@ public class SearchServlet extends HttpServlet {
 				rating = 0;
 			} */
 			
-			System.out.println("VALORI :"+ date +" "+ratOrder+" "+rating);
+			System.out.println("VALORI : "+ratOrder+" "+rating);
 			
-			Collection<MaterialBean> material= model.doRetrieveByParameters(str, date, ratOrder, rating);
+			Collection<MaterialBean> material= model.doRetrieveByParameters(str, ratOrder, rating);
 			
 			request.setAttribute("ricercaNew", str);
 			request.setAttribute("materiale", material);

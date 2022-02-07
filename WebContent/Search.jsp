@@ -92,14 +92,7 @@ DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 <form class="form shadow p-3 mb-5 bg-white rounded" action=<%="SearchServlet;jsessionid="+session.getId() %>>
 <input type="search" id="ricerca" name="ricerca" hidden value="<%=stringRicerca%>">
 <div class="form-row">
-  <div class="form-group col-md-4">
-    <label for="email">Ordine di caricamento</label>
-     <select class="custom-select d-block w-100" id="date" name="date">
-       <option value="novalue"> - </option>
-     <option value="ASC">Crescente</option>
-     <option value="DESC">Decrescente</option>
-     </select>
-  </div>
+
 <br>
   <div class="form-group col-md-4">
     <label for="email">Ordine in base al Rating:</label>
