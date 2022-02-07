@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 	<Utente Username="sime00" Nome="Simone" Cognome="Della Porta" Email="sime@gmail.com" Pass="Sime1" DataNascita="2000-10-27" Coin="1200" Ban="2022-03-01" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" />
-	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" />
-	<Utente Username="califano87" Nome="Alfonso" Cognome="Califano" Email="califano87@gmail.com" Pass="Califano87" DataNascita="2000-05-17" Coin="900" Ban="2022-02-06" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" /> 
-	<Utente Username="sim" Nome="Simone" Cognome="Rossi" Email="sim@gmail.com" Pass="Sim1" DataNascita="2000-08-27" Coin="200" Ban="2022-01-25" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" />
+	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>
+	<Utente Username="califano87" Nome="Alfonso" Cognome="Califano" Email="califano87@gmail.com" Pass="Califano87" DataNascita="2000-05-17" Coin="900" Ban="2022-02-06" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>
+	<Utente Username="sim" Nome="Simone" Cognome="Rossi" Email="sim@gmail.com" Pass="Sim1" DataNascita="2000-08-27" Coin="200" Ban="2022-01-25" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>
+	<Utente Username="ciccioCicogna" Nome="Francesco" Cognome="Cicogna" Email="ciccioCicogna@gmail.com" Pass="Ciccio1" DataNascita="2001-04-10" Coin="50" Ban="2021-09-10" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>
 	
 	<Materiale CodiceMateriale="1" DataCaricamento="2021-10-11" Costo="10" Descrizione="Programmazione 1" Keywords="" Hidden="false" CodiceCorso="1" Username="sime00" IdFile="20" />
 	<Materiale CodiceMateriale="2" DataCaricamento="2021-12-12" Costo="20" Descrizione="Analisi" Keywords="" Hidden="false" CodiceCorso="2" Username="fry" IdFile="15" />

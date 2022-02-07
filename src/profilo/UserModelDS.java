@@ -364,7 +364,7 @@ public class UserModelDS {
 	}
 
 	public void manageBan(String username,Date ban) throws SQLException{
-		if(username==null||username.equals("")||ban.after(new Date(System.currentTimeMillis())))
+		if(username==null||username.equals("")||ban.before(new Date(System.currentTimeMillis())))
 			throw new NullPointerException();
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -533,14 +533,14 @@ public class UserModelDS {
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
-		String sql="SELECT avg(Valutazione) as Media FROM Materiale,Feedback WHERE Materiale.CodiceMateriale=Feedback.CodiceMateriale and Feedback.CodiceMateriale in (select Materiale.CodiceMateriale from Materiale where Username=?);";
-		float media=0;
+		float media=-1.0F;
+		String sql="SELECT avg(Valutazione) as Media FROM Materiale,Feedback WHERE Materiale.CodiceMateriale=Feedback.CodiceMateriale and Feedback.CodiceMateriale in (select Materiale.CodiceMateriale from Materiale where Username=?) GROUP BY Materiale.Username;";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
 			ps.setString(1, username);
 			rs=ps.executeQuery();
-			if(rs.next()) 
+			if(rs.next()&&rs!=null)
 				media=rs.getFloat("Media");
 		}finally {
 			try {
