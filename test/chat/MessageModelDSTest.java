@@ -153,7 +153,7 @@ public class MessageModelDSTest extends DataSourceBasedDBTestCase{
 	@Test
 	public void testDoSave() throws Exception{
 		MessageBean bean= new MessageBean();
-		bean.setIdMessaggio(4);
+		bean.setIdMessaggio(1);
 		bean.setTesto("ciaoo");
 		bean.setDataInvio(Timestamp.valueOf("2022-01-31 16:29:39"));
 		bean.setUsername("fry");

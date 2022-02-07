@@ -117,7 +117,7 @@ public class ChatModelDSTest extends DataSourceBasedDBTestCase  {
 	public void testDoSave() throws Exception{
 		ChatBean bean= new ChatBean();
 		bean.setTitolo("nuova chat");
-		bean.setChatID(66);
+		bean.setChatID(1);
 		chat.doSave(bean);
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/ChatExpected.xml")).getTable("Chat");
 		ITable actual=this.getConnection().createDataSet().getTable("Chat");
