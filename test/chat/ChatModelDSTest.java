@@ -113,6 +113,17 @@ public class ChatModelDSTest extends DataSourceBasedDBTestCase  {
 		assertEquals(result.getTitolo(),"progetto IS");
 	}
 	
+	
+	@Test
+	public void testDoRetrieveLastNonPresente() throws SQLException{
+		ds.getConnection().prepareStatement("DELETE FROM Chat WHERE ChatID=18").execute();
+		ds.getConnection().prepareStatement("DELETE FROM Chat WHERE ChatID=16").execute();
+		ds.getConnection().prepareStatement("DELETE FROM Chat WHERE ChatID=65").execute();
+		
+		ChatBean result= chat.doRetrieveLast();
+		assertNull(result);
+	}
+	
 	@Test
 	public void testDoSave() throws Exception{
 		ChatBean bean= new ChatBean();

@@ -22,6 +22,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import chat.ChatBean;
 import chat.MessageBean;
 import chat.MessageModelDS;
 import chat.ParticipationBean;
@@ -157,6 +158,14 @@ public class ReportModelDSTest extends DataSourceBasedDBTestCase{
 	}
 	
 	@Test
+	public void testDoRetrieveArchivedNotPresent()throws SQLException{
+		ds.getConnection().prepareStatement("DELETE FROM Segnalazione WHERE CodiceSegnalazione=2").execute();
+		
+		Collection<ReportBean> result= report.doRetrieveArchived();
+		assertEquals(result.size(),0);
+	}
+	
+	@Test
 	public void testDoRetrieveNotArchived() throws SQLException{
 		Collection<ReportBean> result= report.doRetrieveNotArchived();
 		ArrayList<ReportBean> rs = new ArrayList<>(result);
@@ -181,6 +190,15 @@ public class ReportModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(rs.get(i).getUsername(),expected.get(i).getUsername());
 		}
 		
+	}
+	
+	@Test
+	public void doRetrieveNotArchivedNotPresent() throws SQLException{
+		ds.getConnection().prepareStatement("DELETE FROM Segnalazione WHERE CodiceSegnalazione=3").execute();
+		ds.getConnection().prepareStatement("DELETE FROM Segnalazione WHERE CodiceSegnalazione=4").execute();
+		
+		Collection<ReportBean> result= report.doRetrieveArchived();
+		assertEquals(result.size(),0);
 	}
 	
 	@Test

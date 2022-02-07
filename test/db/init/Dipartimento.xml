@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<Dipartimento Nome="Dipartimento di Biologia" Denominazione="Politecnico di Milano" Descrizione="http://www.uniba.it/ricerca/dipartimenti/biologia"/>
+	<Dipartimento Nome="Dipartimento di Chimica" Denominazione="Politecnico di Milano" Descrizione="http://www.chimica.uniba.it/"/>
+	<Dipartimento Nome="Dipartimento di Giurisprudenza" Denominazione="Universita' degli Studi del Sannio" Descrizione="http://www.uniba.it/ricerca/dipartimenti/lex"/>
+</dataset>
