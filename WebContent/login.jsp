@@ -29,6 +29,7 @@
   String link ="homepage.jsp";
   String signUp = "signup.jsp";
   String recoveryPass = "RecoveryPassword.jsp";
+  session.removeAttribute("pin");//Per il recupero password
   if(session.getAttribute("username")!=null){
 	  
 	  signUp = response.encodeURL(signUp);

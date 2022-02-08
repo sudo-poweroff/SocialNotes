@@ -71,7 +71,7 @@ public class RecoveryPass extends HttpServlet {
 		        String pass = "Despacito21";
 		        String[] to = { bean.getEmail() }; // list of recipient email addresses
 		        String subject = "Pin di Social Notes";
-		        String body = "Ciao "+bean.getUsername()+" Il pin e' : "+pin+" ";
+		        String body = "Ciao "+bean.getUsername()+" il pin e' : "+pin+" ";
 			   
 			    SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
 			  
@@ -110,12 +110,17 @@ public class RecoveryPass extends HttpServlet {
 				}
 				else {
 					//Pin inserito scorretto
-					response.sendRedirect("login.jsp");
+					request.setAttribute("errorPin", "Pin inserito non corretto");
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
+					dispatcher.forward(request, response);
 				}
 			}
 		}
-		else
-			response.sendRedirect("login.jsp");
+		else {//Se l'username non è presente nel DB
+			request.setAttribute("errorUsername", "Username non trovato");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 }

@@ -37,6 +37,37 @@
 	}
   %>
  
+ 	<%
+	String errorePin = (String) request.getAttribute("errorPin");
+	if (errorePin != null) {
+	%>
+
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Attenzione!</strong> Il pin inserito non &egrave; corretto.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<%
+	}
+	%>
+	
+	 	<%
+	String erroreUsername = (String) request.getAttribute("errorUsername");
+	if (erroreUsername != null) {
+	%>
+
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Attenzione!</strong> Username non trovato.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<%
+	}
+	%>
   		
   		
   		

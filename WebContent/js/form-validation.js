@@ -71,7 +71,7 @@ function passwordValidation(passid,mx,my){
   var passid_len = passid.value.length;
   //Per la lunghezza della password modificare anche i valori nell' espressione regolare 5,12
   var pwdformat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,12}$/;
-  if (passid_len == 0 ||passid_len >= my || passid_len <= mx || !passid.value.match(pwdformat)){
+  if (passid_len == 0 ||passid_len > my || passid_len < mx || !passid.value.match(pwdformat)){
     passid.classList.add("is-invalid");
     passid.focus();
     return false;
