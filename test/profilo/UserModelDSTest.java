@@ -257,6 +257,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us4.setRuolo(0);
 		us4.setImg(null);
 		aspected.add(us4);
+		assertEquals(rs.size(), aspected.size());
 		for(int i=0;i<result.size();i++) {
 			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
 			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());

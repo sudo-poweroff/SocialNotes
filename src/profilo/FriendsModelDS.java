@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Utility;
 
 public class FriendsModelDS {
 
@@ -117,7 +116,7 @@ public class FriendsModelDS {
 		Connection con=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
-		String sql="SELECT count(*) as NumeroAmici FROM Amicizia WHERE Username1=? 	OR Username2=?";
+		String sql="SELECT count(*) as NumeroAmici FROM Amicizia WHERE Username1=? OR Username2=?";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
@@ -126,7 +125,7 @@ public class FriendsModelDS {
 			rs=ps.executeQuery();
 			if(rs.next()) 
 				return rs.getInt("NumeroAmici");
-			return -1;
+			return 0;
 		}finally {
 			try {
 				if(rs!=null)
