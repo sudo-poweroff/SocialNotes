@@ -1,9 +1,7 @@
 package profilo;
 
-import static org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,10 +20,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import chat.ChatBean;
-import chat.MessageBean;
-import chat.MessageModelDS;
-import chat.ParticipationBean;
 
 public class ReportModelDSTest extends DataSourceBasedDBTestCase{
 	

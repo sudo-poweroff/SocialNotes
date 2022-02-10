@@ -1,6 +1,5 @@
 package materiale;
 
-import static org.junit.Assert.*;
 
 import javax.sql.DataSource;
 
@@ -14,42 +13,41 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import profilo.ReportModelDS;
 
 
 
 public class CourseModelDSTest extends DataSourceBasedDBTestCase{
-	
+
 	private DataSource ds;
 	private CourseModelDS course;
 
 	@Override
 	protected DataSource getDataSource() {
 		JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from 'classpath:db/init/Corso.sql'");
-        dataSource.setUser("Ackermann32");
-        dataSource.setPassword("alfonso");
-        return dataSource;
+		dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from 'classpath:db/init/Corso.sql'");
+		dataSource.setUser("Ackermann32");
+		dataSource.setPassword("alfonso");
+		return dataSource;
 	}
 
 	@Override
 	protected IDataSet getDataSet() throws Exception {
 		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/init/Corso.xml"));
 	}
-	
+
 	@Override
 	protected DatabaseOperation getSetUpOperation(){
 		return DatabaseOperation.REFRESH;
 	}
-	
+
 	@Override
 	protected DatabaseOperation getTearDownOperation() {
 		return DatabaseOperation.DELETE_ALL;
 	}
-	
+
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception{}
-	
+
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -68,45 +66,45 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(cBean.getCodiceCorso(),6);
 		assertEquals(cBean.getNome(),"cddc");
 	}
-	
+
 	@Test
 	public void testDoRetrieveByKeyNotPresent() throws Exception {
 		CourseBean cBean = course.doRetrieveByKey("7");
 		assertEquals(cBean,null);
 	}
-	
+
 	@Test
 	public void testDoRetrieveByVoidKey() throws Exception {
 		boolean flag = false;
 		try {
-		CourseBean cBean = course.doRetrieveByKey("");
-		
+			course.doRetrieveByKey("");
+
 		} catch (NullPointerException e) {
 			flag = true;
-			
+
 		}
 		assertEquals(flag, true);
 	}
-	
+
 	@Test
 	public void testDoRetrieveByKeyNull() throws Exception {
 		boolean flag = false;
 		try {
-		CourseBean cBean = course.doRetrieveByKey(null);
-		
+			course.doRetrieveByKey(null);
+
 		} catch (NullPointerException e) {
 			flag = true;
-			
+
 		}
 		assertEquals(flag, true);
 	}
-	
+
 	@Test
 	public void testDoRetrieveByNamePresent() throws Exception  {
 		int codiceCorso = course.doRetrieveByName("programmazione1");
 		assertEquals(codiceCorso, 3);
 	}
-	
+
 	@Test
 	public void testDoRetrieveByNameNotPresent() throws Exception  {
 		int codiceCorso = course.doRetrieveByName("ADE3");
@@ -117,7 +115,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	public void testDoRetrieveByVoidName() throws Exception  {
 		boolean flag = false;
 		try {
-			int codiceMateriale = course.doRetrieveByName("");
+			course.doRetrieveByName("");
 		}catch (NullPointerException e) {
 			flag = true;
 		}
@@ -128,7 +126,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	public void testDoRetrieveByNameNull() throws Exception  {
 		boolean flag = false;
 		try {
-			int codiceMateriale = course.doRetrieveByName(null);
+			course.doRetrieveByName(null);
 		}catch (NullPointerException e) {
 			flag = true;
 		}
@@ -136,5 +134,5 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	}
 
 
-	
+
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<Files Filename="FIA" Formato="pdf" Contenuto="'contenuto'" Dimensione="200" IdFile="3"/> 
+	<Files Filename="PD" Formato="pdf" Contenuto="'contenuto'" Dimensione="300" IdFile="4"/> 
+	<Files Filename="IS" Formato="pdf" Contenuto="'contenuto'" Dimensione="100" IdFile="5"/> 
+	<Files Filename="Machine Learning" Formato="pdf" Contenuto="'contenuto'" Dimensione="150" IdFile="6"/> 
+</dataset>

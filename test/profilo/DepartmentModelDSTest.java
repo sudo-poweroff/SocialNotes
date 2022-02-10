@@ -1,9 +1,7 @@
 package profilo;
 
-import static org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,7 +17,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import chat.MessageBean;
 
 public class DepartmentModelDSTest extends DataSourceBasedDBTestCase{
 	
@@ -135,7 +132,7 @@ public class DepartmentModelDSTest extends DataSourceBasedDBTestCase{
 	@Test
 	public void testDoRetrieveByDenominazioneNonPresente() throws Exception{
 		Collection<DepartmentBean> result=new ArrayList<>();
-		result=department.doRetrieveByDenominazione("Università degli studi di Salerno");
+		result=department.doRetrieveByDenominazione("Universitï¿½ degli studi di Salerno");
 		assertEquals(result.size(), 0);		
 	}
 	

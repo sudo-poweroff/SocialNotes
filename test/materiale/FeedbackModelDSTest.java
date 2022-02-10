@@ -1,6 +1,5 @@
 package materiale;
 
-import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -22,9 +21,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import chat.ChatBean;
-import chat.MessageBean;
-import chat.MessageModelDS;
 
 public class FeedbackModelDSTest extends DataSourceBasedDBTestCase{
 
@@ -71,13 +67,13 @@ public class FeedbackModelDSTest extends DataSourceBasedDBTestCase{
 	}
 	
 	
-	//NON FUNZIONA PERCHè la query crea le view
+	//NON FUNZIONA PERCHï¿½ la query crea le view
 	
 	@Test
 	public void testGetFeedbackByUsernamePresente() throws SQLException{
 		int valutazioneMedia=feedback.getFeedbackByUsername("fry");
 		assertEquals(2,valutazioneMedia);
-		//fail("non funziona perchè la query crea le view");
+		//fail("non funziona perchï¿½ la query crea le view");
 	}
 	
 	@Test

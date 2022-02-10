@@ -1,6 +1,5 @@
 package chat;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import acquisto.PurchaseBean;
 
 public class MessageModelDSTest extends DataSourceBasedDBTestCase{
 

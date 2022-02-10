@@ -1,9 +1,7 @@
 package chat;
 
-import static org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 import javax.sql.DataSource;
 

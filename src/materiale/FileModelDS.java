@@ -1,16 +1,12 @@
 package materiale;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
-import it.unisa.utils.Utility;
 
 public class FileModelDS  {
    

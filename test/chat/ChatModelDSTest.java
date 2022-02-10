@@ -1,7 +1,6 @@
 package chat;
 
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +20,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import acquisto.PurchaseBean;
 
 
 public class ChatModelDSTest extends DataSourceBasedDBTestCase  {
@@ -85,7 +83,6 @@ public class ChatModelDSTest extends DataSourceBasedDBTestCase  {
 	
 	@Test
 	public void testDoRetrieveByKeyVuota() throws SQLException{		
-		ChatBean result= null;
 		boolean flag = false;
 		try {
 			chat.doRetrieveByKey("");
