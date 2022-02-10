@@ -230,7 +230,7 @@ public class MaterialModelDS {
 		
 		
 		
-		String selectSQL="SELECT Materiale.CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+		String selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
 				+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 				+ "GROUP BY CodiceMateriale\n"

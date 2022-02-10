@@ -652,4 +652,53 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     	assertTrue(flag);
     }
     
+    @Test
+    public void testDoDelete() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",3);
+		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
+	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
+	    
+
+	    
+	  //materiale m1
+	    MaterialBean m1 = new MaterialBean();
+	    m1.setCodiceMateriale(4);
+	    m1.setDataCaricamento(Date.valueOf("2021-01-03"));
+	    m1.setKeywords("");
+	    m1.setCosto(20);
+	    m1.setDescrizione("provaInf");
+	    m1.setHidden(false);
+	    m1.setCodiceCorso(1);
+	    m1.setUsername("alfonso00");
+	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m1.setAnteprima(streamM2);
+	    m1.setIdFile(2);
+	    
+	    
+	    materialExpected.add(m1);
+
+	    
+	    for (int i=0;i<materials.size();i++) {
+			InputStream is=materialArray.get(i).getAnteprima();
+			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
+			Blob blob = new SerialBlob(is.readAllBytes());
+			Blob blob2 = new SerialBlob(stream.readAllBytes());
+	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
+			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
+		
+			
+			
+			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
+			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
+			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
+			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());
+			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );
+			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
+			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
+			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
+			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
+			assertEquals(strBean,strExpected );
+	    }
+    }
+    
 }
