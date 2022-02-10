@@ -57,14 +57,14 @@ public class SetPrice extends HttpServlet {
 			String error = "Spiacenti, la registrazione delle informazioni nel database non è andata a buon fine.";
 			request.setAttribute("error", error);
 			//Mando una alert 
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/signup.jsp");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/homepageNotesManager.jsp");
 			dispatcher.forward(request, response);
 			e.printStackTrace();
 		} 
 		
 		
 		
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/materiale.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/homepageNotesManager.jsp");
 		dispatcher.forward(request, response);
 	}
 
