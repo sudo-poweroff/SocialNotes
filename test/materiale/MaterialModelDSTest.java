@@ -118,7 +118,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	public void testDoRetrieveByVoidKey() throws Exception {
 		boolean flag = false;
 		try {
-		MaterialBean mBean = material.doRetrieveByKey("");
+			material.doRetrieveByKey("");
 		
 		} catch (NullPointerException e) {
 			flag = true;
@@ -132,7 +132,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	public void testDoRetrieveByKeyNull() throws Exception {
 		boolean flag = false;
 		try {
-		MaterialBean mBean = material.doRetrieveByKey(null);
+			material.doRetrieveByKey(null);
 		
 		} catch (NullPointerException e) {
 			flag = true;
@@ -325,14 +325,25 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	}
 	
 	@Test
-	public void testDoRetrieveByStringNull() throws Exception {
+	public void testDoRetrieveByStringVuota() throws Exception {
 		boolean flag=false;
 		try {
-			Collection<MaterialBean> materials = material.doRetrieveByString(null);
+			material.doRetrieveByString("");
 		}catch (NullPointerException e) {
 			flag = true;
 		}
-		
+		assertTrue(flag);
+	}
+	
+	@Test
+	public void testDoRetrieveByStringNull() throws Exception {
+		boolean flag=false;
+		try {
+			material.doRetrieveByString(null);
+		}catch (NullPointerException e) {
+			flag = true;
+		}
+		assertTrue(flag);
 	}
 	
 	@Test
@@ -408,20 +419,22 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	public void testDoRetrieveByVoidUsername() throws Exception {
 		boolean flag=false;
 		try {
-			Collection<MaterialBean> materials = material.doRetrieveByUsername("");
+			material.doRetrieveByUsername("");
 		}catch (NullPointerException e) {
 			flag = true;
 		}
+		assertTrue(flag);
 	}
 	
 	@Test
 	public void testDoRetrieveByUsernameNull() throws Exception {
 		boolean flag=false;
 		try {
-			Collection<MaterialBean> materials = material.doRetrieveByUsername(null);
+			material.doRetrieveByUsername(null);
 		}catch (NullPointerException e) {
 			flag = true;
 		}
+		assertTrue(flag);
 	}
 	
 	@Test
@@ -611,6 +624,32 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/init/Materiale.xml")).getTable("Materiale");
 		ITable actual=this.getConnection().createDataSet().getTable("Materiale");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
+    }
+    
+    
+    @Test
+    public void testDoRetrieveFeedback() throws SQLException {
+    	int result=material.doRetrieveFeedback(3);
+    	assertEquals(result, 3);
+    }
+    
+    
+    @Test
+    public void testDoRetrieveFeedbackMaterialNotPresent() throws SQLException {
+    	int result=material.doRetrieveFeedback(10);
+    	assertEquals(result, 0);
+    }
+    
+    
+    @Test
+    public void testDoRetrieveFeedbackCodeMarerialNotValid() throws SQLException {
+    	boolean flag=false;
+    	try {
+    		material.doRetrieveFeedback(-1);
+    	}catch(NullPointerException e) {
+    		flag=true;
+    	}
+    	assertTrue(flag);
     }
     
 }

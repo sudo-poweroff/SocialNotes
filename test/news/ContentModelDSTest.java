@@ -1,8 +1,5 @@
 package news;
 
-import static org.junit.Assert.*;
-
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,6 +83,19 @@ public class ContentModelDSTest extends DataSourceBasedDBTestCase{
 		Collection<Integer> result= content.doRetrieveByCodiceNews(50);
 		assertEquals(result.size(),0);
 	}
+	
+	
+	@Test
+	public void testDoRetrieveByCodiceNewsNonValido()throws Exception{
+		boolean flag=false;
+		try {
+			content.doRetrieveByCodiceNews(-1);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
 	
 	@Test
 	public void testDoSave() throws Exception{

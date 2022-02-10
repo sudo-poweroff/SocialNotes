@@ -73,6 +73,8 @@ public class FeedbackModelDSTest extends DataSourceBasedDBTestCase{
 		//fail("non funziona perch� la query crea le view");
 	}
 	
+	
+	
 	@Test
 	public void testGetFeedbackByUsernameNonPresente() throws SQLException{
 		int valutazioneMedia=feedback.getFeedbackByUsername("pluto");

@@ -14,6 +14,10 @@
     <Corso CodiceCorso="5" Nome="progettazione di algoritmi"/>
     
 
+<Feedback CodiceMateriale="3" Username="sime00" DataFeed="2021-11-10" Commento="appunti utili" Valutazione="4"/>
+<Feedback CodiceMateriale="3" Username="fry" DataFeed="2021-12-30" Commento="appunti un po scadenti" Valutazione="2"/>
+<Feedback CodiceMateriale="4" Username="califano87" DataFeed="2022-01-10" Commento="ottimi appunti" Valutazione="5"/>
+<Feedback CodiceMateriale="5" Username="sime00" DataFeed="2022-02-01" Commento="appunti utili per la preparazione per l esame a meno di qalche imperfezione" Valutazione="4"/>
 
 
 </dataset>
