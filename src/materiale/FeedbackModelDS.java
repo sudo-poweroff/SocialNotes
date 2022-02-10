@@ -23,52 +23,32 @@ public class FeedbackModelDS  {
 			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT Nome,feedback from FeedbackUser WHERE Username = ?;";
 		
-		PreparedStatement viewFeedbackmedia = null;
-		PreparedStatement dropViewFeedbackmedia = null;
-		PreparedStatement viewFeedbackuser = null;
-		PreparedStatement dropViewFeedbackuser = null;
+		String selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
+				+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
+				+ "WHERE Materiale.Hidden = 0\n"
+				+ "GROUP BY Materiale.Username\n"
+				+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
+				+ "WHERE Username = ? AND Ruolo=0\n"
+				+ "GROUP BY Utente.Username;";
 
-		String dropViewFeedbackmediaSQL = "DROP VIEW IF EXISTS FeedbackMedia;";
-		String viewFeedbackmediaSQL = "CREATE VIEW FeedbackMedia AS\n"
-				+ "Select CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
-				+ "FROM Feedback\n"
-				+ "GROUP BY CodiceMateriale;";
-		
-		String dropViewFeedbackuserSQL = "DROP VIEW IF EXISTS FeedbackUser;";
-		String viewFeedbackuserSQL = "CREATE VIEW FeedbackUser AS\n"
-				+ "SELECT NULL AS feedback,Username,nome,Cognome,Denominazione,dipName,Img from Utente\n"
-				+ "UNION\n"
-				+ "SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.dipName, Img\n"
-				+ "FROM Materiale LEFT JOIN FeedbackMedia ON Materiale.CodiceMateriale = FeedbackMedia.CodiceMateriale INNER JOIN Utente ON Materiale.Username = Utente.Username\n"
-				+ "group by Utente.Username;";
-		
+
+
+
 		
 
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(selectSQL);
-			   dropViewFeedbackmedia = con.prepareStatement(dropViewFeedbackmediaSQL);
-			   viewFeedbackmedia = con.prepareStatement(viewFeedbackmediaSQL);
-			   dropViewFeedbackuser = con.prepareStatement(dropViewFeedbackuserSQL);
-			   viewFeedbackuser = con.prepareStatement(viewFeedbackuserSQL);
 
-			//Utility.print("doRetrieveAll:"+ps.toString());
 
-			dropViewFeedbackmedia.execute();
-			viewFeedbackmedia.execute();
-			dropViewFeedbackuser.execute();
-			viewFeedbackuser.execute();
-			
 			ps.setString(1, username);
 			ResultSet rs=ps.executeQuery();
 			if(rs.next()) {
-                       if (rs.getInt("feedback")==0) {
-                    	   if (rs.next()) {
-                    		   return rs.getInt("feedback");
-                    	   }
-                       }
+                       
+            return rs.getInt("feedback");
+    
 			}
 		}
 		finally {

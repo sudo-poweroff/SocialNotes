@@ -209,59 +209,60 @@ public class UserModelDS {
 			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
-		PreparedStatement viewFeedbackmedia = null;
-		PreparedStatement dropViewFeedbackmedia = null;
-		PreparedStatement viewFeedbackuser = null;
-		PreparedStatement dropViewFeedbackuser = null;
-
-		String dropViewFeedbackmediaSQL = "DROP VIEW IF EXISTS FeedbackMedia;";
-		String viewFeedbackmediaSQL = "CREATE VIEW FeedbackMedia AS\n"
-				+ "Select CodiceMateriale,  ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
-				+ "FROM Feedback\n"
-				+ "GROUP BY CodiceMateriale;";
-
-		String dropViewFeedbackuserSQL = "DROP VIEW IF EXISTS FeedbackUser;";
-		String viewFeedbackuserSQL = "CREATE VIEW FeedbackUser AS\n"
-				+ "SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.Ruolo, Utente.dipName, Img\n"
-				+ "FROM Materiale LEFT JOIN FeedbackMedia ON Materiale.CodiceMateriale = FeedbackMedia.CodiceMateriale RIGHT JOIN Utente ON Materiale.Username = Utente.Username\n"
-				+ "group by Utente.Username;";
+	
 
 
 
 
-		String selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser;";
+		String selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
+				+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
+				+ "WHERE Materiale.Hidden = 0\n"
+				+ "GROUP BY Materiale.Username\n"
+				+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
+				+ "WHERE Ruolo=0\n"
+				+ "GROUP BY Utente.Username;";
 
-		if (rating == 0) {
+	
 
 			if ((ratingOrder.compareTo("DESC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0 ORDER BY feedback DESC;";
+				selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
+						+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+						+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
+						+ "WHERE Materiale.Hidden = 0\n"
+						+ "GROUP BY Materiale.Username\n"
+						+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
+						+ "WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)AND Ruolo=0\n"
+						+ "GROUP BY Utente.Username\n"
+						+ "ORDER BY feedback DESC;";
 			}
 			if ((ratingOrder.compareTo("ASC")==0)) {
-				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0 ORDER BY feedback ASC;";
+				selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
+						+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+						+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
+						+ "WHERE Materiale.Hidden = 0\n"
+						+ "GROUP BY Materiale.Username\n"
+						+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
+						+ "WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)AND Ruolo=0\n"
+						+ "GROUP BY Utente.Username\n"
+						+ "ORDER BY feedback ASC";
 			}
 			if ((ratingOrder.compareTo("novalue")==0)) {
-				selectSQL="SELECT feedback,Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND Ruolo=0;";
+				selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
+						+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+						+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
+						+ "WHERE Materiale.Hidden = 0\n"
+						+ "GROUP BY Materiale.Username\n"
+						+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
+						+ "WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?)AND Ruolo=0\n"
+						+ "GROUP BY Utente.Username;";
 			}
 
 
-		}else {
+		
 
 
-
-			if ((ratingOrder.compareTo("DESC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback DESC;";
-			}
-			if ((ratingOrder.compareTo("ASC")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback ASC;";
-			}
-
-
-			if ((ratingOrder.compareTo("novalue")==0)) {
-				selectSQL="SELECT feedback, Username, Nome, Cognome, Denominazione, dipName, Img FROM FeedbackUser WHERE (Username LIKE ? OR Nome LIKE ? OR Cognome LIKE ?) AND feedback = ? AND Ruolo=0 ORDER BY feedback;";
-			}
-
-
-		}
+		
 
 		Collection<UserBean> collectionBean=new LinkedList<UserBean>();
 		try {
@@ -269,30 +270,32 @@ public class UserModelDS {
 			ps=con.prepareStatement(selectSQL);
 
 
-			dropViewFeedbackmedia = con.prepareStatement(dropViewFeedbackmediaSQL);
-			viewFeedbackmedia = con.prepareStatement(viewFeedbackmediaSQL);
-			dropViewFeedbackuser = con.prepareStatement(dropViewFeedbackuserSQL);
-			viewFeedbackuser = con.prepareStatement(viewFeedbackuserSQL);
 
-			if(rating!=0) {
-				ps.setInt(4, rating);
+		
 				ps.setString(1, '%'+str+'%');
 				ps.setString(2, '%'+str+'%');
 				ps.setString(3, '%'+str+'%');
-			}else {
-				ps.setString(1, '%'+str+'%');
-				ps.setString(2, '%'+str+'%');
-				ps.setString(3, '%'+str+'%');
-			}
+			
 
-			dropViewFeedbackmedia.execute();
-			viewFeedbackmedia.execute();
-			dropViewFeedbackuser.execute();
-			viewFeedbackuser.execute();
 
 			ResultSet rs=ps.executeQuery();
 
 			while(rs.next()) {
+				
+				
+				if (rating!=0) {
+					if (rs.getInt("feedback")==rating) {
+						System.out.println("RATING: "+rs.getInt("feedback"));
+						UserBean bean=new UserBean();
+					bean.setUsername(rs.getString("Username"));
+					bean.setNome(rs.getString("Nome"));
+					bean.setCognome(rs.getString("Cognome"));
+					bean.setImg(rs.getBlob("Img"));
+					bean.setDenominazione(rs.getString("Denominazione"));
+					bean.setDipName(rs.getString("dipName"));
+					collectionBean.add(bean);
+					}
+				}else {
 
 				UserBean bean=new UserBean();
 
@@ -305,6 +308,7 @@ public class UserModelDS {
 
 
 				collectionBean.add(bean);
+			}
 			}
 
 		}

@@ -310,9 +310,7 @@ public class MaterialModelDS {
 				}
 			}
 			
-			if (rating!=0){
-				
-			}
+		
 		}
 		finally {
 			try {
