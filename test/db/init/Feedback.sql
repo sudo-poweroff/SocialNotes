@@ -39,16 +39,4 @@ CREATE TABLE IF NOT EXISTS Materiale (
   PRIMARY KEY (`CodiceMateriale`)
 );
 
-CREATE VIEW IF NOT EXISTS FeedbackMedia AS
-Select CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia
-FROM Feedback
-GROUP BY CodiceMateriale;
-
-CREATE VIEW IF NOT EXISTS FeedbackUser AS
-SELECT NULL AS feedback,Username,nome,Cognome,Denominazione,dipName,Img from Utente
-UNION
-SELECT ROUND(AVG(ValutazioneMedia)) AS feedback, Utente.Username, Utente.Nome, Utente.Cognome,Utente.Denominazione, Utente.dipName, Img
-FROM Materiale LEFT JOIN FeedbackMedia ON Materiale.CodiceMateriale = FeedbackMedia.CodiceMateriale INNER JOIN Utente ON Materiale.Username = Utente.Username
-group by Utente.Username;
-
 

@@ -65,17 +65,43 @@ public class FeedbackModelDSTest extends DataSourceBasedDBTestCase{
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
-	
-	//NON FUNZIONA PERCHï¿½ la query crea le view
-	
+		
 	@Test
 	public void testGetFeedbackByUsernamePresente() throws SQLException{
 		int valutazioneMedia=feedback.getFeedbackByUsername("fry");
-		assertEquals(2,valutazioneMedia);
+		assertEquals(3,valutazioneMedia); //La valutazione media dei feedback di fry è 3 (5 e 0 arrotondato per )
 		//fail("non funziona perchï¿½ la query crea le view");
 	}
 	
+	
+	
+	@Test
+	public void testGetFeedbackByUsernameNonPresente() throws SQLException{
+		int valutazioneMedia=feedback.getFeedbackByUsername("pluto");
+		assertEquals(0,valutazioneMedia); 		
+	}
+	
+	@Test
+	public void testGetFeedbackByUsernameVuoto() throws SQLException{
+		boolean flag=false;
+		try {
+			int valutazioneMedia=feedback.getFeedbackByUsername("");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertEquals(true,flag);		
+	}
+	
+	@Test
+	public void testGetFeedbackByUsernameNull() throws SQLException{
+		boolean flag=false;
+		try {
+			int valutazioneMedia=feedback.getFeedbackByUsername(null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertEquals(true,flag);		
+	}
 	
 	
 	@Test
