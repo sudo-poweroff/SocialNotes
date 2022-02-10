@@ -4,4 +4,9 @@
 	<Feedback CodiceMateriale="2" Username="fry" DataFeed="2021-09-24 16:18:55" Commento="Grazie a queste esercitazioni mi sono appassionato alla materia" Valutazione="5"/>
 	<Feedback CodiceMateriale="3" Username="sime00" DataFeed="2021-09-14 23:38:06" Commento="Appunti molto utili" Valutazione="5"/>
 	<Feedback CodiceMateriale="1" Username="fry" DataFeed="2021-11-20 01:52:41" Commento="truffatore" Valutazione="0"/>
+	
+	<Materiale codiceMateriale="2" DataCaricamento="2020-08-02" Keywords="" Costo="0" Descrizione= "provaAde" Hidden="0" CodiceCorso="1" Username="fry" Anteprima="'ciao'" idFile="3" />
+	<Materiale codiceMateriale="1" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="0" CodiceCorso="2" Username="fry" Anteprima="'ciao'" idFile="4" />
+	
+	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" />
 </dataset>
