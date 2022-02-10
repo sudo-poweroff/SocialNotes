@@ -18,6 +18,17 @@ CREATE TABLE IF NOT EXISTS Materiale (
   `Nome` varchar(50) NOT NULL,
   PRIMARY KEY (`CodiceCorso`)
 );
+
+
+CREATE TABLE IF NOT EXISTS `Feedback` (
+  `CodiceMateriale` int NOT NULL AUTO_INCREMENT,
+  `Username` varchar(30) NOT NULL,
+  `DataFeed` datetime NOT NULL,
+  `Commento` longtext NOT NULL,
+  `Valutazione` int NOT NULL,
+  PRIMARY KEY (`CodiceMateriale`,`Username`,`DataFeed`)
+);
+
   
  
 

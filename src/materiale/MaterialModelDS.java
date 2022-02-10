@@ -328,7 +328,7 @@ public class MaterialModelDS {
 	}
 	
 	public int doRetrieveFeedback(int code) throws SQLException {
-		if(code<0)
+		if(code<=0)
 			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
@@ -337,7 +337,7 @@ public class MaterialModelDS {
 		
 		String selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
-				+ "WHERE Materiale.CodiceMateriale = ?;";
+				+ "WHERE Materiale.CodiceMateriale = ? GROUP BY Materiale.CodiceMateriale;";
 		
 		try {
 			con=ds.getConnection();

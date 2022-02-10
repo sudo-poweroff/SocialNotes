@@ -1,10 +1,16 @@
 package materiale;
 
 
+import java.io.ByteArrayInputStream;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
+import org.dbunit.Assertion;
 import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.SortedTable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
@@ -133,6 +139,29 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(flag, true);
 	}
 
+	
+	@Test
+	public void testDoSave() throws Exception{
+		CourseBean bean=new CourseBean();
+		bean.setCodiceCorso(2);
+		bean.setNome("Glottologia");
+		course.doSave(bean);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/CorsoExpected.xml")).getTable("Corso");
+		ITable actual=this.getConnection().createDataSet().getTable("Corso");
+		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
 
+	}
+	
+	
+	@Test
+	public void testDoSaveNull() throws SQLException {
+		boolean flag=false;
+		try {
+			course.doSave(null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 }

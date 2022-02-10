@@ -1,13 +1,18 @@
 package profilo;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.sql.DataSource;
-
+import javax.sql.rowset.serial.SerialBlob;
+import org.dbunit.Assertion;
 import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -71,8 +76,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	}
 
 	//TEST checkLogin()
-	/*@Test
-	public void testCheckLoginDatiPresenti() throws SQLException {
+	@Test
+	public void testCheckLogin() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
 		UserBean us=userModel.checkLogin("sime00","Sime1");
 		assertEquals(us.getUsername(), "sime00");
 		assertEquals(us.getNome(), "Simone");
@@ -85,8 +90,109 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
-		assertNull(us.getImg());
-	}*/
+	}
+	
+	
+	@Test
+	public void testCheckLoginPassNonCorretta() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+		assertNull(userModel.checkLogin("sime00","Sime2"));
+	}
+	
+	
+	@Test
+	public void testCheckLoginPassVuota() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("sime00", "");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginPassNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("sime00", null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserNonPresentePassVuota() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("despacito","");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserNonPresentePassNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("despacito",null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserVuotoPassVuota() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("","");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserVuotoPassNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("",null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserNullPassVuota() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin("","");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testCheckLoginUserNullPassNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.checkLogin(null,null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
 
@@ -105,7 +211,6 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
-		assertNull(us.getImg());
 	}
 
 
@@ -157,7 +262,6 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
-		assertNull(us.getImg());
 	}
 
 
@@ -196,7 +300,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 	//TEST doRetrieveUsers()
 	@Test
-	public void testDoRetrieveUsersPresenti() throws SQLException {
+	public void testDoRetrieveUsersPresenti() throws SQLException, IOException {
 		Collection<UserBean> result=new ArrayList<>();
 		result=userModel.doRetrieveUsers();
 		ArrayList<UserBean> rs=new ArrayList<>(result);
@@ -213,8 +317,11 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
-		us1.setImg(null);
+		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b1=new SerialBlob(stream1.readAllBytes());
+		us1.setImg(b1);
 		aspected.add(us1);
+		
 		UserBean us2=new UserBean();
 		us2.setUsername("fry");
 		us2.setNome("Francesco");
@@ -227,7 +334,10 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us2.setDenominazione("Universita degli studi di Salerno");
 		us2.setDipName("Dipartimento di Informatica");
 		us2.setRuolo(0);
-		us2.setImg(null);
+		InputStream stream2=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b2=new SerialBlob(stream2.readAllBytes());
+		us2.setImg(b2);
+		
 		UserBean us3=new UserBean();
 		us3.setUsername("califano87");
 		us3.setNome("Alfonso");
@@ -240,9 +350,12 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us3.setDenominazione("Universita degli studi di Salerno");
 		us3.setDipName("Dipartimento di Informatica");
 		us3.setRuolo(0);
-		us3.setImg(null);
+		InputStream stream3=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b3=new SerialBlob(stream3.readAllBytes());
+		us3.setImg(b3);
 		aspected.add(us3);
 		aspected.add(us2);
+		
 		UserBean us4=new UserBean();
 		us4.setUsername("sim");
 		us4.setNome("Simone");
@@ -255,8 +368,11 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us4.setDenominazione("Universita degli studi di Salerno");
 		us4.setDipName("Dipartimento di Informatica");
 		us4.setRuolo(0);
-		us4.setImg(null);
+		InputStream stream4=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b4=new SerialBlob(stream4.readAllBytes());
+		us4.setImg(b4);
 		aspected.add(us4);
+		
 		assertEquals(rs.size(), aspected.size());
 		for(int i=0;i<result.size();i++) {
 			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
@@ -270,11 +386,10 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
 			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
 			assertEquals(rs.get(i).getRuolo(),aspected.get(i).getRuolo());
-			assertEquals(rs.get(i).getImg(),aspected.get(i).getImg());
 		}
 	}
-
-
+	
+	
 	@Test
 	public void testDoRetrieveUsersNonPresenti() throws SQLException {
 		ds.getConnection().prepareStatement("DELETE FROM Utente WHERE Ruolo=0;").execute();
@@ -322,8 +437,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 
 	//TEST doSave()
-	/*@Test
-	public void testDoSave() throws Exception{
+	@Test
+	public void testDoSave() throws Exception{//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
 		UserBean us1=new UserBean();
 		us1.setUsername("ciccioCicogna");
 		us1.setNome("Francesco");
@@ -342,8 +457,46 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
 
-	}*/
+	}
 
+	
+	@Test
+	public void testDoSaveAlreadyExists() throws IOException, SQLException {
+		boolean flag=false;
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setEmail("sime@gmail.com");
+		us1.setPass("Sime1");
+		us1.setCoin(1200);
+		us1.setDataNascita(Date.valueOf("2000-10-27"));
+		us1.setBan(Date.valueOf("2022-03-01"));
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		us1.setRuolo(0);
+		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b1=new SerialBlob(stream1.readAllBytes());
+		us1.setImg(b1);
+		try {
+			userModel.doSave(us1);
+		}catch(SQLException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoSaveNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doSave(null);
+		}catch(NullPointerException e){
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
 	//TEST manageBan()
@@ -637,9 +790,175 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	}
 
 
-	//TEST doUpdatePassword() non si può fare perchè la funzione AES_ENCRYPT di MySql non è supportata 
+	//TEST doUpdatePassword()
+	@Test
+	public void testDoUpdatePassword() throws Exception {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+		userModel.doUpdatePassword("sime00","Sime2");
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedPass.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected=new SortedTable(expected);
+		SortedTable tbactual=new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+		}
+	}
+
+	
+	@Test
+	public void testDoUpdatePasswordVuota() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("sime00", "");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
+	@Test
+	public void testDoUpdatePasswordNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("sime00",null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdatePasswordUsernameNonPresente() throws Exception {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+		userModel.doUpdatePassword("despacito", "Sime2");
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedPassUsNotPresent.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected=new SortedTable(expected);
+		SortedTable tbactual=new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+		}
+	}
+
+
+	@Test
+	public void testDoUpdatePasswordVuotaUsernameNonPresente() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("despacito", "");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testDoUpdatePasswordNullUsernameNonPresente() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("despacito",null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdatePasswordUsernameVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("","Sime2");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdatePasswordVuotaUsernameVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("", "");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testDoUpdatePasswordNullUsernameVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword("",null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdatePasswordUsernameNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword(null,"Sime2");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdatePasswordVuotaUsernameNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword(null, "");
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testDoUpdatePasswordNullUsernameNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doUpdatePassword(null,null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
 	//TEST doUpdateEmail()
 	@Test
 	public void testDoUpdateEmail() throws Exception {
@@ -1265,15 +1584,97 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
+	
+	
+	//TEst doUpdateImage()
+	@Test 
+	public void testDoUpdateImage() throws Exception {
+		userModel.doUpdateImage("sime00", new ByteArrayInputStream("'newImg'".getBytes()));
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedImage.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
+	}
+	
+	
+	@Test
+	public void testDoUpdateImageNull() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage("sime00", null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test 
+	public void testDoUpdateImageUserNonPresente() throws Exception {
+		userModel.doUpdateImage("despacito", new ByteArrayInputStream("'newImg'".getBytes()));
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedImageUserNotPresent.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
+	}
+	
+	
+	@Test
+	public void testDoUpdateImageNullUserNonPresente() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage("despacito", null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+	
+	
+	@Test
+	public void testDoUpdateImageUserVuoto() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage("", new ByteArrayInputStream("'newImg'".getBytes()));
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
+	@Test
+	public void testDoUpdateImageNullUserVuoto() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage("", null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
+	@Test
+	public void testDoUpdateImageUserNull() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage(null, new ByteArrayInputStream("'newImg'".getBytes()));
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 
-
-
-
+	@Test
+	public void testDoUpdateImageNullUserNull() throws Exception{
+		boolean flag=false;
+		try{
+			userModel.doUpdateImage(null, null);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 	//TEST getValutazione()
 	@Test

@@ -76,6 +76,8 @@ public class FeedbackModelDSTest extends DataSourceBasedDBTestCase{
 		//fail("non funziona perch� la query crea le view");
 	}
 	
+	
+	
 	@Test
 	public void testDoRetrieveByKeyMaterial()throws Exception{
 		Collection<FeedbackBean> result= feedback.doRetrieveByKeyMaterial(1);
