@@ -256,7 +256,7 @@
 
 										<textarea
 											placeholder="Inserisci una descrizione del materiale"
-											rows="3" class="form-control" name="Descrizione" required></textarea>
+											rows="3" class="form-control" name="Descrizione" id="descrizione" required></textarea>
 
 										<br>
 										<textarea placeholder="Inserisci il corso" rows="1"
