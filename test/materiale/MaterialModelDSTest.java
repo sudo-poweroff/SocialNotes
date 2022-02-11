@@ -654,10 +654,10 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     
     
     
-    
+    //caso STU1-RTO1-RT1
     @Test
     public void testRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
-    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",3);
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",4);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
 	    
@@ -688,8 +688,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			Blob blob2 = new SerialBlob(stream.readAllBytes());
 	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
 			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
+		   			
 			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
@@ -704,6 +703,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    }
     }
     
+    //CASO  STU1-RTO1-RT2
     @Test
     public void testRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",0);
@@ -712,19 +712,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    
 
 	    
-	  //materiale m1
-	    MaterialBean m1 = new MaterialBean();
-	    m1.setCodiceMateriale(4);
-	    m1.setDataCaricamento(Date.valueOf("2021-01-03"));
-	    m1.setKeywords("");
-	    m1.setCosto(20);
-	    m1.setDescrizione("provaInf");
-	    m1.setHidden(false);
-	    m1.setCodiceCorso(1);
-	    m1.setUsername("alfonso00");
-	    InputStream streamM1 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM1);
-	    m1.setIdFile(2);
 	    
 	  //materiale m2
 	    MaterialBean m2 = new MaterialBean();
@@ -742,34 +729,36 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
-	    m3.setCodiceMateriale(4);
-	    m3.setDataCaricamento(Date.valueOf("2021-01-03"));
+	    m3.setCodiceMateriale(5);
+	    m3.setDataCaricamento(Date.valueOf("2020-08-02"));
 	    m3.setKeywords("");
-	    m3.setCosto(20);
-	    m3.setDescrizione("provaInf");
-	    m3.setHidden(false);
+	    m3.setCosto(0);
+	    m3.setDescrizione("provaAde");
+	    m3.setHidden(true);
 	    m3.setCodiceCorso(1);
-	    m3.setUsername("alfonso00");
+	    m3.setUsername("sime00");
 	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM3);
-	    m1.setIdFile(2);
+	    m3.setAnteprima(streamM3);
+	    m3.setIdFile(3);
 	    
-	  //materiale m1
-	    MaterialBean m1 = new MaterialBean();
-	    m1.setCodiceMateriale(4);
-	    m1.setDataCaricamento(Date.valueOf("2021-01-03"));
-	    m1.setKeywords("");
-	    m1.setCosto(20);
-	    m1.setDescrizione("provaInf");
-	    m1.setHidden(false);
-	    m1.setCodiceCorso(1);
-	    m1.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM2);
-	    m1.setIdFile(2);
+	  //materiale m4
+	    MaterialBean m4 = new MaterialBean();
+	    m4.setCodiceMateriale(6);
+	    m4.setDataCaricamento(Date.valueOf("2021-04-26"));
+	    m4.setKeywords("");
+	    m4.setCosto(50);
+	    m4.setDescrizione("provaSO");
+	    m4.setHidden(false);
+	    m4.setCodiceCorso(2);
+	    m4.setUsername("sime00");
+	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m4.setAnteprima(streamM4);
+	    m4.setIdFile(4);
 	    
 	    
-	    materialExpected.add(m1);
+	    materialExpected.add(m4);
+	    materialExpected.add(m2);
+	    materialExpected.add(m3);
 
 	    
 	    for (int i=0;i<materials.size();i++) {
@@ -794,5 +783,681 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(strBean,strExpected );
 	    }
     }
+    
+    //CASO  STU1-RTO2-RT1
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",3);
+		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
+	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
+	    
+
+	    
+	    
+		  //materiale m3
+	    MaterialBean m3 = new MaterialBean();
+	    m3.setCodiceMateriale(5);
+	    m3.setDataCaricamento(Date.valueOf("2020-08-02"));
+	    m3.setKeywords("");
+	    m3.setCosto(0);
+	    m3.setDescrizione("provaAde");
+	    m3.setHidden(true);
+	    m3.setCodiceCorso(1);
+	    m3.setUsername("sime00");
+	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m3.setAnteprima(streamM3);
+	    m3.setIdFile(3);
+	    
+	    
+	    
+	    materialExpected.add(m3);
+
+
+	    
+	    for (int i=0;i<materials.size();i++) {
+			InputStream is=materialArray.get(i).getAnteprima();
+			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
+			Blob blob = new SerialBlob(is.readAllBytes());
+			Blob blob2 = new SerialBlob(stream.readAllBytes());
+	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
+			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
+		
+			
+			
+			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
+			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
+			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
+			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());
+			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );
+			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
+			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
+			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
+			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
+			assertEquals(strBean,strExpected );
+	    }
+    }
+    
+    //CASO  STU1-RTO2-RT2
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",0);
+		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
+	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
+	    
+
+	    
+	    
+	  //materiale m2
+	    MaterialBean m2 = new MaterialBean();
+	    m2.setCodiceMateriale(4);
+	    m2.setDataCaricamento(Date.valueOf("2021-01-03"));
+	    m2.setKeywords("");
+	    m2.setCosto(20);
+	    m2.setDescrizione("provaInf");
+	    m2.setHidden(false);
+	    m2.setCodiceCorso(1);
+	    m2.setUsername("alfonso00");
+	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m2.setAnteprima(streamM2);
+	    m2.setIdFile(2);
+	    
+
+	    
+	  //materiale m4
+	    MaterialBean m4 = new MaterialBean();
+	    m4.setCodiceMateriale(6);
+	    m4.setDataCaricamento(Date.valueOf("2021-04-26"));
+	    m4.setKeywords("");
+	    m4.setCosto(50);
+	    m4.setDescrizione("provaSO");
+	    m4.setHidden(false);
+	    m4.setCodiceCorso(2);
+	    m4.setUsername("sime00");
+	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m4.setAnteprima(streamM4);
+	    m4.setIdFile(4);
+	    
+	    
+	    materialExpected.add(m2);
+	    materialExpected.add(m4);
+
+	    
+	    for (int i=0;i<materials.size();i++) {
+			InputStream is=materialArray.get(i).getAnteprima();
+			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
+			Blob blob = new SerialBlob(is.readAllBytes());
+			Blob blob2 = new SerialBlob(stream.readAllBytes());
+	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
+			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
+		
+			System.out.println("MEDIA "+material.doRetrieveFeedback(materialArray.get(i).getCodiceMateriale())+" CODICE: "+materialArray.get(i).getCodiceMateriale());
+			
+			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
+			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
+			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
+			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());
+			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );
+			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
+			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
+			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
+			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
+			assertEquals(strBean,strExpected );
+			
+	    }
+    }
+    
+    //CASO  STU1-RTO3-RT1
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingANoValueRatingPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",3);
+		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
+	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
+	    
+
+	    
+	    
+	  //materiale m2
+	    MaterialBean m2 = new MaterialBean();
+	    m2.setCodiceMateriale(4);
+	    m2.setDataCaricamento(Date.valueOf("2021-01-03"));
+	    m2.setKeywords("");
+	    m2.setCosto(20);
+	    m2.setDescrizione("provaInf");
+	    m2.setHidden(false);
+	    m2.setCodiceCorso(1);
+	    m2.setUsername("alfonso00");
+	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m2.setAnteprima(streamM2);
+	    m2.setIdFile(2);
+	   
+	    
+	    
+	    materialExpected.add(m2);
+
+
+	    
+	    for (int i=0;i<materials.size();i++) {
+			InputStream is=materialArray.get(i).getAnteprima();
+			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
+			Blob blob = new SerialBlob(is.readAllBytes());
+			Blob blob2 = new SerialBlob(stream.readAllBytes());
+	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
+			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
+		
+			
+			
+			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
+			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
+			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
+			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());
+			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );
+			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
+			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
+			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
+			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
+			assertEquals(strBean,strExpected );
+	    }
+    }
+    
+    //CASO STU1-RTO3-RT2
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",0);
+		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
+	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
+	    
+
+	    
+	    
+	  //materiale m2
+	    MaterialBean m2 = new MaterialBean();
+	    m2.setCodiceMateriale(4);
+	    m2.setDataCaricamento(Date.valueOf("2021-01-03"));
+	    m2.setKeywords("");
+	    m2.setCosto(20);
+	    m2.setDescrizione("provaInf");
+	    m2.setHidden(false);
+	    m2.setCodiceCorso(1);
+	    m2.setUsername("alfonso00");
+	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m2.setAnteprima(streamM2);
+	    m2.setIdFile(2);
+	    
+	  //materiale m3
+	    MaterialBean m3 = new MaterialBean();
+	    m3.setCodiceMateriale(5);
+	    m3.setDataCaricamento(Date.valueOf("2020-08-02"));
+	    m3.setKeywords("");
+	    m3.setCosto(0);
+	    m3.setDescrizione("provaAde");
+	    m3.setHidden(true);
+	    m3.setCodiceCorso(1);
+	    m3.setUsername("sime00");
+	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m3.setAnteprima(streamM3);
+	    m3.setIdFile(3);
+	    
+	  //materiale m4
+	    MaterialBean m4 = new MaterialBean();
+	    m4.setCodiceMateriale(6);
+	    m4.setDataCaricamento(Date.valueOf("2021-04-26"));
+	    m4.setKeywords("");
+	    m4.setCosto(50);
+	    m4.setDescrizione("provaSO");
+	    m4.setHidden(false);
+	    m4.setCodiceCorso(2);
+	    m4.setUsername("sime00");
+	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
+	    m4.setAnteprima(streamM4);
+	    m4.setIdFile(4);
+	    
+	    
+	    materialExpected.add(m2);
+	    materialExpected.add(m4);
+	    materialExpected.add(m3);
+
+	    
+	    for (int i=0;i<materials.size();i++) {
+			InputStream is=materialArray.get(i).getAnteprima();
+			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
+			Blob blob = new SerialBlob(is.readAllBytes());
+			Blob blob2 = new SerialBlob(stream.readAllBytes());
+	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
+			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
+		
+			
+			
+			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
+			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
+			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
+			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());
+			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );
+			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
+			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
+			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
+			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
+			assertEquals(strBean,strExpected );
+	    }
+    }
+    
+    //CASO STU1-RTO4-RT1
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingVoidRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    }
+    
+    //CASO STU1-RTO4-RT2
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingVoidRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    }
+    
+    //CASO STU1-RTO5-RT1
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingNullRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova",null,3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    }
+    
+    //CASO STU1-RTO5-RT2
+    @Test
+    public void testRetrieveByParamatersStrPresentRatingNullRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova",null,0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    }
+    
+    //CASO STU2-RTO1-RT1
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingASCRatingPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","ASC",4);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO1-RT2
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingASCRatingNotPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","ASC",0);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO2-RT1
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingDESCRatingPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","DESC",4);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO2-RT2
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingDESCRatingNotPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","DESC",0);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO3-RT1
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingNoValueRatingPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","novalue",4);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO3-RT2
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingNoValueRatingNotPresent() throws Exception {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","novalue",0);
+		
+    	assertEquals(materials.size(), 0);
+    	
+    }
+    
+    //CASO STU2-RTO4-RT1
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingVoidRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU2-RTO4-RT2
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingVoidRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA","",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU2-RTO5-RT1
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingNullRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA",null,3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU2-RTO5-RT2
+    @Test
+    public void testRetrieveByParamatersStrNotPresentRatingNullRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("APPUNTI-GLOTTOLOGIA",null,0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO1-RT1
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingASCRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","ASC",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO1-RT2
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingASCRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","ASC",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO2-RT1
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingDESCRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","DESC",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO2-RT2
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingDESCRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","DESC",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO3-RT1
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingNovalueRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","novalue",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO3-RT2
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingNovalueRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","novalue",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO4-RT1
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingVoidRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO4-RT2
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingVoidRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("","",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO5-RT1
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingNullRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("",null,3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU3-RTO5-RT2
+    @Test
+    public void testRetrieveByParamatersStrVoidRatingNullRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters("",null,0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO1-RT1
+    @Test
+    public void testRetrieveByParamatersStrNullRatingASCRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"ASC",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO1-RT2
+    @Test
+    public void testRetrieveByParamatersStrNullRatingASCRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"ASC",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO2-RT1
+    @Test
+    public void testRetrieveByParamatersStrNullRatingDESCRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"DESC",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO2-RT2
+    @Test
+    public void testRetrieveByParamatersStrNullRatingDESCRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"DESC",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO3-RT1
+    @Test
+    public void testRetrieveByParamatersStrNullRatingNovalueRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"novalue",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO3-RT2
+    @Test
+    public void testRetrieveByParamatersStrNullRatingNovalueRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"novalue",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO4-RT1
+    @Test
+    public void testRetrieveByParamatersStrNullRatingVoidRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"",3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO4-RT2
+    @Test
+    public void testRetrieveByParamatersStrNullRatingVoidRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,"",0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO5-RT1
+    @Test
+    public void testRetrieveByParamatersStrNullRatingNullRatingPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,null,3);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+    //CASO STU4-RTO5-RT2
+    @Test
+    public void testRetrieveByParamatersStrNullRatingNullRatingNotPresent() throws Exception {
+    	boolean flag = false;
+    	try {
+    	Collection<MaterialBean> materials = material.doRetrieveByParameters(null,null,0);
+    	}catch(NullPointerException e) {
+			flag = true;
+		}
+		assertEquals(flag, true);
+    	
+    }
+    
+
+    
+    
+    
+    
     
 }
