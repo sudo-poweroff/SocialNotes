@@ -30,7 +30,7 @@ CREATE TABLE  IF NOT EXISTS `Materiale` (
   `Keywords` longtext DEFAULT NULL,
   `Costo` int DEFAULT NULL,
   `Descrizione` varchar(100) NOT NULL,
-  `Hidden` boolean NOT NULL,
+  `Hidden` int NOT NULL,
   `CodiceCorso` int NOT NULL,
   `Username` varchar(30) DEFAULT NULL,
   `Anteprima` longblob DEFAULT NULL,

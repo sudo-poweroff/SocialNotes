@@ -91,14 +91,14 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginPassNonCorretta() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
 		assertNull(userModel.checkLogin("sime00","Sime2"));
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginPassVuota() throws SQLException {
 		boolean flag=false;
@@ -109,8 +109,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginPassNull() throws SQLException {
 		boolean flag=false;
@@ -121,8 +121,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserNonPresentePassVuota() throws SQLException {
 		boolean flag=false;
@@ -133,8 +133,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserNonPresentePassNull() throws SQLException {
 		boolean flag=false;
@@ -145,8 +145,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserVuotoPassVuota() throws SQLException {
 		boolean flag=false;
@@ -157,8 +157,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserVuotoPassNull() throws SQLException {
 		boolean flag=false;
@@ -169,8 +169,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserNullPassVuota() throws SQLException {
 		boolean flag=false;
@@ -181,8 +181,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testCheckLoginUserNullPassNull() throws SQLException {
 		boolean flag=false;
@@ -321,7 +321,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
 		aspected.add(us1);
-		
+
 		UserBean us2=new UserBean();
 		us2.setUsername("fry");
 		us2.setNome("Francesco");
@@ -337,7 +337,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		InputStream stream2=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b2=new SerialBlob(stream2.readAllBytes());
 		us2.setImg(b2);
-		
+
 		UserBean us3=new UserBean();
 		us3.setUsername("califano87");
 		us3.setNome("Alfonso");
@@ -355,7 +355,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us3.setImg(b3);
 		aspected.add(us3);
 		aspected.add(us2);
-		
+
 		UserBean us4=new UserBean();
 		us4.setUsername("sim");
 		us4.setNome("Simone");
@@ -372,7 +372,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		Blob b4=new SerialBlob(stream4.readAllBytes());
 		us4.setImg(b4);
 		aspected.add(us4);
-		
+
 		assertEquals(rs.size(), aspected.size());
 		for(int i=0;i<result.size();i++) {
 			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
@@ -388,8 +388,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(rs.get(i).getRuolo(),aspected.get(i).getRuolo());
 		}
 	}
-	
-	
+
+
 	@Test
 	public void testDoRetrieveUsersNonPresenti() throws SQLException {
 		ds.getConnection().prepareStatement("DELETE FROM Utente WHERE Ruolo=0;").execute();
@@ -399,8 +399,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 
 	//TEST doRetrieveByParameterUser()
-	/*@Test
-	public void testMotoreRicerca() throws SQLException {
+	@Test
+	public void testMotoreRicercaROrderASCRating() throws SQLException {
 		Collection<UserBean> result=new ArrayList<>();
 		result=userModel.doRetrieveByParametersUser("sim", "ASC", 5);
 		ArrayList<UserBean> rs=new ArrayList<>(result);
@@ -409,32 +409,713 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setUsername("sime00");
 		us1.setNome("Simone");
 		us1.setCognome("Della Porta");
-		us1.setEmail("sime@gmail.com");
-		us1.setPass("Sime1");
-		us1.setCoin(1200);
-		us1.setDataNascita(Date.valueOf("2000-10-27"));
-		us1.setBan(Date.valueOf("2022-03-01"));
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
-		us1.setRuolo(0);
-		us1.setImg(null);
 		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
 		for(int i=0;i<result.size();i++) {
 			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
 			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
 			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
-			assertEquals(rs.get(i).getEmail(),aspected.get(i).getEmail());
-			assertEquals(rs.get(i).getPass(),aspected.get(i).getPass());
-			assertEquals(rs.get(i).getDataNascita(),aspected.get(i).getDataNascita());
-			assertEquals(rs.get(i).getCoin(),aspected.get(i).getCoin());
-			assertEquals(rs.get(i).getBan(),aspected.get(i).getBan());
 			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
 			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
-			assertEquals(rs.get(i).getRuolo(),aspected.get(i).getRuolo());
-			assertEquals(rs.get(i).getImg(),aspected.get(i).getImg());
 		}
-	}*/
+	}
 
+
+	@Test
+	public void testMotoreRicercaROrderASCNoRating() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("sim", "ASC",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		aspected.add(us2);
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCRating() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("sim", "DESC", 5);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCNoRating() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("sim", "DESC",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		aspected.add(us1);
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		aspected.add(us2);
+
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVRating() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("sim", "novalue", 5);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVNoRating() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("sim", "novalue",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		aspected.add(us2);
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyRating() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("sim", "", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyNoRating() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("sim", "", 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullRating() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("sim",null, 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullNoRating() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("sim",null, 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+
+	@Test
+	public void testMotoreRicercaROrderASCRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "ASC", 5);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderASCNoRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "ASC",0);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "DESC", 5);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCNoRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "DESC",0);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "novalue", 5);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVNoRatingUserNotPresent() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("despacito", "novalue",0);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		assertEquals(result.size(), aspected.size());
+	}
+
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyRatingUserNotPresent() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("despacito", "", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyNoRatingUserNotPresent() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("despacito", "", 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullRatingUserNotPresent() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("despacito",null, 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullNoRatingUserNotPresent() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("despacito",null, 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderASCRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "ASC", 5);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		aspected.add(us3);
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderASCNoRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "ASC",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		UserBean us4=new UserBean();
+		us4.setUsername("califano87");
+		us4.setNome("Alfonso");
+		us4.setCognome("Califano");
+		us4.setDenominazione("Universita degli studi di Salerno");
+		us4.setDipName("Dipartimento di Informatica");
+		aspected.add(us4);
+		aspected.add(us2);
+		aspected.add(us3);
+		aspected.add(us1);
+
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "DESC", 5);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		aspected.add(us3);
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCNoRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "DESC",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		UserBean us4=new UserBean();
+		us4.setUsername("califano87");
+		us4.setNome("Alfonso");
+		us4.setCognome("Califano");
+		us4.setDenominazione("Universita degli studi di Salerno");
+		us4.setDipName("Dipartimento di Informatica");
+		aspected.add(us3);
+		aspected.add(us1);
+		aspected.add(us4);
+		aspected.add(us2);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "novalue", 5);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		aspected.add(us3);
+		aspected.add(us1);
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVNoRatingUserVuoto() throws SQLException {
+		Collection<UserBean> result=new ArrayList<>();
+		result=userModel.doRetrieveByParametersUser("", "novalue",0);
+		ArrayList<UserBean> rs=new ArrayList<>(result);
+		ArrayList<UserBean> aspected=new ArrayList<>();
+		UserBean us1=new UserBean();
+		us1.setUsername("sime00");
+		us1.setNome("Simone");
+		us1.setCognome("Della Porta");
+		us1.setDenominazione("Universita degli studi di Salerno");
+		us1.setDipName("Dipartimento di Informatica");
+		UserBean us2=new UserBean();
+		us2.setUsername("sim");
+		us2.setNome("Simone");
+		us2.setCognome("Rossi");
+		us2.setDenominazione("Universita degli studi di Salerno");
+		us2.setDipName("Dipartimento di Informatica");
+		UserBean us3=new UserBean();
+		us3.setUsername("fry");
+		us3.setNome("Francesco");
+		us3.setCognome("Di Lauro");
+		us3.setDenominazione("Universita degli studi di Salerno");
+		us3.setDipName("Dipartimento di Informatica");
+		UserBean us4=new UserBean();
+		us4.setUsername("califano87");
+		us4.setNome("Alfonso");
+		us4.setCognome("Califano");
+		us4.setDenominazione("Universita degli studi di Salerno");
+		us4.setDipName("Dipartimento di Informatica");
+		aspected.add(us4);
+		aspected.add(us3);
+		aspected.add(us2);
+		aspected.add(us1);
+
+		assertEquals(rs.size(), aspected.size());
+		for(int i=0;i<result.size();i++) {
+			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());
+			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());
+			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());
+			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());
+			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());
+		}
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyRatingUserVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("", "", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyNoRatingUserVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("", "", 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullRatingUserVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("",null, 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullNoRatingUserVuoto() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser("",null, 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+	
+	@Test
+	public void testMotoreRicercaROrderASCRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "ASC", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderASCNoRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "ASC",0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "DESC", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderDESCNoRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "DESC",0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+
+	@Test
+	public void testMotoreRicercaROrderNVRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "novalue", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNVNoRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "novalue",0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "", 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderEmptyNoRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null, "", 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null,null, 5);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
+
+
+	@Test
+	public void testMotoreRicercaROrderNullNoRatingUserNull() throws SQLException {
+		boolean flag=false;
+		try {
+			userModel.doRetrieveByParametersUser(null,null, 0);
+		}catch(NullPointerException e) {
+			flag=true;
+		}
+		assertTrue(flag);
+	}
 
 	//TEST doSave()
 	@Test
@@ -459,7 +1140,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 	}
 
-	
+
 	@Test
 	public void testDoSaveAlreadyExists() throws IOException, SQLException {
 		boolean flag=false;
@@ -485,8 +1166,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoSaveNull() throws SQLException {
 		boolean flag=false;
@@ -814,7 +1495,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 	}
 
-	
+
 	@Test
 	public void testDoUpdatePasswordVuota() throws SQLException {
 		boolean flag=false;
@@ -837,8 +1518,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdatePasswordUsernameNonPresente() throws Exception {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
 		userModel.doUpdatePassword("despacito", "Sime2");
@@ -885,8 +1566,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdatePasswordUsernameVuoto() throws SQLException {
 		boolean flag=false;
@@ -897,8 +1578,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdatePasswordVuotaUsernameVuoto() throws SQLException {
 		boolean flag=false;
@@ -921,8 +1602,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdatePasswordUsernameNull() throws SQLException {
 		boolean flag=false;
@@ -933,8 +1614,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdatePasswordVuotaUsernameNull() throws SQLException {
 		boolean flag=false;
@@ -957,8 +1638,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	//TEST doUpdateEmail()
 	@Test
 	public void testDoUpdateEmail() throws Exception {
@@ -1584,8 +2265,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	//TEst doUpdateImage()
 	@Test 
 	public void testDoUpdateImage() throws Exception {
@@ -1594,8 +2275,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdateImageNull() throws Exception{
 		boolean flag=false;
@@ -1606,8 +2287,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test 
 	public void testDoUpdateImageUserNonPresente() throws Exception {
 		userModel.doUpdateImage("despacito", new ByteArrayInputStream("'newImg'".getBytes()));
@@ -1615,8 +2296,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdateImageNullUserNonPresente() throws Exception{
 		boolean flag=false;
@@ -1627,8 +2308,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
-	
-	
+
+
 	@Test
 	public void testDoUpdateImageUserVuoto() throws Exception{
 		boolean flag=false;
