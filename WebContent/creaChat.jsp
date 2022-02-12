@@ -46,7 +46,7 @@ String ChatCreateServlet = "ChatCreateServlet";
 	%>
 
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Attenzione!</strong> Errore nella creazione della chat.
+		<strong>Attenzione!</strong> Errore nella creazione della chat, seleziona almeno un amico.
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
