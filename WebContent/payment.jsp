@@ -35,7 +35,7 @@
 		       <div class="row">
 				<div class="col-lg-6">
 				 <div class="img-box">
-				   <img src="PrintImage?username=<%=card.getUsername()%>" class="rounded-circle" />
+				   <img src="PrintImage?username=<%=card.getUsername()%>" width="300px" height="300px" class="rounded-circle" />
 				 </div>
 				</div>
 				<div class="col-lg-6">

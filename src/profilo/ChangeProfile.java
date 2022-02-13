@@ -94,26 +94,39 @@ public class ChangeProfile extends HttpServlet {
 //CAMBIO MAIL
 		String mail = request.getParameter("mail");
 		
+		
+		
 		if(mail!=null && !mail.trim().equals("") && Validation.validateEmail(mail)) {
 			try {
-				model_utente.doUpdateEmail(username, mail);
-				success+=" Email aggiornata-";
-				request.setAttribute("success", success);
+					if(model_utente.doRetrieveByEmail(mail)==null) {
+									
+						try {
+							model_utente.doUpdateEmail(username, mail);
+							success+=" Email aggiornata-";
+							request.setAttribute("success", success);
+							}
+						catch(SQLException e) {
+							System.out.println("Errore: Email non aggiornata");
+							error+=" Errore email non aggiornata";
+							request.setAttribute("error",error);	
+							e.printStackTrace();
+						}
+						//aggiorno le varabili di sessione
+						UserModelDS user=new UserModelDS(ds);
+						UserBean bean;
+						try {
+							bean = user.doRetrieveByUsername(username);
+							session.setAttribute("email",bean.getEmail());
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}else {//L'email inserita è già stata presa
+					System.out.println("Errore: Email non aggiornata");
+					error+=" Errore email non aggiornata";
+					request.setAttribute("error",error);	
 				}
-			catch(SQLException e) {
-				System.out.println("Errore: Email non aggiornata");
-				error+=" Errore email non aggiornata";
-				request.setAttribute("error",error);	
-				e.printStackTrace();
-			}
-			//aggiorno le varabili di sessione
-			UserModelDS user=new UserModelDS(ds);
-			UserBean bean;
-			try {
-				bean = user.doRetrieveByUsername(username);
-				session.setAttribute("email",bean.getEmail());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+			}catch(SQLException e){
 				e.printStackTrace();
 			}
 		}

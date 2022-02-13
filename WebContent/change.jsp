@@ -273,7 +273,7 @@
                   <ul class="form-fields">
                     <li>
                       <label>Email</label>
-                      <input type="text" class="text-input" name="mail" onblur="validateEmail(this)">
+                      <input type="text" class="text-input" name="mail" onblur="return validateEmail(this)">
                       <div class="invalid-feedback" id="email-feedback" style="font-size:12px;"></div>
                     </li>
                   </ul>
