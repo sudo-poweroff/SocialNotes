@@ -84,6 +84,21 @@ String visitUserLink="visitUser.jsp";
 	   %>
 	   <jsp:include page="header_user.jsp"></jsp:include>
 	   <% }%>
+	  
+	  
+<%
+		String error = (String)request.getAttribute("error");
+		if(error!=null){
+		%>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  			<strong>Ops!</strong> La ricerca non ha prodotto risultati
+  			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    		<span aria-hidden="true">&times;</span>
+ 			 </button>
+		</div>
+		<%
+		} 
+		%>
 	   
 	   <div class="container">
 <br><br>

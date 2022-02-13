@@ -124,7 +124,7 @@ public class ReportModelDSTest extends DataSourceBasedDBTestCase{
 	
 	@Test
 	public void testArchiveReportNotPresent()throws Exception {
-		report.archiveReport(55);;
+		report.archiveReport(55);
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/init/Segnalazione.xml")).getTable("Segnalazione");
 		ITable actual=this.getConnection().createDataSet().getTable("Segnalazione");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));

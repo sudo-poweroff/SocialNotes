@@ -149,6 +149,17 @@ public class MessageModelDSTest extends DataSourceBasedDBTestCase{
 	}
 	
 	@Test
+	public void testDoRetrieveLatestMessagesNonPresenteOrarioNonValido()throws SQLException{
+		boolean flag = false;
+		try {
+			message.doRetrieveLatestMessages(null,34);
+		}catch(NullPointerException e) {
+			flag=true;	
+		}
+		assertEquals(true,flag);	
+	}
+	
+	@Test
 	public void testDoSave() throws Exception{
 		MessageBean bean= new MessageBean();
 		bean.setIdMessaggio(1);

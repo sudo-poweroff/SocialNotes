@@ -442,7 +442,7 @@ public class FriendsModelDSTest extends DataSourceBasedDBTestCase{
 	public void testIsFriendNullUserVuoto() throws SQLException {
 		boolean flag=false;
 		try {
-			friendsModel.isFriend("", "");
+			friendsModel.isFriend(null, "");
 		}catch(NullPointerException e) {
 			flag=true;
 		}
@@ -454,7 +454,7 @@ public class FriendsModelDSTest extends DataSourceBasedDBTestCase{
 	public void testIsFriendNullUserNull() throws SQLException {
 		boolean flag=false;
 		try {
-			friendsModel.isFriend("", null);
+			friendsModel.isFriend(null, null);
 		}catch(NullPointerException e) {
 			flag=true;
 		}
@@ -503,7 +503,7 @@ public class FriendsModelDSTest extends DataSourceBasedDBTestCase{
 	
 	//TEST doRetrieveByUsername()
 	@Test 
-	public void doRetrieveByUsername() throws SQLException{
+	public void testDoRetrieveByUsername() throws SQLException{
 		Collection<FriendsBean> result=new ArrayList<>();
 		result=friendsModel.doRetrieveByUsername("sime00");
 		ArrayList<FriendsBean> rs=new ArrayList<>(result);

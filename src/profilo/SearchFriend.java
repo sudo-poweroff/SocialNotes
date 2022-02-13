@@ -74,7 +74,8 @@ try {
 			System.out.println("VALORI :"+ str +" "+ratOrder+" "+rating);
 			
 			Collection<UserBean> bean= userDS.doRetrieveByParametersUser(str, ratOrder, rating);
-			
+			if(bean.size()==0)
+				request.setAttribute("error","Errore");
 			request.setAttribute("utente", bean);
 			String urlSearch = response.encodeRedirectURL("/searchFriend.jsp");
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(urlSearch);

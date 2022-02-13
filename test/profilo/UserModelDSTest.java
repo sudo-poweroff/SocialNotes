@@ -1132,7 +1132,9 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
-		us1.setImg(null);
+		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
+		Blob b1=new SerialBlob(stream1.readAllBytes());
+		us1.setImg(b1);
 		userModel.doSave(us1);
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpected.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
@@ -1205,7 +1207,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	}
 
 	@Test
-	public void testManageBanDatNonValida() throws Exception {
+	public void testManageBanDataNonValida() throws Exception {
 		boolean flag=false;
 		try {
 			userModel.manageBan("sime00",Date.valueOf("2022-01-15"));
@@ -1315,7 +1317,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testManageBanUsernameNullDataValida() throws Exception {
 		boolean flag=false;
 		try {
-			userModel.manageBan("",Date.valueOf("2022-03-15"));
+			userModel.manageBan(null,Date.valueOf("2022-03-15"));
 		}catch(NullPointerException e) {
 			flag=true;
 		}
@@ -1327,7 +1329,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testManageBanUsernameNullDataNonValida() throws Exception {
 		boolean flag=false;
 		try {
-			userModel.manageBan("",Date.valueOf("2022-01-15"));
+			userModel.manageBan(null,Date.valueOf("2022-01-15"));
 		}catch(NullPointerException e) {
 			flag=true;
 		}
@@ -1339,7 +1341,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testManageBanUsernameNullDataNull() throws Exception {
 		boolean flag=false;
 		try {
-			userModel.manageBan("",null);
+			userModel.manageBan(null,null);
 		}catch(NullPointerException e) {
 			flag=true;
 		}
@@ -2357,6 +2359,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertTrue(flag);
 	}
 
+	
 	//TEST getValutazione()
 	@Test
 	public void testGetValutazioneUsernamePresente() throws SQLException {
