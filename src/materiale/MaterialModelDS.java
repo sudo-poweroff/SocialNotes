@@ -457,7 +457,7 @@ public class MaterialModelDS {
 			rs=ps.executeQuery();
 			if(rs.next())
 				return rs.getInt("QuantitaMateriale");
-			return -1;
+			return 0;
 		}finally {
 			try {
 				if(rs!=null)

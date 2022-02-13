@@ -583,7 +583,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     public void testGetQuantitaMaterialeCondivisoUsernameNotPresent() throws Exception {
     	int quantitaMaterialeExpected = material.getQuantitaMaterialeCondiviso("mario0129239");
     	
-    	assertEquals(quantitaMaterialeExpected,-1);
+    	assertEquals(quantitaMaterialeExpected,0);
     }
     
     @Test

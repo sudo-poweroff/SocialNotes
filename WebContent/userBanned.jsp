@@ -13,7 +13,19 @@
 <link rel="icon" href="img/favicon.ico">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 <link rel="stylesheet" type="text/css" href="css/userBanned.css" />
+<script>
+function checkDate() {
+    var UserDate = document.getElementById("userdate").value;
+    var ToDate = new Date();
 
+    if (new Date(UserDate).getTime() <= ToDate.getTime()) {
+          alert("La data deve essere successiva o uguale alla data odierna.");
+          return false;
+     }
+    return true;
+}
+
+</script>
 </head>
 <body>
  <%@include file="headerUsersNotesManager.jsp" %>
@@ -69,10 +81,10 @@
                 </td>
                   
                 <td class="candidate-list-favourite-time text-center">
-                <form method="post" action="<%=setBanLink %>?username=<%=bean.getUsername() %>">
+                <form method="post" action="<%=setBanLink %>?username=<%=bean.getUsername() %>" onsubmit="return checkDate()">
                  <a class="candidate-list-favourite order-2 text-danger" ><i class="fas fa-user-clock"></i></a>
                  
-                  <input type="date" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10" required>
+                  <input type="date" name="durataBan" placeholder="GG/MM/AAAA" value="" maxlength="10" id="userdate" required>
                     <button style="margin-left:30px" type="submit"><i class="fas fa-lock"></i></button>             
                      </form>
                     </td>

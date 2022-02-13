@@ -1,6 +1,7 @@
 package profilo;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -30,7 +31,7 @@ public class RemoveBan extends HttpServlet {
 		String username=request.getParameter("username");
 		UserModelDS user =new UserModelDS(ds);
 		try {
-			user.manageBan(username,null);
+			user.manageBan(username,new Date(System.currentTimeMillis()));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

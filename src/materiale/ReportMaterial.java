@@ -3,6 +3,7 @@ package materiale;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -77,10 +78,14 @@ public class ReportMaterial extends HttpServlet {
 				System.out.println("Errore nel caricamento della segnalazione");
 			}
 			
+			request.setAttribute("successReport", "Il materiale è stato segnalato correttamente");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/homepageNotesManager.jsp");
+			dispatcher.forward(request, response);
+			
 		}
 		
 		
-		response.sendRedirect(response.encodeRedirectURL("homepage.jsp"));
+		//response.sendRedirect(response.encodeRedirectURL("homepage.jsp"));
 		
 		
 	}
