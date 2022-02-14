@@ -46,14 +46,18 @@
                     	Collection<ReportBean> reports=report.doRetrieveNotArchived();
                     	if(reports!=null&&reports.size()>0){
                     		Iterator<?> it=reports.iterator();
+                    		%>
+                    		 <div class="col-sm-8">
+                    	      <div class="container-fluid d-flex justify-content-center">
+                              <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
+                    		<% 
                     		while(it.hasNext()){
                     			ReportBean rep=(ReportBean)it.next();
                     
                     %>
-                                <div class="col-sm-8">
+                               
             
-                <div class="container-fluid d-flex justify-content-center">
-                    <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
+          
                     
                        <!--  <div class="list-item" data-id="13" data-item-sortable-id="0" draggable="true" role="option" aria-grabbed="false" style="">
                             <div><a  data-abc="true"><span class="w-40 avatar gd-primary"> <img class="img-fluid" src="PrintImage?username=<%=rep.getUsername() %>" alt="haloo"></span></a></div>
