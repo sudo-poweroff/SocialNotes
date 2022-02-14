@@ -81,11 +81,11 @@ String home = "homepage.jsp";
 	    </div>
 	  </div>
 	  <br>
-	  <textarea placeholder="Inserisci il titolo della news" rows="3" class="form-control" name="titolo" required></textarea>
+	  <textarea placeholder="Inserisci il titolo della news" rows="3" class="form-control" name="titolo" id="titolo" required></textarea>
 	  <br>
-	  <textarea placeholder="Inserisci l'argomento trattato" rows="3" class="form-control" name="argomento" required></textarea>
+	  <tetarea placeholder="Inserisci l'argomento trattato" rows="3" class="form-control" name="argomento" id="argomento" required></textarea>
 	  <br>
-	  <textarea placeholder="Inserisci il contenuto" rows="4" class="form-control" name="contenuto" required></textarea>
+	  <textarea placeholder="Inserisci il contenuto" rows="4" class="form-control" name="contenuto" id="contenuto" required></textarea>
 	  <br>
 	  	<div class="btn-toolbar justify-content-between">
 			<div class="btn-group">
