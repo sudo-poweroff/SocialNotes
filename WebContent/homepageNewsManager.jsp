@@ -83,7 +83,7 @@ String home = "homepage.jsp";
 	  <br>
 	  <textarea placeholder="Inserisci il titolo della news" rows="3" class="form-control" name="titolo" id="titolo" required></textarea>
 	  <br>
-	  <tetarea placeholder="Inserisci l'argomento trattato" rows="3" class="form-control" name="argomento" id="argomento" required></textarea>
+	  <textarea placeholder="Inserisci l'argomento trattato" rows="3" class="form-control" name="argomento" id="argomento" required></textarea>
 	  <br>
 	  <textarea placeholder="Inserisci il contenuto" rows="4" class="form-control" name="contenuto" id="contenuto" required></textarea>
 	  <br>
