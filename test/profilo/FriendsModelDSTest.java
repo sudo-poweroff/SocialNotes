@@ -509,15 +509,16 @@ public class FriendsModelDSTest extends DataSourceBasedDBTestCase{
 		ArrayList<FriendsBean> rs=new ArrayList<>(result);
 		ArrayList<FriendsBean> aspected=new ArrayList<>();
 		FriendsBean fr1=new FriendsBean();
-		fr1.setUsername1("sime00");
-		fr1.setUsername2("fry");
+		fr1.setUsername2("sime00");
+		fr1.setUsername1("fry");
 		fr1.setDataInizio(Date.valueOf("2021-09-15"));
 		aspected.add(fr1);
 		FriendsBean fr2=new FriendsBean();
-		fr1.setUsername1("sime00");
-		fr1.setUsername2("califano87");
-		fr1.setDataInizio(Date.valueOf("2021-09-10"));
+		fr2.setUsername2("sime00");
+		fr2.setUsername1("califano87");
+		fr2.setDataInizio(Date.valueOf("2021-09-10"));
 		aspected.add(fr2);
+		
 		assertEquals(rs.size(), aspected.size());
 		for(int i=0;i<rs.size();i++) {
 			assertEquals(rs.get(i).getUsername1(), aspected.get(i).getUsername1());

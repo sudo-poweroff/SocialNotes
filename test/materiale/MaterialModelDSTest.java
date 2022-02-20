@@ -43,8 +43,8 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	protected DataSource getDataSource() {
 		JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from 'classpath:db/init/Materiale.sql'");
-        dataSource.setUser("Ackermann32");
-        dataSource.setPassword("alfonso");
+        dataSource.setUser("supo-poweroff");
+        dataSource.setPassword("09134");
         return dataSource;
 	}
 
@@ -81,9 +81,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	@Test
 	public void testDoRetrieveByKeyPresent() throws Exception {
 		MaterialBean mBean = material.doRetrieveByKey("3");
-
-
-
 		InputStream is=mBean.getAnteprima();
 		InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
 		Blob blob = new SerialBlob(is.readAllBytes());
@@ -204,7 +201,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	}
 	
 	@Test
-	public void testSetPriceCodMaterialeCodMaterialePresentePrezzoNonValido() throws Exception {
+	public void testSetPriceCodMaterialePresentePrezzoNonValido() throws Exception {
 		boolean flag = false;
 		try {
 		material.setPrice(5, -20);
@@ -642,7 +639,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     
     
     @Test
-    public void testDoRetrieveFeedbackCodeMarerialNotValid() throws SQLException {
+    public void testDoRetrieveFeedbackCodeMaterialNotValid() throws SQLException {
     	boolean flag=false;
     	try {
     		material.doRetrieveFeedback(-1);
@@ -908,7 +905,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     
     //CASO  STU1-RTO3-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingANoValueRatingPresent() throws Exception {
+    public void testRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",3);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();

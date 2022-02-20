@@ -30,7 +30,8 @@ public class AcquistoMaterialeNelCarrelloTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+	//System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();

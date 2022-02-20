@@ -33,7 +33,7 @@ CREATE TABLE  IF NOT EXISTS `Materiale` (
   `Hidden` int NOT NULL,
   `CodiceCorso` int NOT NULL,
   `Username` varchar(30) DEFAULT NULL,
-  `Anteprima` longblob DEFAULT NULL,
+  `Anteprima` longblob NOT NULL,
   `IdFile` int DEFAULT NULL,
   PRIMARY KEY (`CodiceMateriale`)
 );

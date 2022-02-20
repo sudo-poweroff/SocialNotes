@@ -28,7 +28,8 @@ public class ModificaPasswordTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+	 // System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();

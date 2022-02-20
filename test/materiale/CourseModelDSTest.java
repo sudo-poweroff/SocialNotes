@@ -31,8 +31,8 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	protected DataSource getDataSource() {
 		JdbcDataSource dataSource = new JdbcDataSource();
 		dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from 'classpath:db/init/Corso.sql'");
-		dataSource.setUser("Ackermann32");
-		dataSource.setPassword("alfonso");
+		dataSource.setUser("supo-poweroff");
+		dataSource.setPassword("09134");
 		return dataSource;
 	}
 
