@@ -23,7 +23,7 @@ public class MainContext implements ServletContextListener {
 		try {
 			Context initCtx=new InitialContext();
 			Context envCtx=(Context)initCtx.lookup("java:comp/env");
-			ds=(DataSource)envCtx.lookup("jdbc/SocialNotes");
+			ds=(DataSource)envCtx.lookup("jdbc/socialnotes");
 			Connection con=null;
 			try {
 				con=ds.getConnection();
