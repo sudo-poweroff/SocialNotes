@@ -333,7 +333,7 @@ public class UserModelDS {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban,Ruolo) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?,?)";
+		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban,Ruolo, Verificato) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?,?,?);";
 
 		try {
 			connection = ds.getConnection();
@@ -352,6 +352,7 @@ public class UserModelDS {
 			ps.setString(9, item.getDipName());
 			ps.setDate(10, item.getBan());
 			ps.setInt(11, item.getRuolo());
+			ps.setBoolean(12, false); //CR2
 
 			ps.executeUpdate();
 			System.out.println("Salvato nel Database");
@@ -531,6 +532,40 @@ public class UserModelDS {
 		}
 	}
 
+	//CR2
+	/**
+	 * Consente di aggiornare il campo verificato dell'utente
+	 * @param mail rappresenta la mail dell'utente
+	 * @param value rappresenta il nuovo valore da assegnare al campo verificato
+	 * @throws SQLException se l'utente non esiste nel DB
+	 */
+	public void doUpdateVerificato(String mail, boolean value) throws SQLException{
+		if(mail==null || mail.equals(""))
+			throw new IllegalArgumentException("La mail non e' valida");
+		else{
+			Connection con=null;
+			PreparedStatement ps=null;
+			String sql= "UPDATE Utente SET Verificato=? WHERE Email=?;";
+			try{
+				con = ds.getConnection();
+				ps = con.prepareStatement(sql);
+				ps.setBoolean(1, value);
+				ps.setString(2, mail);
+				ps.executeUpdate();
+			}
+			finally {
+				try {
+					if(ps!=null)
+						ps.close();
+				}
+				finally {
+					if(con!=null)
+						con.close();
+				}
+			}
+		}
+	}
+
 	public float getValutazione(String username)throws SQLException {
 		if(username==null||username.equals(""))
 			throw new NullPointerException();
@@ -590,6 +625,47 @@ public class UserModelDS {
 			}
 		}
 		return ruolo;
+	}
+
+	//CR2
+	/**
+	 * Restituisce lo stato verificato dell'utente che ha la mail o lo username indicato dal parametro
+	 * @param usernameOrEmail rappresenta la mail o lo username dell'utente
+	 * @return stato verificato dell'utente
+	 * @throws SQLException se l'utente non esiste nel DB
+	 */
+	public boolean getVerificato(String usernameOrEmail) throws SQLException{
+		if(usernameOrEmail==null || usernameOrEmail.equals(""))
+			throw new IllegalArgumentException("Il parametro non e' valido");
+		else{
+			Connection con= null;
+			PreparedStatement ps= null;
+			ResultSet rs= null;
+			String sql="SELECT Verificato FROM Utente WHERE Username=? OR Email=?;";
+			boolean ver = false;
+			try{
+				con= ds.getConnection();
+				ps= con.prepareStatement(sql);
+				ps.setString(1,usernameOrEmail);
+				ps.setString(2,usernameOrEmail);
+				rs= ps.executeQuery();
+				if(rs.next())
+					ver = rs.getBoolean("Verificato");
+			}
+			finally {
+				try {
+					if(rs!=null)
+						rs.close();
+					if(ps!=null)
+						ps.close();
+				}
+				finally {
+					if(con!=null)
+						con.close();
+				}
+			}
+			return ver;
+		}
 	}
 
 
