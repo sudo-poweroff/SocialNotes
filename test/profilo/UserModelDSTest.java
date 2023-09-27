@@ -1132,6 +1132,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setVerificato(false);
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
@@ -1139,7 +1140,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpected.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
-
+		//Verifico anche se verificato è false??? ***
 	}
 
 
@@ -1158,6 +1159,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setVerificato(false);
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
@@ -2359,6 +2361,46 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertTrue(flag);
 	}
 
+	//Test doUpdateVerificato() ******
+	@Test
+	public void testDoUpdateVerificatoOK() throws Exception{
+		userModel.doUpdateVerificato("fry@gmail.com", true);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedCoin.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected=new SortedTable(expected);
+		SortedTable tbactual=new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Verificato").toString(), tbactual.getValue(i, "Verificato").toString());
+		}
+	}
+
+	@Test(expected = SQLException.class)
+	public void estDoUpdateVerificatoUtenteNonPresente() throws Exception{
+		userModel.doUpdateVerificato("prova@gmail.com", true);
+	}
+
+	@Test(expected = SQLException.class)
+	public void estDoUpdateVerificatoUtenteNull() throws Exception{
+		userModel.doUpdateVerificato(null, true);
+	}
+
+	@Test(expected = SQLException.class)
+	public void estDoUpdateVerificatoUtenteEmpty() throws Exception{
+		userModel.doUpdateVerificato("", true);
+	}
+
 	
 	//TEST getValutazione()
 	@Test
@@ -2435,5 +2477,37 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			flag=true;
 		}
 		assertTrue(flag);
+	}
+
+	//Test getVerificato()
+	@Test
+	public void testGetVerificatoMail() throws Exception{
+		assertFalse(userModel.getVerificato("califano87@gmail.com"));
+	}
+
+	@Test
+	public void testGetVerificatoUsername() throws Exception{
+		assertFalse(userModel.getVerificato("califano87"));
+	}
+
+	//ECCEZIONE O NULL???
+	@Test(expected = SQLException.class)
+	public void testGetVerificatoUtenteNonPresenteMail() throws Exception{
+		userModel.getVerificato("prova@gmail.com");
+	}
+
+	@Test(expected = SQLException.class)
+	public void testGetVerificatoUtenteNonPresenteUsername() throws Exception{
+		userModel.getVerificato("rocco2");
+	}
+
+	@Test(expected = SQLException.class)
+	public void testGetVerificatoNull() throws Exception{
+		userModel.getVerificato(null);
+	}
+
+	@Test(expected = SQLException.class)
+	public void testGetVerificatoEmpty() throws Exception{
+		userModel.getVerificato("");
 	}
 }
