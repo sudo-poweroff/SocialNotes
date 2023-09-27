@@ -1132,7 +1132,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
-		us1.setVerificato(false);
+		us1.setVerificato(false); //CR2
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
@@ -1140,7 +1140,6 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpected.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
-		//Verifico anche se verificato è false??? ***
 	}
 
 
@@ -2387,17 +2386,17 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	}
 
 	@Test(expected = SQLException.class)
-	public void estDoUpdateVerificatoUtenteNonPresente() throws Exception{
+	public void testDoUpdateVerificatoUtenteNonPresente() throws Exception{
 		userModel.doUpdateVerificato("prova@gmail.com", true);
 	}
 
-	@Test(expected = SQLException.class)
-	public void estDoUpdateVerificatoUtenteNull() throws Exception{
+	@Test(expected = IllegalArgumentException.class)
+	public void testDoUpdateVerificatoUtenteNull() throws Exception{
 		userModel.doUpdateVerificato(null, true);
 	}
 
-	@Test(expected = SQLException.class)
-	public void estDoUpdateVerificatoUtenteEmpty() throws Exception{
+	@Test(expected = IllegalArgumentException.class)
+	public void testDoUpdateVerificatoUtenteEmpty() throws Exception{
 		userModel.doUpdateVerificato("", true);
 	}
 
@@ -2490,7 +2489,6 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertFalse(userModel.getVerificato("califano87"));
 	}
 
-	//ECCEZIONE O NULL???
 	@Test(expected = SQLException.class)
 	public void testGetVerificatoUtenteNonPresenteMail() throws Exception{
 		userModel.getVerificato("prova@gmail.com");
@@ -2501,12 +2499,12 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		userModel.getVerificato("rocco2");
 	}
 
-	@Test(expected = SQLException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testGetVerificatoNull() throws Exception{
 		userModel.getVerificato(null);
 	}
 
-	@Test(expected = SQLException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testGetVerificatoEmpty() throws Exception{
 		userModel.getVerificato("");
 	}
