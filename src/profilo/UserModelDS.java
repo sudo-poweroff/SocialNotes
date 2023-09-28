@@ -6,6 +6,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -592,6 +594,64 @@ public class UserModelDS {
 		return ruolo;
 	}
 
+	public Date getBloccato(String usernameOrEmail) throws SQLException{
+		if(usernameOrEmail==null||usernameOrEmail.equals(""))
+			throw new NullPointerException();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT Bloccato FROM Utente WHERE Username=? OR Email =?;";
+		Date bloccato = null;
+		try {
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			ps.setString(1, usernameOrEmail);
+			rs=ps.executeQuery();
+			if(rs.next())
+				bloccato = rs.getDate("Bloccato");
+		}finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(con!=null)
+					con.close();
+			}
+		}
+		return bloccato;
+	}
+
+	public void doUpdateBloccato(String usernameOrEmail,Date date) throws SQLException{
+		if(usernameOrEmail==null||usernameOrEmail.equals("")||date==null)
+			throw new NullPointerException();
+		if(getBloccato(usernameOrEmail)!= null && LocalDateTime.now().toLocalDate().isBefore(getBloccato(usernameOrEmail).toLocalDate())){
+			throw new DateTimeException("");
+		}
+		Connection connection = null;
+		PreparedStatement ps = null;
+
+		String sql = "UPDATE Utente SET  Bloccato=? WHERE Username = ? OR Email = ?";
+
+		try {
+			connection = ds.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.setDate(1, date);
+			ps.setString(2, usernameOrEmail);
+			ps.executeUpdate();
+		} finally {
+			try {
+				if(ps!=null)
+					ps.close();
+			}
+			finally {
+				if(connection!=null)
+					connection.close();
+			}
+		}
+	}
 
 	private DataSource ds;
 }
