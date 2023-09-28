@@ -42,8 +42,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 			}
 		}
 		finally {
@@ -82,8 +81,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 				material.add(bean);
 			}
 		}
@@ -154,8 +152,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 				material.add(bean);
 			}
 		}
@@ -199,8 +196,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 				material.add(bean);
 			}
 		}
@@ -230,7 +226,7 @@ public class MaterialModelDS {
 		
 		
 		
-		String selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+		String selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
 				+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 				+ "GROUP BY CodiceMateriale\n"
@@ -239,14 +235,14 @@ public class MaterialModelDS {
 
 		
 		if ((ratingOrder.compareTo("DESC")==0)) {
-			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
 					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale\n"
 					+ "ORDER BY ValutazioneMedia DESC;";
 		}
 		if ((ratingOrder.compareTo("ASC")==0)) {
-			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n"
 					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale\n"
@@ -255,7 +251,7 @@ public class MaterialModelDS {
 
 		
 		if ((ratingOrder.compareTo("novalue")==0)) {
-			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale,Materiale.Anteprima, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.IdFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
+			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n"
 					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale";
@@ -289,8 +285,7 @@ public class MaterialModelDS {
 					bean.setHidden(rs.getBoolean("Hidden"));
 					bean.setCodiceCorso(rs.getInt("Materiale.CodiceCorso"));
 					bean.setUsername(rs.getString("Materiale.Username"));
-					bean.setIdFile(rs.getInt("IdFile"));
-					bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+					bean.setNomeFile(rs.getString("nomeFile"));
 					material.add(bean);
 					}
 				}else {
@@ -304,8 +299,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("Materiale.CodiceCorso"));
 				bean.setUsername(rs.getString("Materiale.Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 				material.add(bean);
 				}
 			}
@@ -386,8 +380,7 @@ public class MaterialModelDS {
 				bean.setHidden(rs.getBoolean("Hidden"));
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setUsername(rs.getString("Username"));
-				bean.setIdFile(rs.getInt("IdFile"));
-				bean.setAnteprima(rs.getBlob("Anteprima").getBinaryStream());
+				bean.setNomeFile(rs.getString("nomeFile"));
 				material.add(bean);
 			}
 		}
@@ -411,7 +404,7 @@ public class MaterialModelDS {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String sql = "INSERT INTO Materiale" + " (DataCaricamento,Keywords,Costo,Descrizione,Hidden,CodiceCorso,Username,IdFile,Anteprima) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Materiale" + " (DataCaricamento,Keywords,Costo,Descrizione,Hidden,CodiceCorso,Username,nomeFile) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			connection = ds.getConnection();
@@ -423,8 +416,7 @@ public class MaterialModelDS {
 			ps.setBoolean(5, item.isHidden());
 			ps.setInt(6, item.getCodiceCorso());
 			ps.setString(7, item.getUsername());
-			ps.setInt(8, item.getIdFile());
-			ps.setBlob(9, item.getAnteprima());
+			ps.setString(8, item.getNomeFile());
 			
 		
 
