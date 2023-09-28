@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
-    <Materiale codiceMateriale="3" DataCaricamento="2021-08-26" Keywords="" Costo="15" Descrizione= "lezione 16" Hidden="0" CodiceCorso="4" Username="alfonso00" nomeFile="appuntiADE.pdf" />
-    <Materiale codiceMateriale="4" DataCaricamento="2021-01-03" Keywords="" Costo="20" Descrizione= "provaInf" Hidden="0" CodiceCorso="1" Username="alfonso00" nomeFile="provaProg.pdf" />
-    <Materiale codiceMateriale="5" DataCaricamento="2020-08-02" Keywords="" Costo="0" Descrizione= "provaAde" Hidden="1" CodiceCorso="1" Username="sime00" nomeFile="provaADE.pdf" />
-    <Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="0" CodiceCorso="2" Username="sime00" nomeFile="provaSO.pdf" />
+    <Materiale codiceMateriale="3" DataCaricamento="2021-08-26" Keywords="" Costo="15" Descrizione= "lezione 16" Hidden="false" CodiceCorso="4" Username="alfonso00" nomeFile="appuntiADE.pdf" />
+    <Materiale codiceMateriale="4" DataCaricamento="2021-01-03" Keywords="" Costo="20" Descrizione= "provaInf" Hidden="false" CodiceCorso="1" Username="alfonso00" nomeFile="provaProg.pdf" />
+    <Materiale codiceMateriale="5" DataCaricamento="2020-08-02" Keywords="" Costo="0" Descrizione= "provaAde" Hidden="true" CodiceCorso="1" Username="sime00" nomeFile="provaADE.pdf" />
+    <Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="false" CodiceCorso="2" Username="sime00" nomeFile="provaSO.pdf" />
 
 
     
