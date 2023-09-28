@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -1176,83 +1177,83 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		userModel.doSave(null);
 	}
 
-	public void testgetBloccatoUsername() {
-		String username = "Acalifano";
+	public void testgetBloccatoUsername() throws SQLException {
+		String username = "sime00";
 		assertEquals(null, userModel.getBloccato(username));
 	}
 
-	public void testgetBloccatoEmail() {
-		String email = "acalifano123@gmail.com";
+	public void testgetBloccatoEmail() throws SQLException {
+		String email = "sime@gmail.com";
 		assertEquals(null, userModel.getBloccato(email));
 	}
 	@Test(expected = SQLException.class)
-	public void testgetBloccatoByNotExistingUsername(){
+	public void testgetBloccatoByNotExistingUsername() throws SQLException {
 		String username = "GGFlutt";
 		userModel.getBloccato(username);
 	}
 
 	@Test(expected = SQLException.class)
-	public void testgetBloccatoByNotExistingEmail(){
+	public void testgetBloccatoByNotExistingEmail() throws SQLException {
 		String email = "lui@lei.noi";
 		userModel.getBloccato(email);
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testgetBloccatoByEmptyUsernameOrEmail() {
+	public void testgetBloccatoByEmptyUsernameOrEmail() throws SQLException {
 		userModel.getBloccato("");
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testgetBloccatoByNullUsernameOrEmail() {
+	public void testgetBloccatoByNullUsernameOrEmail() throws SQLException {
 		userModel.getBloccato(null);
 	}
 
-	@Test(expected = SQLException.class)
-	public void testDoUpdateBloccatoAnAlreadyBlockedUsername(){
+	@Test(expected = DateTimeException.class)
+	public void testDoUpdateBloccatoAnAlreadyBlockedUsername() throws SQLException {
 		userModel.doUpdateBloccato("GGFlutter", new Date(25,12,2023));
 	}
 
-	@Test(expected = SQLException.class)
-	public void testdoUpdateBloccatoAnAlreadyBlockedEmail(){
+	@Test(expected = DateTimeException.class)
+	public void testdoUpdateBloccatoAnAlreadyBlockedEmail() throws SQLException {
 		userModel.doUpdateBloccato("luigi.allocca12345@live.it", new Date(25,12,2023));
 	}
 
 	public void testDoUpdateBloccatoUsername() throws SQLException{
-		String username = "pipp8";
+		String username = "fry";
 		userModel.doUpdateBloccato(username, new Date(25,12,2023));
 		UserBean bean = userModel.doRetrieveByUsername(username);
 		assertEquals(new Date(25,12,2023), bean.getBloccato());
 	}
 
 	public void testDoUpdateBloccatoEmail() throws SQLException{
-		String email = "user1@gmail.com";
+		String email = "fry@gmail.com";
 		userModel.doUpdateBloccato(email, new Date(25,12,2023));
 		UserBean bean = userModel.doRetrieveByEmail(email);
 		assertEquals(new Date(25,12,2023), bean.getBloccato());
 	}
 	@Test(expected = SQLException.class)
-	public void testDoUpdateBloccatoNotExistingUsername() {
+	public void testDoUpdateBloccatoNotExistingUsername() throws SQLException {
 		String username = "pip";
 		userModel.doUpdateBloccato(username, new Date(25,12,2023));
 	}
 	@Test(expected = SQLException.class)
-	public void testDoUpdateBloccatoNotExistingEmail() {
+	public void testDoUpdateBloccatoNotExistingEmail() throws SQLException {
 		String email = "a@aasdasdasd.aa";
 		userModel.doUpdateBloccato(email, new Date(25,12,2023));
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testDoUpdateBloccatoEmptyUsernameOrEmail(){
+	public void testDoUpdateBloccatoEmptyUsernameOrEmail() throws SQLException {
 		userModel.doUpdateBloccato("", new Date(25,12,2023));
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testDoUpdateBloccatoEmptyUsernameOrEmail(){
+	public void testDoUpdateBloccatoNullUsernameOrEmail() throws SQLException {
 		userModel.doUpdateBloccato(null, new Date(25,12,2023));
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testDoUpdateUsernameOrEmailWithInvalidDate(){
+	public void testDoUpdateUsernameOrEmailWithInvalidDate() throws SQLException {
 		userModel.doUpdateBloccato("GGFlutter", new Date(25,12,2023));
 	}
 
