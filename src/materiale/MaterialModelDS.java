@@ -65,7 +65,7 @@ public class MaterialModelDS {
 	public Collection<MaterialBean> notValidated()throws SQLException{
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Materiale WHERE Hidden=1 ;";
+		String selectSQL="SELECT * FROM Materiale WHERE Hidden=true ;";
 		Collection<MaterialBean> material=new LinkedList<MaterialBean>();
 		try {
 			con=ds.getConnection();
@@ -105,7 +105,7 @@ public class MaterialModelDS {
 			throw new NullPointerException();
 		Connection con=null;
 		PreparedStatement ps=null;
-		String sql="UPDATE Materiale SET Costo=?,Hidden=0 WHERE CodiceMateriale=?";
+		String sql="UPDATE Materiale SET Costo=?,Hidden=false WHERE CodiceMateriale=?";
 		try {
 			con = ds.getConnection();
 			ps = con.prepareStatement(sql);
@@ -178,7 +178,7 @@ public class MaterialModelDS {
 		PreparedStatement ps=null;
 		ResultSet rs=null;
 		
-		String sql="SELECT * FROM Materiale WHERE Username=? AND Hidden=0 ORDER BY DataCaricamento desc;";
+		String sql="SELECT * FROM Materiale WHERE Username=? AND Hidden=false ORDER BY DataCaricamento desc;";
 		Collection<MaterialBean> material=new LinkedList<MaterialBean>();
 		try {
 			con=ds.getConnection();
@@ -228,7 +228,7 @@ public class MaterialModelDS {
 		
 		String selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
-				+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
+				+ "WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 				+ "GROUP BY CodiceMateriale\n"
 				+ "ORDER BY ValutazioneMedia;";
 		
@@ -237,14 +237,14 @@ public class MaterialModelDS {
 		if ((ratingOrder.compareTo("DESC")==0)) {
 			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
-					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
+					+ "WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale\n"
 					+ "ORDER BY ValutazioneMedia DESC;";
 		}
 		if ((ratingOrder.compareTo("ASC")==0)) {
 			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n"
-					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
+					+ "WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale\n"
 					+ "ORDER BY ValutazioneMedia;";
 			}
@@ -253,7 +253,7 @@ public class MaterialModelDS {
 		if ((ratingOrder.compareTo("novalue")==0)) {
 			selectSQL="SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 					+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n"
-					+ "WHERE Materiale.Hidden = 0 AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
+					+ "WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n"
 					+ "GROUP BY CodiceMateriale";
 			}
 
@@ -364,7 +364,7 @@ public class MaterialModelDS {
 	public Collection<MaterialBean> doRetrieveByOrderDate() throws SQLException {
 		Connection con=null;
 		PreparedStatement ps=null;
-		String selectSQL="SELECT * FROM Materiale WHERE Hidden=0 ORDER BY DataCaricamento desc;";
+		String selectSQL="SELECT * FROM Materiale WHERE Hidden=false ORDER BY DataCaricamento desc;";
 		Collection<MaterialBean> material=new LinkedList<MaterialBean>();
 		try {
 			con=ds.getConnection();
