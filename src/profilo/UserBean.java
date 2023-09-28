@@ -20,6 +20,7 @@ public class UserBean {
 		this.ban=null;
 		this.denominazione="";
 		this.dipName="";
+		this.bloccato = null;
 	}
 	
 	
@@ -160,6 +161,14 @@ public class UserBean {
 				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + "]";
 	}
 
+	public Date getBloccato() {
+		return bloccato;
+	}
+
+	public void setBloccato(Date bloccato) {
+		this.bloccato = bloccato;
+	}
+
 
 	private String username;
     private String nome;
@@ -173,4 +182,5 @@ public class UserBean {
     private String denominazione;
     private String dipName;
     private int ruolo;
+	private Date bloccato;
 }
