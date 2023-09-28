@@ -1,15 +1,14 @@
-CREATE TABLE IF NOT EXISTS Materiale (              
-  `CodiceMateriale` int NOT NULL AUTO_INCREMENT,
-  `DataCaricamento` date NOT NULL,
-  `Keywords` longtext DEFAULT NULL,                   
-  `Costo` int DEFAULT NULL,         
-  `Descrizione` varchar(100) NOT NULL,                
-  `Hidden` int NOT NULL,                       
-  `CodiceCorso` int NOT NULL,                     
-  `Username` varchar(30) DEFAULT NULL,
-  `Anteprima` longblob NOT NULL,
-  `IdFile` int DEFAULT NULL,
-  PRIMARY KEY (`CodiceMateriale`)
+CREATE TABLE IF NOT EXISTS Materiale (
+    `CodiceMateriale` int NOT NULL AUTO_INCREMENT,
+    `DataCaricamento` date NOT NULL,
+    `Keywords` longtext,
+    `Costo` int DEFAULT NULL,
+    `Descrizione` varchar(100) NOT NULL,
+    `Hidden` tinyint(1) NOT NULL,
+    `CodiceCorso` int NOT NULL,
+    `Username` varchar(30) DEFAULT NULL,
+    `nomeFile` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`CodiceMateriale`)
   );
   
   
