@@ -87,10 +87,10 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 		assertEquals(mBean.getKeywords(),"");
 		assertEquals(mBean.getCosto(), 15);
 		assertEquals(mBean.getDescrizione(), "lezione 16");
-		assertEquals(mBean.isHidden(),false);
+		assertFalse(mBean.isHidden());
 		assertEquals(mBean.getCodiceCorso(), 4);
 		assertEquals(mBean.getUsername(),"alfonso00");
-		assertEquals(mBean.getNomeFile(),"appuntiAde.pdf");
+		assertEquals(mBean.getNomeFile(),"appuntiADE.pdf");
 	}
 	
 	@Test
@@ -140,7 +140,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(mBean.getKeywords(),"");
 			assertEquals(mBean.getCosto(),0);
 			assertEquals(mBean.getDescrizione(),"provaAde" );
-			assertEquals(mBean.isHidden(),true );
+			assertTrue(mBean.isHidden());
 			assertEquals(mBean.getCodiceCorso(),1 );
 			assertEquals(mBean.getUsername(),"sime00" );
 			assertEquals(mBean.getNomeFile(),"provaADE.pdf");
