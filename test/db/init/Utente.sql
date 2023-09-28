@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `Utente` (
   `Denominazione` varchar(300) DEFAULT NULL,
   `dipName` varchar(400) DEFAULT NULL,
   `Ruolo` int NOT NULL,
+  `Bloccato` Date,
   PRIMARY KEY (`Username`)
 );
 

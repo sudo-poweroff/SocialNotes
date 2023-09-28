@@ -4,7 +4,8 @@
 	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" Img="'Img'" />
 	<Utente Username="califano87" Nome="Alfonso" Cognome="Califano" Email="califano87@gmail.com" Pass="Califano87" DataNascita="2000-05-17" Coin="900" Ban="2022-02-06" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" Img="'Img'"/> 
 	<Utente Username="sim" Nome="Simone" Cognome="Rossi" Email="sim@gmail.com" Pass="Sim1" DataNascita="2000-08-27" Coin="200" Ban="2022-01-25" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" Img="'Img'"/>
-	
+	<Utente Username="GGFlutter" Nome="Luigi" Cognome="Allocca" Email="luigi.allocca12345@live.it" Pass="Password1" DataNascita="2000-07-06" Coin="200" Ban="2022-01-25" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" Img="'Img'" Bloccato="2023-12-25"/>
+
 	<Materiale CodiceMateriale="1" DataCaricamento="2021-10-11" Costo="10" Descrizione="Programmazione 1" Keywords="" Hidden="0" CodiceCorso="1" Username="sime00" IdFile="20" Anteprima="'anteprima'"/>
 	<Materiale CodiceMateriale="2" DataCaricamento="2021-12-12" Costo="20" Descrizione="Analisi" Keywords="" Hidden="0" CodiceCorso="2" Username="fry" IdFile="15" Anteprima="'anteprima'"/>
 	<Materiale CodiceMateriale="3" DataCaricamento="2022-01-15" Costo="30" Descrizione="Programmazione e strutture dati" Keywords="" Hidden="0" CodiceCorso="3" Username="califano87" IdFile="55" Anteprima="'anteprima'"/>
