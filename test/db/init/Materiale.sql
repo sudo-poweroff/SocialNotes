@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Materiale (
     `Keywords` longtext,
     `Costo` int DEFAULT NULL,
     `Descrizione` varchar(100) NOT NULL,
-    `Hidden` tinyint(1) NOT NULL,
+    `Hidden` BOOLEAN NOT NULL,
     `CodiceCorso` int NOT NULL,
     `Username` varchar(30) DEFAULT NULL,
     `nomeFile` varchar(255) DEFAULT NULL,
