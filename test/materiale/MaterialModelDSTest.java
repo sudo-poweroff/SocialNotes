@@ -575,7 +575,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //caso STU1-RTO1-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",4);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -614,7 +614,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //CASO  STU1-RTO1-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -679,7 +679,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //CASO  STU1-RTO2-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",3);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -720,7 +720,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //CASO  STU1-RTO2-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -777,7 +777,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //CASO  STU1-RTO3-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",3);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -818,7 +818,7 @@ materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     
     //CASO STU1-RTO3-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
