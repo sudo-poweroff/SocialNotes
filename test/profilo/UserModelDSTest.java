@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 
@@ -2390,14 +2391,14 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		userModel.doUpdateVerificato("prova@gmail.com", true);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testDoUpdateVerificatoUtenteNull() throws Exception{
-		userModel.doUpdateVerificato(null, true);
+		assertThrows(IllegalArgumentException.class, ()->{userModel.doUpdateVerificato(null, true);});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testDoUpdateVerificatoUtenteEmpty() throws Exception{
-		userModel.doUpdateVerificato("", true);
+		assertThrows(IllegalArgumentException.class, ()->{userModel.doUpdateVerificato("", true);});
 	}
 
 	
@@ -2499,13 +2500,13 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		userModel.getVerificato("rocco2");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testGetVerificatoNull() throws Exception{
-		userModel.getVerificato(null);
+	@Test
+	public void testGetVerificatoNull() throws SQLException {
+		assertThrows(IllegalArgumentException.class, ()->{userModel.getVerificato(null);});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetVerificatoEmpty() throws Exception{
-		userModel.getVerificato("");
+		assertThrows(IllegalArgumentException.class, ()->{userModel.getVerificato("");});
 	}
 }
