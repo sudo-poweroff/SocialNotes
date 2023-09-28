@@ -2360,11 +2360,11 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertTrue(flag);
 	}
 
-	//Test doUpdateVerificato() ******
+	//Test doUpdateVerificato() CR2
 	@Test
 	public void testDoUpdateVerificatoOK() throws Exception{
 		userModel.doUpdateVerificato("fry@gmail.com", true);
-		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedCoin.xml")).getTable("Utente");
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedVerificato.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		SortedTable tbexpected=new SortedTable(expected);
 		SortedTable tbactual=new SortedTable(actual);
@@ -2381,7 +2381,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
 			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
 			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
-			assertEquals(tbexpected.getValue(i, "Verificato").toString(), tbactual.getValue(i, "Verificato").toString());
+			assertEquals(tbexpected.getValue(i, "Verificato").toString(), tbactual.getValue(i, "Verificato").toString()); //CR2
 		}
 	}
 
