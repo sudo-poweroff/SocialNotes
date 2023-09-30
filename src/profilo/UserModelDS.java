@@ -96,6 +96,7 @@ public class UserModelDS {
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
+				bean.setVerificato(rs.getBoolean("Verificato"));
 			}
 			else
 				return null;
@@ -140,6 +141,7 @@ public class UserModelDS {
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
+				bean.setVerificato(rs.getBoolean("Verificato"));
 			}
 			else
 				return null;
@@ -625,47 +627,6 @@ public class UserModelDS {
 			}
 		}
 		return ruolo;
-	}
-
-	//CR2
-	/**
-	 * Restituisce lo stato verificato dell'utente che ha la mail o lo username indicato dal parametro
-	 * @param usernameOrEmail rappresenta la mail o lo username dell'utente
-	 * @return stato verificato dell'utente
-	 * @throws SQLException se l'utente non esiste nel DB
-	 */
-	public boolean getVerificato(String usernameOrEmail) throws SQLException{
-		if(usernameOrEmail==null || usernameOrEmail.equals(""))
-			throw new IllegalArgumentException("Il parametro non e' valido");
-		else{
-			Connection con= null;
-			PreparedStatement ps= null;
-			ResultSet rs= null;
-			String sql="SELECT Verificato FROM Utente WHERE Username=? OR Email=?;";
-			boolean ver = false;
-			try{
-				con= ds.getConnection();
-				ps= con.prepareStatement(sql);
-				ps.setString(1,usernameOrEmail);
-				ps.setString(2,usernameOrEmail);
-				rs= ps.executeQuery();
-				if(rs.next())
-					ver = rs.getBoolean("Verificato");
-			}
-			finally {
-				try {
-					if(rs!=null)
-						rs.close();
-					if(ps!=null)
-						ps.close();
-				}
-				finally {
-					if(con!=null)
-						con.close();
-				}
-			}
-			return ver;
-		}
 	}
 
 
