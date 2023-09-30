@@ -212,6 +212,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+		assertEquals(us.isVerificato(), false); //CR2
 	}
 
 
@@ -263,6 +264,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+		assertEquals(us.isVerificato(), false); //CR2
 	}
 
 
@@ -2425,7 +2427,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}catch(NullPointerException e) {
 			flag=true;
 		}
-		assertTrue(flag);;
+		assertTrue(flag);
 	}
 
 	@Test
@@ -2436,7 +2438,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}catch(NullPointerException e) {
 			flag=true;
 		}
-		assertTrue(flag);;
+		assertTrue(flag);
 	}
 
 
@@ -2479,34 +2481,4 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertTrue(flag);
 	}
 
-	//Test getVerificato()
-	@Test
-	public void testGetVerificatoMail() throws Exception{
-		assertFalse(userModel.getVerificato("califano87@gmail.com"));
-	}
-
-	@Test
-	public void testGetVerificatoUsername() throws Exception{
-		assertFalse(userModel.getVerificato("califano87"));
-	}
-
-	@Test(expected = SQLException.class)
-	public void testGetVerificatoUtenteNonPresenteMail() throws Exception{
-		userModel.getVerificato("prova@gmail.com");
-	}
-
-	@Test(expected = SQLException.class)
-	public void testGetVerificatoUtenteNonPresenteUsername() throws Exception{
-		userModel.getVerificato("rocco2");
-	}
-
-	@Test
-	public void testGetVerificatoNull() throws SQLException {
-		assertThrows(IllegalArgumentException.class, ()->{userModel.getVerificato(null);});
-	}
-
-	@Test
-	public void testGetVerificatoEmpty() throws Exception{
-		assertThrows(IllegalArgumentException.class, ()->{userModel.getVerificato("");});
-	}
 }
