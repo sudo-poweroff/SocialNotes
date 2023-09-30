@@ -21,18 +21,6 @@
 
 		try{
 			File pdfFile = new File(filePath);
-		/*	PDDocument document = PDDocument.load(pdfFile);
-
-			// Crea un oggetto PDFTextStripper
-			PDFTextStripper pdfTextStripper = new PDFTextStripper();
-
-			// Estrai il testo dal PDF
-			String text = pdfTextStripper.getText(document);
-
-			// Chiudi il documento PDF
-			document.close();*/
-
-			// Converti il testo estratto in un InputStream
 			InputStream is = new FileInputStream(pdfFile);
 
 			OutputStream outStream = response.getOutputStream();
