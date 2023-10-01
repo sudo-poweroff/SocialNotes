@@ -246,7 +246,7 @@
 											<label>File PDF</label> <input class="form-control" required
 												type="file" id="formFile" name="Contenuto"
 												onchange="return fileValidation()"
-												accept=".pdf,.doc,.docx,.odt,.ppt,.pptx"> <br>
+												accept=".pdf"> <br>
 										</div>
 
 										<br>
