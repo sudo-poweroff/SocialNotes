@@ -4,14 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +18,6 @@ import javax.sql.DataSource;
 
 import it.unisa.utils.Validation;
 import materiale.MaterialBean;
-import org.h2.engine.User;
 
 /**
  * Servlet implementation class Login
@@ -113,7 +107,7 @@ public class Login extends HttpServlet {
 				return;
 			}
 
-			if (!bean.isVerificato()){
+			if (!bean.isVerificato()){ //CR2
 				String error="Mail non verificata";
 				request.setAttribute("error",error);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
