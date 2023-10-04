@@ -121,7 +121,7 @@ public class ChangeProfile extends HttpServlet {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-				}else {//L'email inserita è già stata presa
+				}else {//L'email inserita ï¿½ giï¿½ stata presa
 					System.out.println("Errore: Email non aggiornata");
 					error+=" Errore email non aggiornata";
 					request.setAttribute("error",error);	
@@ -175,7 +175,8 @@ public class ChangeProfile extends HttpServlet {
 			UserBean bean = new UserBean();
 			//Vedo se la password ï¿½ corretta
 			try {
-				bean = model_utente.checkLogin(username,current_password);
+				if (model_utente.checkPassword(username,current_password))
+				bean = model_utente.doRetrieveByUsername(username);
 			}catch(SQLException e) {
 				System.out.println("Errore checkLogin in ChangeProfile");
 			}

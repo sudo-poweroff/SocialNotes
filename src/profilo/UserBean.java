@@ -2,8 +2,7 @@ package profilo;
 
 import java.sql.Blob;
 import java.sql.Date;
-
-
+import java.sql.Timestamp;
 
 
 public class UserBean {
@@ -161,11 +160,11 @@ public class UserBean {
 				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + "]";
 	}
 
-	public Date getBloccato() {
+	public Timestamp getBloccato() {
 		return bloccato;
 	}
 
-	public void setBloccato(Date bloccato) {
+	public void setBloccato(Timestamp bloccato) {
 		this.bloccato = bloccato;
 	}
 
@@ -182,5 +181,5 @@ public class UserBean {
     private String denominazione;
     private String dipName;
     private int ruolo;
-	private Date bloccato;
+	private Timestamp bloccato;
 }

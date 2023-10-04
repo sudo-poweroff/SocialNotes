@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    
+    <Corso CodiceCorso="6" Nome="cddc"/>
+    <Corso CodiceCorso="3" Nome="programmazione1"/>
+    <Corso CodiceCorso="4" Nome="architettura degli elaboratori"/>
+    <Corso CodiceCorso="5" Nome="progettazione di algoritmi"/>
+    
+
+
+</dataset>

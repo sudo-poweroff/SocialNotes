@@ -1,0 +1,15 @@
+@charset "ISO-8859-1";
+h1{
+	color:#9697e7;
+}
+
+#back{
+	cursor:pointer;
+	border-radius:15px;
+	background-color:#9697e7;
+	position:absolute;
+	left:1200px;
+	top: 80px;
+	color: white;
+	
+}

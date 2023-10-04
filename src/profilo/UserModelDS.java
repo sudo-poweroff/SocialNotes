@@ -1,11 +1,7 @@
 package profilo;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -22,55 +18,25 @@ public class UserModelDS {
 		this.ds=ds;
 	}
 
-
-	public UserBean checkLogin(String name,String password)throws SQLException {
-		if(name==null||name.equals("")||password==null||password.equals(""))
-			throw new NullPointerException();
-		Connection con=null;
-		PreparedStatement ps=null;
-		String sql="SELECT Username,Nome,Cognome,Img,Email,Pass,DataNascita,Coin,Ban,Denominazione,DipName, AES_DECRYPT(Pass,'despacito') as Password,Ruolo FROM Utente WHERE Email = ? OR Username=?";
-		UserBean bean=new UserBean();
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(sql);
-			ps.setString(1, name);
-			ps.setString(2, name);
-			ResultSet rs=ps.executeQuery();
-
-			if(rs.next()&&(rs.getString("Password").compareTo(password))==0) {
-				System.out.println("Utente loggato");
-				bean.setUsername(rs.getString("Username"));
-				bean.setNome(rs.getString("Nome"));
-				bean.setCognome(rs.getString("Cognome"));
-				bean.setImg(rs.getBlob("Img"));
-				bean.setEmail(rs.getString("Email"));
-				bean.setPass(rs.getString("Pass"));
-				bean.setDataNascita(rs.getDate("DataNascita"));
-				bean.setCoin(rs.getInt("Coin"));
-				bean.setBan(rs.getDate("Ban"));
-				bean.setDenominazione(rs.getString("Denominazione"));
-				bean.setDipName(rs.getString("DipName"));
-				bean.setRuolo(rs.getInt("Ruolo"));
+	public boolean checkPassword(String username, String password) throws SQLException{
+		if(username==null || username.isEmpty() || password==null || password.isEmpty())
+		throw new IllegalArgumentException("Parametri non validi");
+        else{
+			Connection con;
+			PreparedStatement ps;
+			String query = "SELECT AES_DECRYPT(Pass,'despacito') as Password FROM Utente WHERE Username = ?;";
+			con = ds.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				String passDB = rs.getString("Password");
+                return passDB.equals(password);
 			}
-			else {
-				System.out.println("Utente non loggato");
-				return null;
-			}
-			if(rs!=null)
-				rs.close();
-		}
-
-		finally {
-			try {
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
+			else{
+				return false;
 			}
 		}
-		return bean;
 	}
 
 	public UserBean doRetrieveByUsername(String name)throws SQLException{
@@ -98,6 +64,7 @@ public class UserModelDS {
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
+				bean.setBloccato(rs.getTimestamp("Bloccato"));
 			}
 			else
 				return null;
@@ -371,7 +338,7 @@ public class UserModelDS {
 
 	public void manageBan(String username,Date ban) throws SQLException{
 		if(username==null||username.equals("")||ban.before(new Date(System.currentTimeMillis())))
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -594,42 +561,9 @@ public class UserModelDS {
 		return ruolo;
 	}
 
-	public Date getBloccato(String usernameOrEmail) throws SQLException{
-		if(usernameOrEmail==null||usernameOrEmail.equals(""))
-			throw new NullPointerException();
-		Connection con=null;
-		PreparedStatement ps=null;
-		ResultSet rs=null;
-		String sql="SELECT Bloccato FROM Utente WHERE Username=? OR Email =?;";
-		Date bloccato = null;
-		try {
-			con=ds.getConnection();
-			ps=con.prepareStatement(sql);
-			ps.setString(1, usernameOrEmail);
-			rs=ps.executeQuery();
-			if(rs.next())
-				bloccato = rs.getDate("Bloccato");
-		}finally {
-			try {
-				if(rs!=null)
-					rs.close();
-				if(ps!=null)
-					ps.close();
-			}
-			finally {
-				if(con!=null)
-					con.close();
-			}
-		}
-		return bloccato;
-	}
-
-	public void doUpdateBloccato(String usernameOrEmail,Date date) throws SQLException{
-		if(usernameOrEmail==null||usernameOrEmail.equals("")||date==null)
-			throw new NullPointerException();
-		if(getBloccato(usernameOrEmail)!= null && LocalDateTime.now().toLocalDate().isBefore(getBloccato(usernameOrEmail).toLocalDate())){
-			throw new DateTimeException("");
-		}
+	public void doUpdateBloccato(String usernameOrEmail, Timestamp date) throws SQLException{
+		if(usernameOrEmail==null|| usernameOrEmail.isEmpty() ||date==null)
+			throw new IllegalArgumentException();
 		Connection connection = null;
 		PreparedStatement ps = null;
 
@@ -638,8 +572,9 @@ public class UserModelDS {
 		try {
 			connection = ds.getConnection();
 			ps = connection.prepareStatement(sql);
-			ps.setDate(1, date);
+			ps.setTimestamp(1, date);
 			ps.setString(2, usernameOrEmail);
+			ps.setString(3, usernameOrEmail);
 			ps.executeUpdate();
 		} finally {
 			try {
