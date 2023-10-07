@@ -60,14 +60,14 @@
     }
 %>
 
-<form class="form-setNewPassword" action="SetNewPassword" method="POST" >
+<form class="form-signin" action="SetNewPassword" method="POST" >
     <a href="<%=link%>"><img class="d-block mx-auto mb-4" src="img/logo.png" alt="SocialNotes" width="140" height="140"></a>
     <h1 class="h3 mb-3 font-weight-normal">Imposta nuova password</h1>
     <label for="password1" class="sr-only">Nuova password</label>
-    <input type="password" name="password1"id="password1" class="form-control" placeholder="Inserire password" required autofocus>
+    <input type="password" name="password1"id="password1" class="form-control" placeholder="Nuova password" required autofocus>
     <br>
     <label for="password2" class="sr-only">Inserisci nuovamente la nuova password</label>
-    <input type="password" name="password2" id="password2" class="form-control" placeholder="Inserire password" required>
+    <input type="password" name="password2" id="password2" class="form-control" placeholder="Inserisci nuovamente la nuova password" required>
 
     <br>
     <button class="btn btn-lg btn-principale btn-block" type="submit">Imposta nuova password</button>
