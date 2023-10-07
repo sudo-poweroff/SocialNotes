@@ -71,6 +71,8 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		CourseBean cBean = course.doRetrieveByKey("6");
 		assertEquals(cBean.getCodiceCorso(),6);
 		assertEquals(cBean.getNome(),"cddc");
+		assertEquals(cBean.getNomeDipartimento(),"Dipartimento di Informatica");
+		assertEquals(cBean.getDenominazione(),"Universita' Degli Studi Di Salerno");
 	}
 
 	@Test
@@ -109,6 +111,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	public void testDoRetrieveByNamePresent() throws Exception  {
 		int codiceCorso = course.doRetrieveByName("programmazione1");
 		assertEquals(codiceCorso, 3);
+
 	}
 
 	@Test
@@ -145,6 +148,8 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		CourseBean bean=new CourseBean();
 		bean.setCodiceCorso(2);
 		bean.setNome("Glottologia");
+		bean.setNomeDipartimento("Dipartimento di \'Lettere Lingue Arti\'. Italianistica e culture comparate");
+		bean.setDenominazione("Politecnico di Milano");
 		course.doSave(bean);
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/CorsoExpected.xml")).getTable("Corso");
 		ITable actual=this.getConnection().createDataSet().getTable("Corso");
