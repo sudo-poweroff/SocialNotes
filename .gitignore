@@ -1,2 +1,9 @@
 /build/
 /bin/
+/.idea/
+/classes/
+/SocialNotes.eml
+/SocialNotes.iml
+/test/materialesistema/chromedriver
+/test/materialesistema/chromedriver.exe
+/test/profilosistema/chromedriver.exe
