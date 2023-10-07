@@ -8,10 +8,10 @@
 <Materiale codiceMateriale="1" DataCaricamento="2021-03-20" Keywords="" Costo="0" Hidden="1" CodiceCorso="3" Username="fry" Anteprima="'ciao'" idFile="2" Descrizione="AppuntiMMI"></Materiale>
 
 
-    <Corso CodiceCorso="6" Nome="cddc"/>
-    <Corso CodiceCorso="3" Nome="programmazione1"/>
-    <Corso CodiceCorso="4" Nome="architettura degli elaboratori"/>
-    <Corso CodiceCorso="5" Nome="progettazione di algoritmi"/>
+    <Corso CodiceCorso="6" Nome="cddc" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="3" Nome="programmazione1" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="4" Nome="architettura degli elaboratori" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="5" Nome="progettazione di algoritmi" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
     
 
 

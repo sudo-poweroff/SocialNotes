@@ -7,11 +7,11 @@
 <Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="0" CodiceCorso="2" Username="sime00" Anteprima="'ciao'" idFile="4" />
 
 
-    
-    <Corso CodiceCorso="6" Nome="cddc"/>
-    <Corso CodiceCorso="3" Nome="programmazione1"/>
-    <Corso CodiceCorso="4" Nome="architettura degli elaboratori"/>
-    <Corso CodiceCorso="5" Nome="progettazione di algoritmi"/>
+
+<Corso CodiceCorso="6" Nome="cddc" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+<Corso CodiceCorso="3" Nome="programmazione1" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+<Corso CodiceCorso="4" Nome="architettura degli elaboratori" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+<Corso CodiceCorso="5" Nome="progettazione di algoritmi" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
     
 
 <Feedback CodiceMateriale="3" Username="sime00" DataFeed="2021-11-10" Commento="appunti utili" Valutazione="4"/>
