@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<Segnalazione CodiceSegnalazione="4" Stato="0" Motivo="immagine non valida" Username="fry"/>
-	<Segnalazione CodiceSegnalazione="2" Stato="1" Motivo="materiale non congruo" Username="fry"/>
-	<Segnalazione CodiceSegnalazione="3" Stato="0" Motivo="materiale non corrisponde a preview" Username="sime00"/>
-</dataset>

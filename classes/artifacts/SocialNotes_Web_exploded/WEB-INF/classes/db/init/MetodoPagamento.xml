@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<MetodoPagamento NumeroCarta="0000000000000000" DataScadenza="2024-05-15" NomeIntestatario="Simone" CognomeIntestatario="Della Porta" Username="sime00"/>
-	<MetodoPagamento NumeroCarta="0000111122223333" DataScadenza="2025-10-15" NomeIntestatario="Francesco" CognomeIntestatario="Di Lauro" Username="fry"/>
-	<MetodoPagamento NumeroCarta="0123456789012345" DataScadenza="2026-01-17" NomeIntestatario="Alfonso" CognomeIntestatario="Califano" Username="califano87"/>
-	<MetodoPagamento NumeroCarta="1111111111111111" DataScadenza="2024-07-12" NomeIntestatario="Simone" CognomeIntestatario="Della Porta" Username="sime00"/>
-</dataset>

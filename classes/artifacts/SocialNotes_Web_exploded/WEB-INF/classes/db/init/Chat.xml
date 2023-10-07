@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<Chat ChatID="18" Titolo="friendship"/>
-	<Chat ChatID="16" Titolo="gruppo di fuoco"/>
-	<Chat ChatID="65" Titolo="progetto IS"/>
-	<Partecipazione Username="fry" ChatID="65"/>
-	<Partecipazione Username="fry" ChatID="16"/>
-	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>
-</dataset>
