@@ -25,25 +25,21 @@
 
 
   <body class="text-center">
-  <%
-  String link ="homepage.jsp";
-  if(session.getAttribute("username")!=null){
-	    DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-		String username=(String)session.getAttribute("username");
-		UserModelDS role=new UserModelDS(ds);
-		
-		
-		
-	}
-  %>
+	  <%
+	  String link ="homepage.jsp";
+	  if(session.getAttribute("username")!=null){
+		  String encodedURL = response.encodeRedirectURL(link);
+		  response.sendRedirect(encodedURL);
+	  }
+	  %>
  
- 	<%
+	<%
 	String errorePin = (String) request.getAttribute("errorPin");
 	if (errorePin != null) {
 	%>
 
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Attenzione!</strong> Il pin inserito non &egrave; corretto.
+		<strong>Attenzione!</strong> <%=errorePin%>
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -53,17 +49,17 @@
 	}
 	%>
 	
-	 	<%
+	<%
 	String erroreUsername = (String) request.getAttribute("errorUsername");
 	if (erroreUsername != null) {
 	%>
 
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Attenzione!</strong> Username non trovato.
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<strong>Attenzione!</strong> <%=erroreUsername%>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
 
 	<%
 	}
@@ -71,29 +67,32 @@
   		
   		
   		
-    <form class="form-signin" action="RecoveryPass" method="POST" >
-      <a href="<%=link %>"><img class="d-block mx-auto mb-4" src="img/logo.png" alt="SocialNotes" width="140" height="140"></a>
-      <h1 class="h3 mb-3 font-weight-normal">Recupero Password</h1>
-      
+	<form class="form-signin" action="RecoveryPass" method="POST" >
+		<a href="<%=link %>"><img class="d-block mx-auto mb-4" src="img/logo.png" alt="SocialNotes" width="140" height="140"></a>
+      	<h1 class="h3 mb-3 font-weight-normal">Recupero Password</h1>
+
 		<%
-      if(session.getAttribute("pin")!=null){
-      %>
+		if(session.getAttribute("pin")!=null){
+		%>
       
-	  <h2 class="h3 mb-3 font-weight-normal">Inserisci nuovamente il tuo Username e il pin che ti abbiamo inviato via mail</h2>
-	  <label for="inputUser" class="sr-only">Username</label>
-      <input type="text" name="inputUser" id="inputUser" class="form-control" placeholder="username" required autofocus>
-	  <br>
-      <label for="inputPin" class="sr-only">Pin</label>
-      <input type="text" name="inputPin" id="inputPin" class="form-control" placeholder="PIN" required autofocus>
-     
-      <br>
-	<%
-      }else{
-	%>
-	   <label for="inputUser" class="sr-only">Username</label>
-      <input type="text" name="inputUser" id="inputUser" class="form-control" placeholder="username" required autofocus>
-		<br>
-      <%} %>
+			<h2 class="h3 mb-3 font-weight-normal">Inserisci nuovamente il tuo Username e il pin che ti abbiamo inviato via mail</h2>
+			<label for="username" class="sr-only">Username</label>
+			<input type="text" name="username" id="username" class="form-control" placeholder="username" required autofocus>
+			<br>
+			<label for="inputPin" class="sr-only">Pin</label>
+			<input type="text" name="inputPin" id="inputPin" class="form-control" placeholder="PIN" required autofocus>
+
+			<br>
+		<%
+		}
+		else{
+		%>
+			<label for="username" class="sr-only">Username</label>
+			<input type="text" name="username" id="username" class="form-control" placeholder="username" required autofocus>
+			<br>
+      <%
+		}
+	  %>
 	
       <button class="btn btn-lg btn-principale btn-block" type="submit">Recupera password</button>
       <button class="bottoneindietro" onclick="history.back()">Torna indietro</button>

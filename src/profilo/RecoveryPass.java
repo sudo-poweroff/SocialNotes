@@ -46,18 +46,21 @@ public class RecoveryPass extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		String username = request.getParameter("inputUser");
+		String username = request.getParameter("username");
 		
-		 DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		UserModelDS uModel = new UserModelDS(ds);
-		System.out.println("USERNAME REQUEST: "+username);
-		UserBean bean = new UserBean();
+		UserBean bean = null;
 		try {
 			bean = uModel.doRetrieveByUsername(username);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block	
-			e.printStackTrace();
+		} catch (SQLException | NullPointerException e) {
+			//CR4 -> s el'utente non esiste
+			request.setAttribute("errorUsername", "Username errato");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
+			dispatcher.forward(request, response);
+			return;
 		}
+
 		//Controllo che un utente con quell'username esista
 		if (bean!=null) {
 			
@@ -65,59 +68,37 @@ public class RecoveryPass extends HttpServlet {
 				Random r = new Random();
 				int pin = r.nextInt(900000)+100000;
 				session.setAttribute("pin", pin);
-				System.out.println("Genero pin, salvo pin in sessione:"+pin);
 				
 			    String from = "socialnotes2021@gmail.com";
-		        String pass = "Despacito21";
+		        String pass = "fxyffsvvabkrvqrj"; //CR4 -> token per inviare la mail
 		        String[] to = { bean.getEmail() }; // list of recipient email addresses
-		        String subject = "Pin di Social Notes";
-		        String body = "Ciao "+bean.getUsername()+" il pin e' : "+pin+" ";
-			   
+		        String subject = "Pin recupero password Social Notes";
+		        String body = "Ciao "+bean.getUsername()+", il pin per poter recuperare la password e' : "+pin+" ";
 			    SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
-			  
 			    sendEmail.SendMail();
+
 			    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
 				dispatcher.forward(request, response);
 			}
-			else {//il pin è in sessione
-				System.out.println("Il pin è stato inviato");
+			else {//il pin e' in sessione
 				int pin = (int)session.getAttribute("pin");
 				int pinInserito = Integer.parseInt(request.getParameter("inputPin"));
-				System.out.println("PIN:"+pin+" Pin inserito dall'utente: "+pinInserito);
 				if(pin==pinInserito) {
-					RandomString gen = new RandomString(12, ThreadLocalRandom.current());
-					String password = gen.nextString();
-					System.out.println("NUOVA PASSWORD : "+password);
-					
-				    try {
-						uModel.doUpdatePassword(username, password);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				    
-				    String from = "socialnotes2021@gmail.com";
-			        String pass = "Despacito21";
-			        String[] to = { bean.getEmail() }; // list of recipient email addresses
-			        String subject = "CONFERMA DI CAMBIAMENTO PASSWORD SU Social Notes";
-			        String body = "Ciao "+bean.getUsername()+" La tua nuova password e' : "+password+" ";
-				    
-				    SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
-				    
-				    sendEmail.SendMail();
 				    session.removeAttribute("pin");
-				    response.sendRedirect("login.jsp");
+					session.setAttribute("usernameRecupero", username);
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/setNewPassword.jsp");
+					dispatcher.forward(request, response);
 				}
 				else {
 					//Pin inserito scorretto
-					request.setAttribute("errorPin", "Pin inserito non corretto");
+					request.setAttribute("errorPin", "Pin inserito errato");
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
 					dispatcher.forward(request, response);
 				}
 			}
 		}
-		else {//Se l'username non è presente nel DB
-			request.setAttribute("errorUsername", "Username non trovato");
+		else {//Se l'username non e' presente nel DB
+			request.setAttribute("errorUsername", "Username errato");
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
 			dispatcher.forward(request, response);
 		}
