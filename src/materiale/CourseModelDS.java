@@ -38,6 +38,8 @@ public class CourseModelDS {
 				CourseBean bean = new CourseBean();
 				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
 				bean.setNome(rs.getString("Nome"));
+				bean.setNomeDipartimento(rs.getString("NomeDipartimento"));
+				bean.setDenominazione(rs.getString("Denominazione"));
 				
 				return bean;
 			}
@@ -68,7 +70,7 @@ public class CourseModelDS {
 	}
 
 
-	public int doRetrieveByName(String name)  {
+	public int doRetrieveByName(String name,String nomeDipatimento,String denominazione)  {
 		if(name==null||name.equals(""))
 			throw new NullPointerException();
 		Connection con=null;
@@ -86,6 +88,8 @@ public class CourseModelDS {
 			else {
 				CourseBean course=new CourseBean();
 				course.setNome(name);
+				course.setNomeDipartimento(nomeDipatimento);
+				course.setDenominazione(denominazione);
 				CourseModelDS newCourse=new CourseModelDS(ds);
 				newCourse.doSave(course);
 				rs=ps.executeQuery();
@@ -122,11 +126,13 @@ public class CourseModelDS {
 		Connection con=null;
 		PreparedStatement ps=null;
 		//ResultSet rs=null;
-		String sql="INSERT INTO Corso (Nome) VALUES (?)";
+		String sql="INSERT INTO Corso (Nome,NomeDipartimento,Denominazione) VALUES (?,?,?)";
 		try {
 			con=ds.getConnection();
 			ps=con.prepareStatement(sql);
 			ps.setString(1, item.getNome());
+			ps.setString(2, item.getNomeDipartimento());
+			ps.setString(3,item.getDenominazione());
 			System.out.println(ps.executeUpdate());
 
 
