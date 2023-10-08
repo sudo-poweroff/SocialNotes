@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -32,7 +33,7 @@ public class RecuperoPasswordTest {
   public void setUp() {
 	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
 	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
@@ -88,5 +89,75 @@ public class RecuperoPasswordTest {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
       assert(elements.size() > 0);
     }
+  }
+
+  @Test
+  public void testRecuperoPasswordFormatoErrato() {
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1680, 964));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.linkText("Hai dimenticato la password?")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.id("inputPin")).click();
+    try {
+      Thread.sleep(15000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("password1")).click();
+    driver.findElement(By.id("password1")).sendKeys("ciao");
+    driver.findElement(By.id("password2")).sendKeys("Password1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.cssSelector(".alert")).click();
+    assertThat(driver.findElement(By.cssSelector(".alert")).getText(), is("Attenzione! Formato password errato\n×"));
+  }
+
+  @Test
+  public void testRecuperoPasswordDiverse() {
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1680, 964));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.linkText("Hai dimenticato la password?")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.id("inputPin")).click();
+    try {
+      Thread.sleep(15000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("password1")).click();
+    driver.findElement(By.id("password1")).sendKeys("Password1");
+    driver.findElement(By.id("password2")).sendKeys("password1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.cssSelector(".alert")).click();
+    assertThat(driver.findElement(By.cssSelector(".alert")).getText(), is("Attenzione! Le password non coincidono\n×"));
+  }
+
+  @Test
+  public void testRecuperoPasswordPinErrato() {
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1680, 964));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.linkText("Hai dimenticato la password?")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
+    driver.findElement(By.id("inputPin")).click();
+    driver.findElement(By.id("inputPin")).sendKeys("1231312313131313");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.cssSelector(".alert")).click();
+    assertThat(driver.findElement(By.cssSelector(".alert")).getText(), is("Attenzione! Pin inserito errato\n×"));
   }
 }
