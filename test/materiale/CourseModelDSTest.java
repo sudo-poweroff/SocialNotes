@@ -109,14 +109,14 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 
 	@Test
 	public void testDoRetrieveByNamePresent() throws Exception  {
-		int codiceCorso = course.doRetrieveByName("programmazione1");
+		int codiceCorso = course.doRetrieveByName("programmazione1","Dipartimento di Informatica","Universita' Degli Studi Di Salerno");
 		assertEquals(codiceCorso, 3);
 
 	}
 
 	@Test
 	public void testDoRetrieveByNameNotPresent() throws Exception  {
-		int codiceCorso = course.doRetrieveByName("ADE3");
+		int codiceCorso = course.doRetrieveByName("ADE3","Dipartimento di Informatica","Universita' Degli Studi Di Salerno");
 		assertEquals(codiceCorso, 1);
 	}
 
@@ -124,7 +124,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	public void testDoRetrieveByVoidName() throws Exception  {
 		boolean flag = false;
 		try {
-			course.doRetrieveByName("");
+			course.doRetrieveByName("","Dipartimento di Informatica","Universita' Degli Studi Di Salerno");
 		}catch (NullPointerException e) {
 			flag = true;
 		}
@@ -135,7 +135,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	public void testDoRetrieveByNameNull() throws Exception  {
 		boolean flag = false;
 		try {
-			course.doRetrieveByName(null);
+			course.doRetrieveByName(null,"Dipartimento di Informatica","Universita' Degli Studi Di Salerno");
 		}catch (NullPointerException e) {
 			flag = true;
 		}
