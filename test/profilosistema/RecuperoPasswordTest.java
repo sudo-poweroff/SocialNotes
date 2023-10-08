@@ -31,7 +31,7 @@ public class RecuperoPasswordTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+    System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
 	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
     driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
@@ -63,32 +63,49 @@ public class RecuperoPasswordTest {
   @Test
   public void testRecuperoPasswordEffettuato() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1181, 852));
+    driver.manage().window().setSize(new Dimension(1382, 736));
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.linkText("Hai dimenticato la password?")).click();
-    driver.findElement(By.id("inputUser")).click();
-    driver.findElement(By.id("inputUser")).sendKeys("fry");
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
     driver.findElement(By.cssSelector(".btn")).click();
-    driver.findElement(By.id("inputUser")).click();
-    driver.findElement(By.id("inputUser")).sendKeys("fry");
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("ggallocca1");
     driver.findElement(By.id("inputPin")).click();
-    driver.findElement(By.id("inputPin")).sendKeys("40452");
+
+    try {
+      Thread.sleep(15000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("password1")).click();
+    assertThat(driver.getTitle(), is("Imposta nuova password"));
+    assertThat(driver.findElement(By.cssSelector(".h3")).getText(), is("Imposta nuova password"));
+    driver.findElement(By.id("password1")).click();
+    driver.findElement(By.id("password1")).sendKeys("Password1");
+    driver.findElement(By.id("password2")).click();
+    driver.findElement(By.id("password2")).sendKeys("Password1");
     driver.findElement(By.cssSelector(".btn")).click();
     assertThat(driver.getTitle(), is("Login"));
+    assertThat(driver.findElement(By.cssSelector(".h3")).getText(), is("Effettua il Login"));
+    driver.close();
   }
   @Test
   public void testRecuperoPasswordUsernameNonPresente() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1181, 852));
+    driver.manage().window().setSize(new Dimension(1382, 736));
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.linkText("Hai dimenticato la password?")).click();
-    driver.findElement(By.id("inputUser")).click();
-    driver.findElement(By.id("inputUser")).sendKeys("pluto");
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("malgioglio");
     driver.findElement(By.cssSelector(".btn")).click();
     {
-      List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
+      List<WebElement> elements = driver.findElements(By.cssSelector("small"));
       assert(elements.size() > 0);
     }
+    driver.close();
   }
 
   @Test
