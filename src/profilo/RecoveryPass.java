@@ -82,7 +82,17 @@ public class RecoveryPass extends HttpServlet {
 			}
 			else {//il pin e' in sessione
 				int pin = (int)session.getAttribute("pin");
-				int pinInserito = Integer.parseInt(request.getParameter("inputPin"));
+				int pinInserito = 0;
+				try {
+					pinInserito = Integer.parseInt(request.getParameter("inputPin").trim());
+				}
+				catch(NumberFormatException e){
+					//Pin inserito scorretto
+					request.setAttribute("errorPin", "Pin inserito errato");
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
 				if(pin==pinInserito) {
 				    session.removeAttribute("pin");
 					session.setAttribute("usernameRecupero", username);
@@ -94,6 +104,7 @@ public class RecoveryPass extends HttpServlet {
 					request.setAttribute("errorPin", "Pin inserito errato");
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
 					dispatcher.forward(request, response);
+					return;
 				}
 			}
 		}
@@ -101,6 +112,7 @@ public class RecoveryPass extends HttpServlet {
 			request.setAttribute("errorUsername", "Username errato");
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/RecoveryPassword.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}
 	}
 
