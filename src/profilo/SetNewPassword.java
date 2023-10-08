@@ -30,7 +30,7 @@ public class SetNewPassword extends HttpServlet {
         String password1=request.getParameter("password1");
         String password2=request.getParameter("password2");
         if(!Validation.validatePassword(password1)){
-            String error="Password formattata male";
+            String error="Formato password errato";
             request.setAttribute("error",error);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/setNewPassword.jsp");
             dispatcher.forward(request, response);
