@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Interesse Username="simo" CodiceCorso="46"/>
-    <Interesse Username="simo" CodiceCorso="11"/>
+    <Interesse Username="sime00" CodiceCorso="46"/>
+    <Interesse Username="sime00" CodiceCorso="11"/>
     <Interesse Username="fry" CodiceCorso="20"/>
     <Interesse Username="fry" CodiceCorso="26"/>
 </dataset>
