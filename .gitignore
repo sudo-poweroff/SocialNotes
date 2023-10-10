@@ -7,3 +7,13 @@
 /test/materialesistema/chromedriver
 /test/materialesistema/chromedriver.exe
 /test/profilosistema/chromedriver.exe
+/WebContent/WEB-INF/lib/javax.annotation.jar
+/WebContent/WEB-INF/lib/javax.ejb.jar
+/WebContent/WEB-INF/lib/javax.jms.jar
+/WebContent/WEB-INF/lib/javax.persistence.jar
+/WebContent/WEB-INF/lib/javax.resource.jar
+/WebContent/WEB-INF/lib/javax.servlet.jar
+/WebContent/WEB-INF/lib/javax.servlet.jsp.jar
+/WebContent/WEB-INF/lib/javax.servlet.jsp.jstl.jar
+/WebContent/WEB-INF/lib/javax.servlet-api-4.0.1.jar
+/WebContent/WEB-INF/lib/javax.transaction.jar
