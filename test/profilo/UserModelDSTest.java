@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 
@@ -211,6 +212,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+		assertEquals(us.isVerificato(), false); //CR2
 	}
 
 
@@ -262,6 +264,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+		assertEquals(us.isVerificato(), false); //CR2
 	}
 
 
@@ -1132,6 +1135,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setVerificato(false); //CR2
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
@@ -1139,7 +1143,6 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpected.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
-
 	}
 
 
@@ -1158,6 +1161,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setVerificato(false);
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
@@ -2359,6 +2363,46 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertTrue(flag);
 	}
 
+	//Test doUpdateVerificato() CR2
+	@Test
+	public void testDoUpdateVerificatoOK() throws Exception{
+		userModel.doUpdateVerificato("fry@gmail.com", true);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedVerificato.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected=new SortedTable(expected);
+		SortedTable tbactual=new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Verificato").toString(), tbactual.getValue(i, "Verificato").toString()); //CR2
+		}
+	}
+
+	@Test(expected = SQLException.class)
+	public void testDoUpdateVerificatoUtenteNonPresente() throws Exception{
+		userModel.doUpdateVerificato("prova@gmail.com", true);
+	}
+
+	@Test
+	public void testDoUpdateVerificatoUtenteNull() throws Exception{
+		assertThrows(IllegalArgumentException.class, ()->{userModel.doUpdateVerificato(null, true);});
+	}
+
+	@Test
+	public void testDoUpdateVerificatoUtenteEmpty() throws Exception{
+		assertThrows(IllegalArgumentException.class, ()->{userModel.doUpdateVerificato("", true);});
+	}
+
 	
 	//TEST getValutazione()
 	@Test
@@ -2383,7 +2427,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}catch(NullPointerException e) {
 			flag=true;
 		}
-		assertTrue(flag);;
+		assertTrue(flag);
 	}
 
 	@Test
@@ -2394,7 +2438,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}catch(NullPointerException e) {
 			flag=true;
 		}
-		assertTrue(flag);;
+		assertTrue(flag);
 	}
 
 
@@ -2436,4 +2480,5 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
+
 }
