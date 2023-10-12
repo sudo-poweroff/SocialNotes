@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -145,6 +146,40 @@ public class CourseModelDS {
 					con.close();
 				}
 			}
+		}
+	}
+
+	public ArrayList<CourseBean> doRetrieveAll(){
+		ArrayList<CourseBean> courses=new ArrayList<>();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String sql="SELECT * FROM Corso;";
+		try{
+			con=ds.getConnection();
+			ps=con.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				CourseBean bean=new CourseBean();
+				bean.setCodiceCorso(rs.getInt("CodiceCorso"));
+				bean.setNome(rs.getString("Nome"));
+				bean.setNomeDipartimento(rs.getString("NomeDipartimento"));
+				bean.setDenominazione(rs.getString("Denominazione"));
+				courses.add(bean);
+			}
+		}
+		finally {
+			try {
+				if(rs!=null)
+					rs.close();
+				if (ps != null)
+					ps.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			return courses;
 		}
 	}
 

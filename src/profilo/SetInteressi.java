@@ -1,0 +1,67 @@
+package profilo;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.SQLException;
+
+@WebServlet("/SetInteressi")
+public class SetInteressi extends HttpServlet {
+    public SetInteressi(){
+        super();
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            String linkLogin = "login.jsp";
+            String encodeURL = response.encodeRedirectURL(linkLogin);
+            response.sendRedirect(encodeURL);
+        } else {
+            DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
+            InteresseModelDS interesseModel = new InteresseModelDS(ds);
+
+            String username = (String) session.getAttribute("username");
+
+            StringBuilder requestBody = new StringBuilder();
+            try (BufferedReader reader = request.getReader()) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    requestBody.append(line);
+                }
+            }
+            String jsonData = requestBody.toString();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String[] interessi = objectMapper.readValue(jsonData, String[].class);
+            for (int i = 0; i < interessi.length - 1; i++) {
+                InteresseBean interesse = new InteresseBean();
+                interesse.setUsername(username);
+                interesse.setCodiceCorso(Integer.parseInt(interessi[i]));
+                try {
+                    interesseModel.doSave(interesse);
+                } catch (SQLException e) {
+                    //errore
+                    throw new RuntimeException(e);
+                }
+            }
+
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("WebContent/homepage_user.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+
+}

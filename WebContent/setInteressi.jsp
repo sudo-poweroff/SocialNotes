@@ -1,4 +1,9 @@
+<%@ page import="javax.sql.DataSource" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import ="java.io.InputStream" %>
+<%@ page import="java.util.*" %>
+<%@ page import="materiale.CourseModelDS" %>
+<%@ page import="materiale.CourseBean" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -16,80 +21,96 @@
 </head>
 
 <body class="text-center">
+<%
+    if (session.getAttribute("username")==null){
+        String linkLogin = "login.jsp";
+        String encodeURL = response.encodeRedirectURL(linkLogin);
+        response.sendRedirect(encodeURL);
+
+    }
+    String nome = (String)session.getAttribute("nome");
+    String cognome = (String)session.getAttribute("cognome");
+    String username = (String)session.getAttribute("username");
+    String email = (String)session.getAttribute("email");
+    String password = (String)session.getAttribute("password");
+    Date dataNascita = (Date)session.getAttribute("dataNascita");
+    String matricola = (String)session.getAttribute("matricola");
+    // int coin = (int)session.getAttribute("coin");
+    String denominazione = (String)session.getAttribute("denominazione");
+    String dipName = (String)session.getAttribute("dipName");
+
+
+    DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+%>
 <h1 class="h3 mb-3 font-weight-normal">Inserisci i tuoi interessi</h1>
 <div class="button-container">
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
+    <%
+        CourseModelDS courseModel=new CourseModelDS(ds);
+        ArrayList<CourseBean> courses=courseModel.doRetrieveAll();
+        if(courses!=null&&courses.size()>0){
+            Iterator<?> it= courses.iterator();
+            while(it.hasNext()){
+                CourseBean bean= (CourseBean) it.next();
+    %>
+                <button class="custom-button" id="<%=bean.getCodiceCorso()%>">
+                    <div class="button-content">
+                        <span><%=bean.getNome()%></span>
+                    </div>
+                </button>
+    <%
+            }
+        }
+    %>
 
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
+</div>
 
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
-
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
-    <button class="custom-button">
-        <div class="button-content">
-            <i class="fa fa-plus"></i> <!-- Aggiungi l'icona desiderata qui -->
-            <span>Testo del pulsante</span>
-        </div>
-    </button>
+<div class="bottom-buttons">
+    <button class="custom-button square-button white-button" id="skipButton">Skip</button>
+    <button class="custom-button square-button black-button" id="avantiButton">Avanti</button>
 </div>
 
 <script>
     const buttons = document.querySelectorAll(".custom-button");
+    const interessiSelezionati = [];
 
     buttons.forEach(button => {
         button.addEventListener("click", function () {
             button.classList.toggle("selected");
-
             if (button.classList.contains("selected")) {
                 // Cambia il colore dello sfondo e del testo quando selezionato
                 button.style.backgroundColor = "#E6AF2A";
                 button.style.color = "#fff";
+                interessiSelezionati.push(button.id);
             } else {
                 // Torna allo stile iniziale quando deselezionato
                 button.style.backgroundColor = "#fff";
                 button.style.color = "#000";
+                const idCorso = button.id;
+                const index = interessiSelezionati.indexOf(idCorso);
+                if (index !== -1) {
+                    interessiSelezionati.splice(index, 1);
+                }
             }
+            console.log("Corsi selezionati: ",interessiSelezionati)
         });
     });
+    const skipButton = document.getElementById("skipButton");
+    const avantiButton = document.getElementById("avantiButton");
+
+    skipButton.addEventListener("click", function () {
+        window.location.href = "homepage_user.jsp";
+    });
+
+    avantiButton.addEventListener("click", function () {
+        fetch('SetInteressi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(interessiSelezionati),
+        })
+    });
 </script>
-
-
-<div class="bottom-buttons">
-    <button class="custom-button square-button white-button">Skip</button>
-    <button class="custom-button square-button black-button">Avanti</button>
-</div>
 
 <style>
     .custom-button {
