@@ -22,24 +22,6 @@
 
 <body class="text-center">
 <%
-    if (session.getAttribute("username")==null){
-        String linkLogin = "login.jsp";
-        String encodeURL = response.encodeRedirectURL(linkLogin);
-        response.sendRedirect(encodeURL);
-
-    }
-    String nome = (String)session.getAttribute("nome");
-    String cognome = (String)session.getAttribute("cognome");
-    String username = (String)session.getAttribute("username");
-    String email = (String)session.getAttribute("email");
-    String password = (String)session.getAttribute("password");
-    Date dataNascita = (Date)session.getAttribute("dataNascita");
-    String matricola = (String)session.getAttribute("matricola");
-    // int coin = (int)session.getAttribute("coin");
-    String denominazione = (String)session.getAttribute("denominazione");
-    String dipName = (String)session.getAttribute("dipName");
-
-
     DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 %>
 <h1 class="h3 mb-3 font-weight-normal">Inserisci i tuoi interessi</h1>
@@ -65,8 +47,8 @@
 </div>
 
 <div class="bottom-buttons">
-    <button class="custom-button square-button white-button" id="skipButton">Skip</button>
-    <button class="custom-button square-button black-button" id="avantiButton">Avanti</button>
+    <button class="square-button white-button" id="skipButton">Skip</button>
+    <button class="square-button black-button" id="avantiButton">Avanti</button>
 </div>
 
 <script>
@@ -97,10 +79,6 @@
     const skipButton = document.getElementById("skipButton");
     const avantiButton = document.getElementById("avantiButton");
 
-    skipButton.addEventListener("click", function () {
-        window.location.href = "homepage_user.jsp";
-    });
-
     avantiButton.addEventListener("click", function () {
         fetch('SetInteressi', {
             method: 'POST',
@@ -108,8 +86,14 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(interessiSelezionati),
-        })
+        }).then(()=>window.location.href = "homepage.jsp");
     });
+
+    skipButton.addEventListener("click", function () {
+        window.location.href = "homepage.jsp";
+    });
+
+
 </script>
 
 <style>
@@ -136,12 +120,14 @@
         background-color: #fff;
         border: 1px solid #000;
         color: #000;
+        margin-right: 16px;
     }
 
     .black-button {
         background-color: #000;
         border: 1px solid #000;
         color: #fff;
+        margin-left: 16px;
     }
 
     .bottom-buttons {

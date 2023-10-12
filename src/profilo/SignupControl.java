@@ -153,7 +153,7 @@ public class SignupControl extends HttpServlet {
 			Collection<MaterialBean>cart=new LinkedList<MaterialBean>();
 			session.setAttribute("cart", cart);
 		
-				String link = "Success.jsp";
+				String link = "setInteressi.jsp";
 				 String encodedURL = response.encodeRedirectURL(link);
 				 response.sendRedirect(encodedURL);
 		

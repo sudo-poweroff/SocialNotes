@@ -1,6 +1,7 @@
 package profilo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import materiale.MaterialBean;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
 
 @WebServlet("/SetInteressi")
 public class SetInteressi extends HttpServlet {
@@ -25,7 +28,7 @@ public class SetInteressi extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
         if (session == null) {
             String linkLogin = "login.jsp";
             String encodeURL = response.encodeRedirectURL(linkLogin);
@@ -47,20 +50,17 @@ public class SetInteressi extends HttpServlet {
             ObjectMapper objectMapper = new ObjectMapper();
 
             String[] interessi = objectMapper.readValue(jsonData, String[].class);
-            for (int i = 0; i < interessi.length - 1; i++) {
-                InteresseBean interesse = new InteresseBean();
-                interesse.setUsername(username);
-                interesse.setCodiceCorso(Integer.parseInt(interessi[i]));
-                try {
+            for (int i = 0; i < interessi.length; i++) {
+                try{
+                    InteresseBean interesse = new InteresseBean();
+                    interesse.setUsername(username);
+                    interesse.setCodiceCorso(Integer.parseInt(interessi[i]));
                     interesseModel.doSave(interesse);
-                } catch (SQLException e) {
-                    //errore
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
                 }
             }
-
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("WebContent/homepage_user.jsp");
-            dispatcher.forward(request, response);
         }
     }
 
