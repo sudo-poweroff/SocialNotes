@@ -1,9 +1,12 @@
 package materiale;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +20,9 @@ import com.mysql.cj.Session;
 
 import profilo.UserBean;
 import profilo.UserModelDS;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.rendering.ImageType;
 
 @WebServlet("/PrintAnteprima")
 public class PrintAnteprima extends HttpServlet {
@@ -30,30 +36,26 @@ public class PrintAnteprima extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("image/png");
 		String code=request.getParameter("codice");
-		//System.out.println("Codice preso dalla request: "+code);
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		try{
 			MaterialModelDS material=new MaterialModelDS(ds);
 			MaterialBean bean=material.doRetrieveByKey(code);
-			
-			//Blob image=bean.getAnteprima();
-			//InputStream is=image.getBinaryStream();
-			//System.out.println("CodiceMateriale "+bean.getCodiceMateriale());
-			InputStream is=bean.getAnteprima();
-			OutputStream outStream = response.getOutputStream();
-			byte[] buf = new byte[4096];
-			int len = -1;
 
-			//Write the file contents to the servlet response
-			//Using a buffer of 4kb (configurable). This can be
-			//optimized based on web server and app server
-			//properties
-			while ((len = is.read(buf)) != -1) {
-				outStream.write(buf, 0, len);
-			}
+			String fileName=bean.getNomeFile();
+			String filePath="C:\\Users\\sdell\\projects\\SocialNotes\\material\\"+fileName;
 
-			outStream.flush();
-			outStream.close();
+			PDDocument document = PDDocument.load(new File(filePath));
+			PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+			// Estrai la pagina come immagine
+			BufferedImage bim = pdfRenderer.renderImageWithDPI(1 - 1, 300, ImageType.RGB);
+
+			// Scrivi l'immagine nella risposta HTTP
+			OutputStream out = response.getOutputStream();
+			ImageIO.write(bim, "jpg", out);
+			out.close();
+
+			document.close();
 		}catch (Exception e){
 			e.printStackTrace();
 		}

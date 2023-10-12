@@ -15,18 +15,7 @@ public class MaterialBean {
 		this.hidden=true;
 		this.codiceCorso=-1;
 		this.username="";
-		this.idFile=-1;
-		this.anteprima=null;
-	}
-	
-	
-	public InputStream getAnteprima() {
-		return anteprima;
-	}
-
-
-	public void setAnteprima(InputStream anteprima) {
-		this.anteprima = anteprima;
+		this.nomeFile="";
 	}
 
 
@@ -108,17 +97,14 @@ public class MaterialBean {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
 
-	public int getIdFile() {
-		return idFile;
+	public String getNomeFile() {
+		return nomeFile;
 	}
 
-
-	public void setIdFile(int idFile) {
-		this.idFile = idFile;
+	public void setNomeFile(String nomeFile) {
+		this.nomeFile = nomeFile;
 	}
-
 
 	public boolean isEmpty() {
 		return this.codiceMateriale==-1;
@@ -129,18 +115,22 @@ public class MaterialBean {
 	public boolean equals(Object obj) {
 		return this.codiceMateriale==((MaterialBean)obj).getCodiceCorso();
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
-		return "MaterialBean [codiceMateriale=" + codiceMateriale + ", dataCaricamento=" + dataCaricamento
-				+ ", keywords=" + keywords + ", costo=" + costo + ", descrizione=" + descrizione + ", hidden=" + hidden
-				+ ", codiceCorso=" + codiceCorso + ", username=" + username + ", idFile=" + idFile + ", anteprima="
-				+ anteprima + "]";
+		return "MaterialBean{" +
+				"codiceMateriale=" + codiceMateriale +
+				", dataCaricamento=" + dataCaricamento +
+				", keywords='" + keywords + '\'' +
+				", costo=" + costo +
+				", descrizione='" + descrizione + '\'' +
+				", hidden=" + hidden +
+				", codiceCorso=" + codiceCorso +
+				", username='" + username + '\'' +
+				", nomeFile='" + nomeFile + '\'' +
+				'}';
 	}
-
-
-
 
 	private int codiceMateriale;
     private Date dataCaricamento;
@@ -150,6 +140,5 @@ public class MaterialBean {
     private boolean hidden;
     private int codiceCorso;
     private String username;
-    private int idFile;
-    private InputStream anteprima;
+    private String nomeFile;
 }
