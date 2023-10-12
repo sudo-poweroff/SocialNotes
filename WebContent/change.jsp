@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="java.sql.Date,materiale.*,profilo.*,java.util.Collection,java.util.Iterator"%>
+    pageEncoding="ISO-8859-1" import="java.sql.Date,materiale.*,profilo.*"%>
     
 <%@ page import ="java.io.InputStream" %>
-<%@page import="com.mysql.cj.jdbc.Blob"%>  
-<%@page import="java.util.LinkedList"%>  
+<%@page import="com.mysql.cj.jdbc.Blob"%>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head prefix="og:http://ogp.me/ns#">
@@ -412,11 +412,7 @@
             </div>
           </div>
 
-          <!-- Language row -->
-
-
-
-
+          <!-- Add payment method row -->
 
             <div class="row-group editable-single-row">
               <div class="grid data-row">
@@ -534,7 +530,9 @@
                  </div>
                 </div>
                 </div>
-                 <div class="row-group editable-single-row">
+
+            <!--Delete payment method row-->
+            <div class="row-group editable-single-row">
             <div class="grid data-row">
               <div class="grid__item one-quarter title">
                 Elimina metodo di pagamento
@@ -574,31 +572,109 @@
               <div class="grid__item one-half"></div>
             </div>
           </div>
+            </div>
+
+            <!--Modifica interessi-->
+            <div class="row-group editable-single-row">
+                <div class="grid data-row">
+                    <div class="grid__item one-quarter title">
+                        Modifica interessi
+                    </div>
+                    <!--
+       -->
+                    <div class="grid__item one-half data" data-field="None">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <!--
+       -->
+                    <div class="grid__item one-quarter">
+                        <button href="#" class="btn edit-hidden-form btn-principale">
+                            Modifica
+                        </button>
+                    </div>
+                </div>
+                <div class="grid hidden-form hidden">
+                    <div class="grid__item one-quarter">Aggiungi/Rimuovi interessi</div>
+                    <div class="grid__item one-third">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Aggiungi interessi</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="addInteressi" multiple>
+                                <%
+                                    InteresseModelDS interessiModel=new InteresseModelDS(ds);
+                                    ArrayList<CourseBean> newInteressi=interessiModel.doRetrieveNewInteressi(username);
+                                    if(newInteressi!=null&&newInteressi.size()>0){
+                                        Iterator<?> it= newInteressi.iterator();
+                                        while(it.hasNext()){
+                                          CourseBean bean= (CourseBean) it.next();
+
+
+
+                                %>
+                                            <option value="<%=bean.getCodiceCorso()%>"><%=bean.getNome()%></option>
+                                <%
+                                        }
+                                    }
+                                %>
+                                </select>
+                            </div>
+                            <br>
+                            <label class="col-sm-3 control-label">Rimuovi interessi</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="removeInteressi" multiple>
+                                   <%
+                                       ArrayList<CourseBean> interessi=interessiModel.getInteressi(username);
+                                        if(interessi!=null&&interessi.size()>0){
+                                            Iterator<?> it= interessi.iterator();
+                                            while(it.hasNext()){
+                                                CourseBean bean= (CourseBean) it.next();
+
+
+
+                                    %>
+                                    <option value="<%=bean.getCodiceCorso()%>"><%=bean.getNome()%></option>
+                                    <%
+                                            }
+                                        }
+                                    %>
+                                </select>
+                            </div>
+
+                            <div class="submit">
+                                <div class="messages"></div>
+                                <button class="btn btn-principale cancel-hidden-form text-dark">Chiudi</button>
+                            </div>
+
+                        </div>
+                        <div class="grid__item one-half"></div>
+                    </div>
+                </div>
                 <div class="grid__item one-quarter"></div>
-                	<div class="grid__item one-half">
-              		<div class="submit">
-                     <div class="messages"></div>
-                     <button class="btn btn--primary btn-principale text-dark" type="submit">Salva le modifiche</button>
-                     <button class="btn btn-danger" type="reset">Annulla</button>
-                   </div>
-                   <br>
-                   </div>
-                	
-                </div>
+                <div class="grid__item one-half">
+                    <div class="submit">
+                        <div class="messages"></div>
+                        <button class="btn btn--primary btn-principale text-dark" type="submit">Salva le modifiche</button>
+                        <button class="btn btn-danger" type="reset">Annulla</button>
+                    </div>
+                    <br>
                 </div>
 
-
-
-
-
-
             </div>
+        </div>
+
+
+
+
+
+
+        </div>
             
             
-            </form>
+    </form>
             
             
-            </div>
+
 
 
 

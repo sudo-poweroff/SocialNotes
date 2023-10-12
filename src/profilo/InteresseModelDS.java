@@ -1,5 +1,8 @@
 package profilo;
 
+import materiale.CourseBean;
+import org.checkerframework.checker.units.qual.A;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -123,5 +126,74 @@ public class InteresseModelDS {
                     con.close();
         }
     }
+
+    public ArrayList<CourseBean> doRetrieveNewInteressi(String Username) throws SQLException {
+        if(Username==null||Username.equals(""))
+            throw new NullPointerException();
+        ArrayList<CourseBean>newInteressi=new ArrayList<>();
+        Connection con=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        String sql="SELECT CodiceCorso,Nome FROM corso WHERE codiceCorso NOT IN (SELECT CodiceCorso FROM interesse WHERE Username=?);";
+        try{
+            con=ds.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,Username);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                CourseBean bean=new CourseBean();
+                bean.setCodiceCorso(rs.getInt("CodiceCorso"));
+                bean.setNome(rs.getString("Nome"));
+                newInteressi.add(bean);
+            }
+        }finally {
+            try {
+                if(rs!=null)
+                    rs.close();
+                if(ps!=null)
+                    ps.close();
+            }
+            finally {
+                if(con!=null)
+                    con.close();
+            }
+        }
+        return newInteressi;
+    }
+
+    public ArrayList<CourseBean> getInteressi(String Username) throws SQLException {
+        if(Username==null||Username.equals(""))
+            throw new NullPointerException();
+        ArrayList<CourseBean>interessi=new ArrayList<>();
+        Connection con=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        String sql="SELECT CodiceCorso,Nome FROM corso WHERE codiceCorso IN (SELECT CodiceCorso FROM interesse WHERE Username=?);";
+        try{
+            con=ds.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,Username);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                CourseBean bean=new CourseBean();
+                bean.setCodiceCorso(rs.getInt("CodiceCorso"));
+                bean.setNome(rs.getString("Nome"));
+                interessi.add(bean);
+            }
+        }finally {
+            try {
+                if(rs!=null)
+                    rs.close();
+                if(ps!=null)
+                    ps.close();
+            }
+            finally {
+                if(con!=null)
+                    con.close();
+            }
+        }
+        return interessi;
+    }
+
 
 }

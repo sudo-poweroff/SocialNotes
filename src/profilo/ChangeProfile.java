@@ -306,20 +306,55 @@ public class ChangeProfile extends HttpServlet {
 		}
 		
 		
-		
-		
-		/*System.out.println("mail:"+mail+
-				"\n nomeuni:"+nomeuni+
-				"\n dipartimento:"+dipartimento+
-				"\n current_password:"+current_password+
-				"\n password:"+password+
-				"\n confirm_password:"+confirm_password+
-				"\n nomecarta:"+nomecarta+
-				"\n cognomecarta:"+cognomecarta+
-				"\n numerocarta:"+numerocarta+
-				"\n mesecarta:"+mesecarta+
-				"\n annocarta:"+annocarta+
-				"\n username:"+username);*/
+//AGGIUNGI INTERESSI
+		String[] addInteressi=request.getParameterValues("addInteressi");
+		if(addInteressi!=null&&addInteressi.length>0){
+			InteresseModelDS interesseModel=new InteresseModelDS(ds);
+			boolean esito=true;
+			for(int i=0;i<addInteressi.length;i++) {
+				InteresseBean bean=new InteresseBean();
+				bean.setUsername(username);
+				bean.setCodiceCorso(Integer.parseInt(addInteressi[i]));
+				try {
+					interesseModel.doSave(bean);
+				} catch (SQLException e) {
+					esito=false;
+					e.printStackTrace();
+				}
+			}
+			if(esito){
+				success+=" Interessi aggiunti";
+				request.setAttribute("success", success);
+			}
+			else{
+				error+=" Errore: interessi non inseriti correttamente";
+				request.setAttribute("error",error);
+			}
+
+		}
+
+	//ELIMINA INTERESSI
+		String[] removeInteressi=request.getParameterValues("removeInteressi");
+		if(removeInteressi!=null&&removeInteressi.length>0){
+			InteresseModelDS interesseModel=new InteresseModelDS(ds);
+			boolean esito=true;
+			for(int i=0;i<removeInteressi.length;i++) {
+				try {
+					interesseModel.doDelete(username,Integer.parseInt(removeInteressi[i]));
+				} catch (SQLException e) {
+					esito=true;
+					e.printStackTrace();
+				}
+			}
+			if (esito){
+				success+=" Interessi rimossi";
+				request.setAttribute("success", success);
+			}
+			else{
+				error+=" Errore: interessi non eliminati correttamente";
+				request.setAttribute("error",error);
+			}
+		}
 		
 		
 		doGet(request, response);
