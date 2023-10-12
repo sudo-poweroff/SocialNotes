@@ -14,7 +14,7 @@ public class SendEmail {
           
 	
    private String from = "socialnotes2021@gmail.com";
-   private  String pass = "Despacito21";
+   private  String pass = "fxyffsvvabkrvqrj";
    private String[] to;
    private String subject;
    private String body;

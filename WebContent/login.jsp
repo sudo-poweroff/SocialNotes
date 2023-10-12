@@ -47,13 +47,13 @@
 		
 	}
   %>
-  		<%
+<%
 	String errore = (String) request.getAttribute("error");
 	if (errore != null) {
-	%>
+%>
 
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Attenzione!</strong> Nome utente e/o password non corrispondono.
+        <strong>Attenzione!</strong> <small><%=errore%></small>
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -69,7 +69,7 @@
       <a href="<%=link%>"><img class="d-block mx-auto mb-4" src="img/logo.png" alt="SocialNotes" width="140" height="140"></a>
       <h1 class="h3 mb-3 font-weight-normal">Effettua il Login</h1>
       <label for="inputEmail" class="sr-only">Email</label>
-      <input type="text" name="login"id="inputEmail" class="form-control" placeholder="Indirizzo mail o username" required autofocus>
+      <input type="text" name="utente" id="inputEmail" class="form-control" placeholder="Indirizzo mail o username" required autofocus>
       <br>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>

@@ -96,6 +96,7 @@ public class UserModelDS {
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
+				bean.setVerificato(rs.getBoolean("Verificato"));
 			}
 			else
 				return null;
@@ -140,6 +141,7 @@ public class UserModelDS {
 				bean.setDenominazione(rs.getString("Denominazione"));
 				bean.setDipName(rs.getString("DipName"));
 				bean.setRuolo(rs.getInt("Ruolo"));
+				bean.setVerificato(rs.getBoolean("Verificato"));
 			}
 			else
 				return null;
@@ -333,7 +335,7 @@ public class UserModelDS {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban,Ruolo) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?,?)";
+		String insertSQL = "INSERT INTO Utente (Username, Nome, Cognome, Email, Pass, DataNascita, Coin, Denominazione, DipName,Ban,Ruolo, Verificato) VALUES (?, ?, ?, ?, AES_ENCRYPT(?,'despacito'), ?, ?, ?, ?,?,?,?);";
 
 		try {
 			connection = ds.getConnection();
@@ -352,6 +354,7 @@ public class UserModelDS {
 			ps.setString(9, item.getDipName());
 			ps.setDate(10, item.getBan());
 			ps.setInt(11, item.getRuolo());
+			ps.setBoolean(12, false); //CR2
 
 			ps.executeUpdate();
 			System.out.println("Salvato nel Database");
@@ -527,6 +530,40 @@ public class UserModelDS {
 			finally {
 				if(connection!=null)
 					connection.close();
+			}
+		}
+	}
+
+	//CR2
+	/**
+	 * Consente di aggiornare il campo verificato dell'utente
+	 * @param mail rappresenta la mail dell'utente
+	 * @param value rappresenta il nuovo valore da assegnare al campo verificato
+	 * @throws SQLException se l'utente non esiste nel DB
+	 */
+	public void doUpdateVerificato(String mail, boolean value) throws SQLException{
+		if(mail==null || mail.equals(""))
+			throw new IllegalArgumentException("La mail non e' valida");
+		else{
+			Connection con=null;
+			PreparedStatement ps=null;
+			String sql= "UPDATE Utente SET Verificato=? WHERE Email=?;";
+			try{
+				con = ds.getConnection();
+				ps = con.prepareStatement(sql);
+				ps.setBoolean(1, value);
+				ps.setString(2, mail);
+				ps.executeUpdate();
+			}
+			finally {
+				try {
+					if(ps!=null)
+						ps.close();
+				}
+				finally {
+					if(con!=null)
+						con.close();
+				}
 			}
 		}
 	}

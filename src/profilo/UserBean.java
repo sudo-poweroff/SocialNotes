@@ -20,6 +20,7 @@ public class UserBean {
 		this.ban=null;
 		this.denominazione="";
 		this.dipName="";
+		this.verificato= false;
 	}
 	
 	
@@ -145,6 +146,14 @@ public class UserBean {
 	public boolean isEmpty() {
 		return (this.username.compareTo(""))==0;
 	}
+
+	public void setVerificato(boolean value){
+		this.verificato=value;
+	}
+
+	public boolean isVerificato(){
+		return this.verificato;
+	}
 	
 	
 	@Override
@@ -157,7 +166,7 @@ public class UserBean {
 	public String toString() {
 		return "UserBean [username=" + username + ", nome=" + nome + ", cognome=" + cognome + ", img=" + img
 				+ ", email=" + email + ", pass=" + pass + ", dataNascita=" + dataNascita
-				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + "]";
+				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + ", verificato="+verificato+"]";
 	}
 
 
@@ -173,4 +182,5 @@ public class UserBean {
     private String denominazione;
     private String dipName;
     private int ruolo;
+	private boolean verificato;
 }

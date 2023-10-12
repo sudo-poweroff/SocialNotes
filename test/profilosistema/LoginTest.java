@@ -6,33 +6,24 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 public class LoginTest {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+	System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
@@ -42,15 +33,29 @@ public class LoginTest {
   }
   @Test
   public void testLoginEffettuato() {
+    System.out.println("ciao");
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1181, 852));
+    driver.manage().window().setSize(new Dimension(1936, 1048));
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.id("inputEmail")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("fry");
-    driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
     driver.findElement(By.cssSelector(".btn")).click();
     assertThat(driver.getTitle(), is("SocialNotes - Home"));
+    driver.close();
+  }
+
+  //CR2
+  @Test
+  public void testLoginMailNoVerificata(){
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1382, 736));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.id("inputEmail")).sendKeys("rocco0");
+    driver.findElement(By.id("inputPassword")).sendKeys("saddaSapeFa0");
+    driver.findElement(By.cssSelector(".btn")).click();
+    assertThat(driver.findElement(By.cssSelector("small")).getText(), is("Mail non verificata"));
+    driver.close();
   }
   @Test
   public void testLoginPasswordNonValida() {
