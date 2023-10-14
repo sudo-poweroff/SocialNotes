@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `Utente` (
   `dipName` varchar(400) DEFAULT NULL,
   `Ruolo` int NOT NULL,
   `Bloccato` datetime DEFAULT NULL,
+  `Verificato` BOOLEAN NOT NULL,
   PRIMARY KEY (`Username`)
 );
 

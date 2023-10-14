@@ -51,30 +51,34 @@ public class Login extends HttpServlet {
 			response.sendRedirect("homepage.jsp");
 		}
 		else {
-			String login = request.getParameter("login");
+			String usernameEmail = request.getParameter("utente");
 			String pwd = request.getParameter("password");
 
 			//validazione
-			if(login==null || login.trim().equals("") || pwd==null || pwd.trim().equals("")) {
+
+			if(usernameEmail==null || usernameEmail.trim().equals("") || pwd==null || pwd.trim().equals("") || !Validation.validatePassword(pwd)) {
 				String error="Accesso negato";
 				request.setAttribute("error",error);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
 				dispatcher.forward(request, response);
 				return;
 			}
+
+			UserModelDS model= new UserModelDS(ds);
 			UserBean bean = null;
 			try {
-				bean = model.doRetrieveByUsername(login);
+				bean = model.doRetrieveByUsername(usernameEmail);
 			} catch (SQLException e) {
 				//tento con l'email
 				System.out.println("Non c'e' match con username");
 			}
+
 			if (bean==null){
 				try {
-					bean = model.doRetrieveByEmail(login);
+					bean = model.doRetrieveByEmail(usernameEmail);
 				} catch (SQLException e) {
 					//l'utente non esiste nel DB
-					String error="Username e/o password non corretti.";
+					String error="Utente e/o password non corretti.";
 					request.setAttribute("error",error);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
 					dispatcher.forward(request, response);
@@ -82,8 +86,9 @@ public class Login extends HttpServlet {
 				}
 			}
 
-			if(bean == null){
-				String error="Login e/o password non corretti";
+      
+      if (!bean.isVerificato()){ //CR2
+				String error="Mail non verificata";
 				request.setAttribute("error",error);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
 				dispatcher.forward(request, response);
@@ -107,7 +112,7 @@ public class Login extends HttpServlet {
 			}
 			try {
 				HashMap<String, Integer> bloccati = (HashMap<String, Integer>) session.getAttribute("bloccati");
-                if(!model.checkPassword(bean.getUsername(), pwd)){
+        if(!model.checkPassword(bean.getUsername(), pwd)){
 					if(bloccati == null || !bloccati.containsKey(bean.getUsername())){
 						HashMap<String, Integer> temp = new HashMap<>();
 						temp.put(bean.getUsername(), 0);
@@ -143,7 +148,11 @@ public class Login extends HttpServlet {
 					}
 				}
 			} catch (SQLException | ServletException | IOException e) {
-				return;
+          String error="Utente e/o password non corretti.";
+          request.setAttribute("error",error);
+          RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+          dispatcher.forward(request, response);
+          return;
 			}
 
 			try {
@@ -165,8 +174,7 @@ public class Login extends HttpServlet {
 					session.setAttribute("ban",bean.getBan());
 					session.setAttribute("denominazione",bean.getDenominazione());
 					session.setAttribute("dipName",bean.getDipName());
-					UserModelDS role=new UserModelDS(ds);
-					int userRole=role.getRole(bean.getUsername());
+					int userRole=model.getRole(bean.getUsername());
 
 					session.setAttribute("role", userRole);
 					Collection<MaterialBean>cart=new LinkedList<MaterialBean>();
@@ -184,10 +192,7 @@ public class Login extends HttpServlet {
 			}catch (IOException i){
 				i.printStackTrace();
 			}
-
-
-			doGet(request, response);
-			}
+		}
 
 	}
 

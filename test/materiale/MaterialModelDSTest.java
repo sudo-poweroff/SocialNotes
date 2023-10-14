@@ -81,26 +81,16 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	@Test
 	public void testDoRetrieveByKeyPresent() throws Exception {
 		MaterialBean mBean = material.doRetrieveByKey("3");
-		InputStream is=mBean.getAnteprima();
-		InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-		Blob blob = new SerialBlob(is.readAllBytes());
-		Blob blob2 = new SerialBlob(stream.readAllBytes());
-        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-		String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-	
+
 		assertEquals(mBean.getCodiceMateriale(), 3);
-		assertEquals(mBean.getCodiceCorso(), 4);
+		assertEquals(mBean.getDataCaricamento(),Date.valueOf("2021-08-26"));
+		assertEquals(mBean.getKeywords(),"");
 		assertEquals(mBean.getCosto(), 15);
 		assertEquals(mBean.getDescrizione(), "lezione 16");
-		assertEquals(mBean.getIdFile(),1);
-		assertEquals(strBean, strExpected);
-		assertEquals(mBean.getKeywords(),"");
+		assertFalse(mBean.isHidden());
+		assertEquals(mBean.getCodiceCorso(), 4);
 		assertEquals(mBean.getUsername(),"alfonso00");
-	
-		assertEquals(mBean.getDataCaricamento(),Date.valueOf("2021-08-26"));
-		assertEquals(mBean.isHidden(),false);
-	
-		
+		assertEquals(mBean.getNomeFile(),"appuntiADE.pdf");
 	}
 	
 	@Test
@@ -119,7 +109,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 		
 		} catch (NullPointerException e) {
 			flag = true;
-			
 		}
 		assertEquals(flag, true);
 		
@@ -133,7 +122,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 		
 		} catch (NullPointerException e) {
 			flag = true;
-			
 		}
 		assertEquals(flag, true);
 	    
@@ -146,29 +134,17 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 		ArrayList<MaterialBean> arrayMaterial = new ArrayList<>(materialCollection);
 		
 		for (MaterialBean mBean : arrayMaterial) {
-			
-			InputStream is=mBean.getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
+
 			assertEquals(mBean.getCodiceMateriale(),5 );
 			assertEquals(mBean.getDataCaricamento(),Date.valueOf("2020-08-02") );
 			assertEquals(mBean.getKeywords(),"");
 			assertEquals(mBean.getCosto(),0);
 			assertEquals(mBean.getDescrizione(),"provaAde" );
-			assertEquals(mBean.isHidden(),true );
+			assertTrue(mBean.isHidden());
 			assertEquals(mBean.getCodiceCorso(),1 );
 			assertEquals(mBean.getUsername(),"sime00" );
-			assertEquals(mBean.getIdFile(),3 );
-			assertEquals(strBean,strExpected );
+			assertEquals(mBean.getNomeFile(),"provaADE.pdf");
 		}
-		
-		
 	}
 	
 	
@@ -253,9 +229,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m1.setHidden(false);
 	    m1.setCodiceCorso(1);
 	    m1.setUsername("alfonso00");
-	    InputStream streamM1 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM1);
-	    m1.setIdFile(2);
+	    m1.setNomeFile("provaProg.pdf");
 	    
 	  //materiale m2
 	    MaterialBean m2 = new MaterialBean();
@@ -267,9 +241,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(true);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("sime00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(3);
+	    m2.setNomeFile("provaADE.pdf");
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
@@ -281,24 +253,13 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(false);
 	    m3.setCodiceCorso(2);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(4);
+	    m3.setNomeFile("provaSO.pdf");
 	    
 	    materialExpected.add(m1);
 	    materialExpected.add(m2);
 	    materialExpected.add(m3);
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -307,11 +268,8 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(), materialExpected.get(i).getNomeFile());
 	    }
-	    
-	    
 	}
 	
 	@Test
@@ -361,9 +319,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(true);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("sime00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(3);
+	    m2.setNomeFile("provaADE.pdf");
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
@@ -375,23 +331,12 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(false);
 	    m3.setCodiceCorso(2);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(4);
+	    m3.setNomeFile("provaSO.pdf");
 	    
 	    materialExpected.add(m3);
 	    materialExpected.add(m2);
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -400,8 +345,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile());
 	    }
 	}
 	
@@ -451,9 +395,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m1.setHidden(false);
 	    m1.setCodiceCorso(1);
 	    m1.setUsername("alfonso00");
-	    InputStream streamM1 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM1);
-	    m1.setIdFile(2);
+	    m1.setNomeFile("provaProg.pdf");
 	    
 	  //materiale m2
 	    MaterialBean m2 = new MaterialBean();
@@ -465,9 +407,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(true);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("sime00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(3);
+	    m2.setNomeFile("provaADE.pdf");
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
@@ -479,9 +419,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(false);
 	    m3.setCodiceCorso(2);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(4);
+	    m3.setNomeFile("provaSO.pdf");
 	    
 	    //materiale m4
 	    MaterialBean m4 = new MaterialBean();
@@ -493,9 +431,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m4.setHidden(false);
 	    m4.setCodiceCorso(4);
 	    m4.setUsername("alfonso00");
-	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m4.setAnteprima(streamM4);
-	    m4.setIdFile(1);
+	    m4.setNomeFile("appuntiADE.pdf");
 	    
 	    materialExpected.add(m4);
 	    materialExpected.add(m3);
@@ -503,15 +439,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    materialExpected.add(m2);
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -520,8 +447,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile());
 	    }
 	    
 	}
@@ -538,19 +464,15 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     @Test
     public void testDoSaveMaterialNotPresent() throws Exception {
     	MaterialBean materialBean = new MaterialBean();
-
-	    InputStream streamM = new ByteArrayInputStream("'ciao'".getBytes());
-    	
-    	materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
+materialBean.setDataCaricamento(Date.valueOf("2021-03-20"));
     	materialBean.setKeywords("");
     	materialBean.setCosto(0);
     	materialBean.setHidden(true);
     	materialBean.setCodiceCorso(3);
     	materialBean.setUsername("fry");
-    	materialBean.setIdFile(2);
     	materialBean.setDescrizione("AppuntiMMI");
-    	materialBean.setAnteprima(streamM);
-    	
+    	materialBean.setNomeFile("appuntiMMI.pdf");
+
 		material.doSave(materialBean);
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/MaterialeExpected.xml")).getTable("Materiale");
 		ITable actual=this.getConnection().createDataSet().getTable("Materiale");
@@ -653,7 +575,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
     
     //caso STU1-RTO1-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",4);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -670,23 +592,13 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m1.setHidden(false);
 	    m1.setCodiceCorso(1);
 	    m1.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m1.setAnteprima(streamM2);
-	    m1.setIdFile(2);
+	    m1.setNomeFile("provaProg.pdf");
 	    
 	    
 	    materialExpected.add(m1);
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		   			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -695,14 +607,14 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
+
 	    }
     }
     
     //CASO  STU1-RTO1-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","ASC",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -720,9 +632,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(false);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(2);
+	    m2.setNomeFile("provaProg.pdf");
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
@@ -734,9 +644,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(true);
 	    m3.setCodiceCorso(1);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(3);
+	    m3.setNomeFile("provaADE.pdf");
 	    
 	  //materiale m4
 	    MaterialBean m4 = new MaterialBean();
@@ -748,9 +656,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m4.setHidden(false);
 	    m4.setCodiceCorso(2);
 	    m4.setUsername("sime00");
-	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m4.setAnteprima(streamM4);
-	    m4.setIdFile(4);
+	    m4.setNomeFile("provaSO.pdf");
 	    
 	    
 	    materialExpected.add(m4);
@@ -759,15 +665,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -776,14 +673,13 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
 	    }
     }
     
     //CASO  STU1-RTO2-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",3);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -801,9 +697,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(true);
 	    m3.setCodiceCorso(1);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(3);
+	    m3.setNomeFile("provaADE.pdf");
 	    
 	    
 	    
@@ -812,15 +706,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -829,14 +714,13 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
 	    }
     }
     
     //CASO  STU1-RTO2-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","DESC",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -854,9 +738,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(false);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(2);
+	    m2.setNomeFile("provaProg.pdf");
 	    
 
 	    
@@ -870,9 +752,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m4.setHidden(false);
 	    m4.setCodiceCorso(2);
 	    m4.setUsername("sime00");
-	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m4.setAnteprima(streamM4);
-	    m4.setIdFile(4);
+	    m4.setNomeFile("provaSO.pdf");
 	    
 	    
 	    materialExpected.add(m2);
@@ -880,13 +760,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
 			System.out.println("MEDIA "+material.doRetrieveFeedback(materialArray.get(i).getCodiceMateriale())+" CODICE: "+materialArray.get(i).getCodiceMateriale());
 			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
@@ -897,15 +770,14 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
-			
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
+
 	    }
     }
     
     //CASO  STU1-RTO3-RT1
     @Test
-    public void testRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",3);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -923,9 +795,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(false);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(2);
+	    m2.setNomeFile("provaProg.pdf");
 	   
 	    
 	    
@@ -934,15 +804,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -951,14 +812,13 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
 	    }
     }
     
     //CASO STU1-RTO3-RT2
     @Test
-    public void testRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
+    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
     	Collection<MaterialBean> materials = material.doRetrieveByParameters("prova","novalue",0);
 		ArrayList<MaterialBean> materialArray = new ArrayList<>(materials);
 	    ArrayList<MaterialBean> materialExpected = new ArrayList<>();
@@ -976,9 +836,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m2.setHidden(false);
 	    m2.setCodiceCorso(1);
 	    m2.setUsername("alfonso00");
-	    InputStream streamM2 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m2.setAnteprima(streamM2);
-	    m2.setIdFile(2);
+	    m2.setNomeFile("provaProg.pdf");
 	    
 	  //materiale m3
 	    MaterialBean m3 = new MaterialBean();
@@ -990,9 +848,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m3.setHidden(true);
 	    m3.setCodiceCorso(1);
 	    m3.setUsername("sime00");
-	    InputStream streamM3 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m3.setAnteprima(streamM3);
-	    m3.setIdFile(3);
+	    m3.setNomeFile("provaADE.pdf");
 	    
 	  //materiale m4
 	    MaterialBean m4 = new MaterialBean();
@@ -1004,9 +860,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 	    m4.setHidden(false);
 	    m4.setCodiceCorso(2);
 	    m4.setUsername("sime00");
-	    InputStream streamM4 = new ByteArrayInputStream("'ciao'".getBytes());
-	    m4.setAnteprima(streamM4);
-	    m4.setIdFile(4);
+	    m4.setNomeFile("provaSO.pdf");
 	    
 	    
 	    materialExpected.add(m2);
@@ -1015,15 +869,6 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 
 	    
 	    for (int i=0;i<materials.size();i++) {
-			InputStream is=materialArray.get(i).getAnteprima();
-			InputStream stream = new ByteArrayInputStream("'ciao'".getBytes());
-			Blob blob = new SerialBlob(is.readAllBytes());
-			Blob blob2 = new SerialBlob(stream.readAllBytes());
-	        String strBean = new String(blob.getBytes(1l, (int) blob.length()));
-			String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); 
-		
-			
-			
 			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );
 			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );
 			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());
@@ -1032,8 +877,7 @@ public class MaterialModelDSTest extends DataSourceBasedDBTestCase {
 			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );
 			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );
 			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );
-			assertEquals(materialArray.get(i).getIdFile(),materialExpected.get(i).getIdFile() );
-			assertEquals(strBean,strExpected );
+			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );
 	    }
     }
     

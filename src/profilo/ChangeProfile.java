@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.sql.DataSource;
 
+import it.unisa.utils.SendEmail;
 import it.unisa.utils.Validation;
 
 /**
@@ -89,48 +90,9 @@ public class ChangeProfile extends HttpServlet {
 			
 			
 		}
-		
-		
-//CAMBIO MAIL
-		String mail = request.getParameter("mail");
-		
-		
-		
-		if(mail!=null && !mail.trim().equals("") && Validation.validateEmail(mail)) {
-			try {
-					if(model_utente.doRetrieveByEmail(mail)==null) {
-									
-						try {
-							model_utente.doUpdateEmail(username, mail);
-							success+=" Email aggiornata-";
-							request.setAttribute("success", success);
-							}
-						catch(SQLException e) {
-							System.out.println("Errore: Email non aggiornata");
-							error+=" Errore email non aggiornata";
-							request.setAttribute("error",error);	
-							e.printStackTrace();
-						}
-						//aggiorno le varabili di sessione
-						UserModelDS user=new UserModelDS(ds);
-						UserBean bean;
-						try {
-							bean = user.doRetrieveByUsername(username);
-							session.setAttribute("email",bean.getEmail());
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				}else {//L'email inserita � gi� stata presa
-					System.out.println("Errore: Email non aggiornata");
-					error+=" Errore email non aggiornata";
-					request.setAttribute("error",error);	
-				}
-			}catch(SQLException e){
-				e.printStackTrace();
-			}
-		}
-//CAMBIO UNI/DIPATRIMENTO
+
+    
+  //CAMBIO UNI/DIPATRIMENTO
 		String nomeuni = request.getParameter("nomeuni");
 		//String indirizzo = request.getParameter("indirizzo");
 		String dipartimento = request.getParameter("dipartimento");
@@ -160,13 +122,8 @@ public class ChangeProfile extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
-		
-		
-		
-		
-		
-		
-//CAMBIO PASSWORD
+
+		//CAMBIO PASSWORD
 		String current_password = request.getParameter("current_password");
 		String password = request.getParameter("password");
 		String confirm_password = request.getParameter("confirm_password");
@@ -216,9 +173,8 @@ public class ChangeProfile extends HttpServlet {
 				}
 			}
 		}
-		
-		
-//AGGIUNTA NUOVA CARTA
+
+		//AGGIUNTA NUOVA CARTA
 		PaymentMethodModelDS model_carta= new PaymentMethodModelDS(ds);
 		
 		String nomecarta = request.getParameter("nomecarta");
@@ -269,9 +225,8 @@ public class ChangeProfile extends HttpServlet {
 				}
 			}
 		}
-		
-		
-//ELIMINA CARTA
+
+		//ELIMINA CARTA
 		String eliminaCarta=request.getParameter("numcartaDelete");
 		if(eliminaCarta!=null && !eliminaCarta.trim().equals("") && eliminaCarta.length()==16) {
 			PaymentMethodModelDS pay=new PaymentMethodModelDS(ds);
@@ -305,22 +260,56 @@ public class ChangeProfile extends HttpServlet {
 				request.setAttribute("error",error);
 			}
 		}
-		
-		
-		
-		
-		/*System.out.println("mail:"+mail+
-				"\n nomeuni:"+nomeuni+
-				"\n dipartimento:"+dipartimento+
-				"\n current_password:"+current_password+
-				"\n password:"+password+
-				"\n confirm_password:"+confirm_password+
-				"\n nomecarta:"+nomecarta+
-				"\n cognomecarta:"+cognomecarta+
-				"\n numerocarta:"+numerocarta+
-				"\n mesecarta:"+mesecarta+
-				"\n annocarta:"+annocarta+
-				"\n username:"+username);*/
+
+		//CAMBIO MAIL
+		String mail = request.getParameter("mail");
+
+		if(mail!=null && !mail.trim().equals("") && Validation.validateEmail(mail)) {
+			try {
+				if(model_utente.doRetrieveByEmail(mail)==null) { //controlla se non c'è nessun utente con quella mail
+					try {
+						model_utente.doUpdateEmail(username, mail);
+						//CR2
+						model_utente.doUpdateVerificato(mail,false); //stato verificato = false
+						String from = "socialnotes2021@gmail.com";
+						String pass = "fxyffsvvabkrvqrj";
+						String[] to = { mail };
+						String subject = "Cambio mail in Social Notes";
+						String body = "Ciao "+username+ " ! Il team di SocialNotes ti comunica che i tuoi dati sono stati aggiornati con successo! Verifica la tua mail tramite questo link:\n"+
+								"http://localhost:8080/SocialNotes/Verifica?username="+username+"&mail="+mail+"&accessNumber=1";
+
+						SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
+						sendEmail.SendMail(); //invio mail di verifica
+
+						String toLogout = response.encodeRedirectURL("Logout"); //logout dell'utente
+						response.sendRedirect(toLogout);
+						return;
+					}
+					catch(SQLException |NullPointerException | IllegalArgumentException e) {
+						//parametri non validi o aggiornamento non andato a buon fine
+						System.out.println("Errore: Email non aggiornata");
+						error+=" Errore email non aggiornata";
+						request.setAttribute("error",error);
+						e.printStackTrace();
+					}
+					//aggiorno le varabili di sessione
+					UserBean bean;
+					try {
+						bean = model_utente.doRetrieveByUsername(username);
+						session.setAttribute("email",bean.getEmail());
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else {//L'email inserita e' gia' stata presa
+					System.out.println("Errore: Email non aggiornata");
+					error+=" Errore email non aggiornata";
+					request.setAttribute("error",error);
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
 		
 		
 		doGet(request, response);

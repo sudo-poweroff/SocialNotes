@@ -127,11 +127,8 @@ if(cartError!=null){
                             <img src="PrintAnteprima?codice=<%=material.getCodiceMateriale() %>" class="img-center">
                         
                     </div>
-                    <%	FileModelDS fileModel=new FileModelDS(ds);
-                    	FileBean file=fileModel.doRetrieveByKey(material.getIdFile());
-                    %>
                     <div class="block-body text-center">
-                        <h3 class="heading heading-5 strong-600 text-capitalize"><%=file.getFilename() %></h3>
+                        <h3 class="heading heading-5 strong-600 text-capitalize"><%=material.getNomeFile().substring(0,material.getNomeFile().length()-6)%></h3>
                   	    <div class="widget-26-job-starred">
 	             			<canvas class="myCanvas" data-rating="<%=feed %>" width="100" height="20">not support the canvas tag.</canvas>
 	            		</div>
@@ -142,7 +139,7 @@ if(cartError!=null){
                                <% if (session.getAttribute("username")!=null) { %>
                                 <div class="col-8">
                                 
-                                		<%	//verifico se l'utente ha giÃ  comprato quel materiale
+                                		<%	//verifico se l'utente ha già comprato quel materiale
 					
 											PurchaseModelDS acquistiModel = new PurchaseModelDS(ds);
 											Collection<PurchaseBean> acquistiEffettuati = acquistiModel.doRetrieveByUsername((String)session.getAttribute("username"));
