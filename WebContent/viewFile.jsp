@@ -1,11 +1,9 @@
-<%@page import="java.io.File"%>
-<%@page import="java.io.FileOutputStream"%>
-<%@page import="java.io.BufferedOutputStream"%>
 <%@page import="java.nio.Buffer"%>
-<%@page import="java.io.OutputStream"%>
-<%@page import="java.io.InputStream"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="javax.sql.DataSource,materiale.*"%>
+		 pageEncoding="UTF-8" import="javax.sql.DataSource,materiale.*"%>
+<%@ page import="org.apache.pdfbox.pdmodel.PDDocument" %>
+<%@ page import="org.apache.pdfbox.text.PDFTextStripper" %>
+<%@ page import="java.io.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,33 +13,30 @@
 </head>
 <body>
 	<%
-	String idfile=request.getParameter("idfile");
-	int idFile=Integer.parseInt(idfile);
-	DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-	FileModelDS model= new FileModelDS(ds);
-	FileBean bean= model.doRetrieveByKey(idFile);
-	response.setHeader("Content-Disposition", "filename="+bean.getFilename());//attachment dopo la virgola per scaricare direttamente
-		response.setContentType("application/pdf");
+	String fileName=request.getParameter("fileName");
+	response.setHeader("Content-Disposition", "filename="+fileName);//attachment dopo la virgola per scaricare direttamente
+	response.setContentType("application/pdf");
+	System.out.println(fileName);
+	String filePath="C:\\Users\\sdell\\projects\\SocialNotes\\material\\"+fileName;
 
 		try{
-			InputStream is=bean.getContenuto();
-			
-	
-				    
-				    OutputStream outStream = response.getOutputStream();
-				    byte[] buf = new byte[4096];
-				    int len = -1;
+			File pdfFile = new File(filePath);
+			InputStream is = new FileInputStream(pdfFile);
 
-				    //Write the file contents to the servlet response
-				    //Using a buffer of 4kb (configurable). This can be
-				    //optimized based on web server and app server
-				    //properties
-				    while ((len = is.read(buf)) != -1) {
-				        outStream.write(buf, 0, len);
-				    }
+			OutputStream outStream = response.getOutputStream();
+			byte[] buf = new byte[4096];
+			int len = -1;
 
-				    outStream.flush();
-				    outStream.close();
+			//Write the file contents to the servlet response
+			//Using a buffer of 4kb (configurable). This can be
+			//optimized based on web server and app server
+			//properties
+			while ((len = is.read(buf)) != -1) {
+				outStream.write(buf, 0, len);
+			}
+
+			outStream.flush();
+			outStream.close();
 		}catch (Exception e){}
 	%>
 </body>

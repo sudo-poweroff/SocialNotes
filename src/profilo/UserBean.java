@@ -2,8 +2,7 @@ package profilo;
 
 import java.sql.Blob;
 import java.sql.Date;
-
-
+import java.sql.Timestamp;
 
 
 public class UserBean {
@@ -20,6 +19,9 @@ public class UserBean {
 		this.ban=null;
 		this.denominazione="";
 		this.dipName="";
+		this.bloccato = null;
+		this.verificato= false;
+
 	}
 	
 	
@@ -145,6 +147,14 @@ public class UserBean {
 	public boolean isEmpty() {
 		return (this.username.compareTo(""))==0;
 	}
+
+	public void setVerificato(boolean value){
+		this.verificato=value;
+	}
+
+	public boolean isVerificato(){
+		return this.verificato;
+	}
 	
 	
 	@Override
@@ -157,20 +167,30 @@ public class UserBean {
 	public String toString() {
 		return "UserBean [username=" + username + ", nome=" + nome + ", cognome=" + cognome + ", img=" + img
 				+ ", email=" + email + ", pass=" + pass + ", dataNascita=" + dataNascita
-				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + "]";
+				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + ", verificato="+verificato+"]";
+	}
+
+	public Timestamp getBloccato() {
+		return bloccato;
+	}
+
+	public void setBloccato(Timestamp bloccato) {
+		this.bloccato = bloccato;
 	}
 
 
 	private String username;
-    private String nome;
-    private String cognome;
-    private Blob img;
-    private String email;
-    private String pass;
-    private Date dataNascita;
-    private int coin;
-    private Date ban;
-    private String denominazione;
-    private String dipName;
-    private int ruolo;
+  private String nome;
+  private String cognome;
+  private Blob img;
+  private String email;
+  private String pass;
+  private Date dataNascita;
+  private int coin;
+  private Date ban;
+  private String denominazione;
+  private String dipName;
+  private int ruolo;
+  private Timestamp bloccato;
+	private boolean verificato;
 }
