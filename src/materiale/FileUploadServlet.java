@@ -76,7 +76,7 @@ public class FileUploadServlet extends HttpServlet {
 			DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 			CourseModelDS course=new CourseModelDS(ds);
 			String nome=request.getParameter("Corso");
-			int codiceCorso=course.doRetrieveByName(nome);
+			int codiceCorso=course.doRetrieveByName(nome,(String) session.getAttribute("dipName"),(String) session.getAttribute("denominazione"));
 
 			//continuo inserimento dati
 			material.setCodiceCorso(codiceCorso);
