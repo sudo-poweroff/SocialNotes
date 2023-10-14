@@ -64,7 +64,6 @@ public class Login extends HttpServlet {
 				return;
 			}
 
-			UserModelDS model= new UserModelDS(ds);
 			UserBean bean = null;
 			try {
 				bean = model.doRetrieveByUsername(usernameEmail);
