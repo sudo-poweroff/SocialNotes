@@ -1,5 +1,7 @@
 package profilo;
 
+import materiale.CourseBean;
+import org.checkerframework.checker.units.qual.C;
 import org.dbunit.Assertion;
 import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.DatabaseUnitException;
@@ -16,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -69,14 +72,17 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         InteresseBean i2=new InteresseBean();
         i2.setUsername("sime00");
         i2.setCodiceCorso(3);
+        i2.setDataInserimento(Date.valueOf("2023-10-13"));
         expected.add(i2);
         InteresseBean i3=new InteresseBean();
         i3.setUsername("sime00");
         i3.setCodiceCorso(11);
+        i3.setDataInserimento(Date.valueOf("2023-10-13"));
         expected.add(i3);
         InteresseBean i1=new InteresseBean();
         i1.setUsername("sime00");
         i1.setCodiceCorso(46);
+        i1.setDataInserimento(Date.valueOf("2023-10-13"));
         expected.add(i1);
 
         assertEquals(expected.size(),interessi.size());
@@ -122,6 +128,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         InteresseBean i1=new InteresseBean();
         i1.setUsername("sime00");
         i1.setCodiceCorso(3);
+        i1.setDataInserimento(Date.valueOf("2023-10-13"));
         expected.add(i1);
         assertEquals(expected.size(),interessi.size());
         for(int i=0; i<interessi.size();i++){
@@ -141,6 +148,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         InteresseBean interesse= new InteresseBean();
         interesse.setUsername("sime00");
         interesse.setCodiceCorso(20);
+        interesse.setDataInserimento(Date.valueOf("2023-10-13"));
         interesseModel.doSave(interesse);
         ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/InteresseExpected.xml")).getTable("Interesse");
         ITable actual=this.getConnection().createDataSet().getTable("Interesse");
@@ -152,6 +160,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         InteresseBean interesse= new InteresseBean();
         interesse.setUsername("sime00");
         interesse.setCodiceCorso(3);
+        interesse.setDataInserimento(Date.valueOf("2023-10-13"));
         boolean flag=false;
         try{
             interesseModel.doSave(interesse);
@@ -223,5 +232,96 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/init/Interesse.xml")).getTable("Interesse");
         ITable actual=this.getConnection().createDataSet().getTable("Interesse");
         Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
+    }
+
+    @Test
+    public void testDoRetriveNewInteressiOK() throws SQLException {
+        ArrayList<CourseBean>newInteressi=interesseModel.doRetrieveNewInteressi("sime00");
+        ArrayList<CourseBean> expected=new ArrayList<>();
+        CourseBean c1=new CourseBean();
+        c1.setCodiceCorso(20);
+        c1.setNome("BD");
+        expected.add(c1);
+        CourseBean c2=new CourseBean();
+        c2.setCodiceCorso(26);
+        c2.setNome("TSW");
+        expected.add(c2);
+        assertEquals(expected.size(),newInteressi.size());
+        for(int i=0; i<newInteressi.size();i++){
+            assertEquals(newInteressi.get(i).getCodiceCorso(), expected.get(i).getCodiceCorso());
+            assertEquals(newInteressi.get(i).getNome(),expected.get(i).getNome());
+        }
+    }
+
+    @Test
+    public void testDoRetriveNewInteressiNull() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.doRetrieveNewInteressi(null);
+        }catch (IllegalArgumentException e){
+            flag=true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testDoRetriveNewInteressiEmpty() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.doRetrieveNewInteressi("");
+        }catch (IllegalArgumentException e){
+            flag=true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testGetInteressiOk() throws SQLException {
+        ArrayList<CourseBean> interessi=interesseModel.getInteressi("sime00");
+        ArrayList<CourseBean> expected=new ArrayList<>();
+        CourseBean c1=new CourseBean();
+        c1.setCodiceCorso(3);
+        c1.setNome("programmazione1");
+        expected.add(c1);
+        CourseBean c2=new CourseBean();
+        c2.setCodiceCorso(11);
+        c2.setNome("ADE");
+        expected.add(c2);
+        CourseBean c3=new CourseBean();
+        c3.setCodiceCorso(46);
+        c3.setNome("IGES");
+        expected.add(c3);
+        for(int i=0; i<interessi.size();i++){
+            assertEquals(interessi.get(i).getCodiceCorso(), expected.get(i).getCodiceCorso());
+            assertEquals(interessi.get(i).getNome(),expected.get(i).getNome());
+        }
+    }
+
+    @Test
+    public void testGetInteressiUsernameNonPresente() throws SQLException {
+        ArrayList<CourseBean>interessi=interesseModel.getInteressi("ab");
+        assertEquals(interessi.size(),0);
+    }
+
+    @Test
+    public void testGetInteressiUsernameNull() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.getInteressi(null);
+        }catch (IllegalArgumentException e){
+            flag=true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testGetInteressiEmptyUsername() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.getInteressi("");
+        }catch (IllegalArgumentException e){
+            flag=true;
+        }
+        assertTrue(flag);
     }
 }

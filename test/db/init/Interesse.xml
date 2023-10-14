@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Interesse Username="sime00" CodiceCorso="46"/>
-    <Interesse Username="sime00" CodiceCorso="3"/>
-    <Interesse Username="sime00" CodiceCorso="11"/>
-    <Interesse Username="fry" CodiceCorso="20"/>
-    <Interesse Username="fry" CodiceCorso="26"/>
+    <Interesse Username="sime00" CodiceCorso="46" DataInserimento="2023-10-13"/>
+    <Interesse Username="sime00" CodiceCorso="3" DataInserimento="2023-10-13"/>
+    <Interesse Username="sime00" CodiceCorso="11" DataInserimento="2023-10-13"/>
+    <Interesse Username="fry" CodiceCorso="20" DataInserimento="2023-10-13"/>
+    <Interesse Username="fry" CodiceCorso="26" DataInserimento="2023-10-13"/>
+
+
+    <Corso CodiceCorso="46" Nome="IGES" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="3" Nome="programmazione1" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="11" Nome="ADE" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="20" Nome="BD" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="26" Nome="TSW" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
 </dataset>
