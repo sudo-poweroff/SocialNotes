@@ -101,7 +101,7 @@
   }
   
   
-  Collection<MaterialBean> materials=material.doRetrieveByOrderDate();
+  Collection<MaterialBean> materials=null;
 %>
 
 	<%@ include file="header_user.jsp"%>

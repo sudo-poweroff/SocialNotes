@@ -4,9 +4,8 @@ package profilo;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,6 +13,7 @@ import javax.sql.DataSource;
 import javax.sql.rowset.serial.SerialBlob;
 import org.dbunit.Assertion;
 import org.dbunit.DataSourceBasedDBTestCase;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.SortedTable;
@@ -25,7 +25,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 
 
@@ -76,27 +75,9 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		super.tearDown();
 	}
 
-	//TEST checkLogin()
-	@Test
-	public void testCheckLogin() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
-		UserBean us=userModel.checkLogin("sime00","Sime1");
-		assertEquals(us.getUsername(), "sime00");
-		assertEquals(us.getNome(), "Simone");
-		assertEquals(us.getCognome(),"Della Porta");
-		assertEquals(us.getEmail(), "sime@gmail.com");
-		assertEquals(us.getPass(), "Sime1");
-		assertEquals(us.getDataNascita(), "2000-10-27");
-		assertEquals(us.getCoin(), 1200);
-		assertEquals(us.getBan(), "2022-03-01");
-		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
-		assertEquals(us.getDipName(), "Dipartimento di Informatica");
-		assertEquals(us.getRuolo(), 0);
-	}
-
-
 	@Test
 	public void testCheckLoginPassNonCorretta() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
-		assertNull(userModel.checkLogin("sime00","Sime2"));
+		assertFalse(userModel.checkPassword("sime00","Sime2"));
 	}
 
 
@@ -104,8 +85,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginPassVuota() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("sime00", "");
-		}catch(NullPointerException e) {
+			userModel.checkPassword("sime00", "");
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -116,8 +97,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginPassNull() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("sime00", null);
-		}catch(NullPointerException e) {
+			userModel.checkPassword("sime00", null);
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -128,8 +109,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserNonPresentePassVuota() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("despacito","");
-		}catch(NullPointerException e) {
+			userModel.checkPassword("despacito","");
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -140,8 +121,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserNonPresentePassNull() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("despacito",null);
-		}catch(NullPointerException e) {
+			userModel.checkPassword("despacito",null);
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -152,8 +133,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserVuotoPassVuota() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("","");
-		}catch(NullPointerException e) {
+			userModel.checkPassword("","");
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -164,8 +145,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserVuotoPassNull() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("",null);
-		}catch(NullPointerException e) {
+			userModel.checkPassword("",null);
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -176,8 +157,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserNullPassVuota() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin("","");
-		}catch(NullPointerException e) {
+			userModel.checkPassword("","");
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -188,8 +169,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 	public void testCheckLoginUserNullPassNull() throws SQLException {
 		boolean flag=false;
 		try {
-			userModel.checkLogin(null,null);
-		}catch(NullPointerException e) {
+			userModel.checkPassword(null,null);
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -212,6 +193,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+    assertEquals(Timestamp.valueOf("2011-11-11 00:00:00.0"), new Timestamp(us.getBloccato().getTime()));
 		assertEquals(us.isVerificato(), false); //CR2
 	}
 
@@ -264,6 +246,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(us.getDenominazione(), "Universita degli studi di Salerno");
 		assertEquals(us.getDipName(), "Dipartimento di Informatica");
 		assertEquals(us.getRuolo(), 0);
+    assertNull(us.getBloccato());
 		assertEquals(us.isVerificato(), false); //CR2
 	}
 
@@ -754,7 +737,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 	@Test
 	public void testMotoreRicercaROrderASCNoRatingUserVuoto() throws SQLException {
-		Collection<UserBean> result=new ArrayList<>();
+		Collection<UserBean> result;
 		result=userModel.doRetrieveByParametersUser("", "ASC",0);
 		ArrayList<UserBean> rs=new ArrayList<>(result);
 		ArrayList<UserBean> aspected=new ArrayList<>();
@@ -1135,6 +1118,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setBloccato(null);
 		us1.setVerificato(false); //CR2
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
@@ -1148,8 +1132,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 	@Test
 	public void testDoSaveAlreadyExists() throws IOException, SQLException {
-		boolean flag=false;
-		UserBean us1=new UserBean();
+		boolean flag = false;
+		UserBean us1 = new UserBean();
 		us1.setUsername("sime00");
 		us1.setNome("Simone");
 		us1.setCognome("Della Porta");
@@ -1161,35 +1145,27 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		us1.setDenominazione("Universita degli studi di Salerno");
 		us1.setDipName("Dipartimento di Informatica");
 		us1.setRuolo(0);
+		us1.setBloccato(null);
 		us1.setVerificato(false);
 		InputStream stream1=new ByteArrayInputStream("'Img'".getBytes());
 		Blob b1=new SerialBlob(stream1.readAllBytes());
 		us1.setImg(b1);
 		try {
 			userModel.doSave(us1);
-		}catch(SQLException e) {
-			flag=true;
+		} catch (SQLException e) {
+			flag = true;
 		}
 		assertTrue(flag);
 	}
 
-
-	@Test
 	public void testDoSaveNull() throws SQLException {
-		boolean flag=false;
-		try {
-			userModel.doSave(null);
-		}catch(NullPointerException e){
-			flag=true;
-		}
-		assertTrue(flag);
+		assertThrows(NullPointerException.class, ()->{userModel.doSave(null);});
 	}
-
 
 	//TEST manageBan()
 	@Test
 	public void testManageBanDatiValidi() throws Exception {
-		userModel.manageBan("sime00",Date.valueOf("2022-03-15"));
+		userModel.manageBan("sime00",Date.valueOf("2023-12-15"));
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBan.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		SortedTable tbexpected=new SortedTable(expected);
@@ -1207,6 +1183,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
 			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
 			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
 		}
 	}
 
@@ -1215,7 +1192,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan("sime00",Date.valueOf("2022-01-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1235,7 +1212,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 
 	@Test
 	public void testManageBanUsernameNonPresente() throws Exception {
-		userModel.manageBan("despacito",Date.valueOf("2022-03-15"));
+		userModel.manageBan("despacito",Date.valueOf("2023-12-15"));
 		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBanUsernameNonPresente.xml")).getTable("Utente");
 		ITable actual=this.getConnection().createDataSet().getTable("Utente");
 		SortedTable tbexpected=new SortedTable(expected);
@@ -1262,7 +1239,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan("despacito",Date.valueOf("2022-01-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1286,7 +1263,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan("",Date.valueOf("2022-03-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1298,7 +1275,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan("",Date.valueOf("2022-01-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1310,7 +1287,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan("",null);
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1322,7 +1299,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan(null,Date.valueOf("2022-03-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1334,7 +1311,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan(null,Date.valueOf("2022-01-15"));
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
@@ -1346,12 +1323,127 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		boolean flag=false;
 		try {
 			userModel.manageBan(null,null);
-		}catch(NullPointerException e) {
+		}catch(IllegalArgumentException e) {
 			flag=true;
 		}
 		assertTrue(flag);
 	}
 
+	public void testDoUpdateBloccatoUsername() throws Exception {
+		String username = "califano87";
+		Timestamp blockdate = Timestamp.valueOf("2023-12-25 00:00:00.0");
+		userModel.doUpdateBloccato(username, blockdate);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBloccatoUpdate.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected = new SortedTable(expected);
+		SortedTable tbactual = new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
+		}
+	}
+
+	public void testDoUpdateBloccatoEmail() throws Exception{
+		String email = "califano87@gmail.com";
+		Timestamp blockdate = Timestamp.valueOf("2023-12-25 00:00:00.0");
+		userModel.doUpdateBloccato(email, blockdate);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBloccatoUpdate.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected = new SortedTable(expected);
+		SortedTable tbactual = new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
+		}
+	}
+	@Test(expected = SQLException.class)
+	public void testDoUpdateBloccatoNotExistingUsername() throws Exception {
+		String username = "pip";
+		Timestamp blockdate = Timestamp.valueOf("2023-12-25 00:00:00.0");
+		userModel.doUpdateBloccato(username, blockdate);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBloccatoUpdate.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected = new SortedTable(expected);
+		SortedTable tbactual = new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
+		}
+	}
+	@Test(expected = SQLException.class)
+	public void testDoUpdateBloccatoNotExistingEmail() throws Exception {
+		String email = "a@aasdasdasd.aa";
+		Timestamp blockdate = Timestamp.valueOf("2023-12-25 00:00:00.0");
+		userModel.doUpdateBloccato(email, blockdate);
+		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream("db/expected/UtenteExpectedBloccatoUpdate.xml")).getTable("Utente");
+		ITable actual=this.getConnection().createDataSet().getTable("Utente");
+		SortedTable tbexpected = new SortedTable(expected);
+		SortedTable tbactual = new SortedTable(actual);
+		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());
+		for(int i=0;i<tbexpected.getRowCount();i++) {
+			assertEquals(tbexpected.getValue(i, "Username"), tbactual.getValue(i, "Username"));
+			assertEquals(tbexpected.getValue(i, "Nome"), tbactual.getValue(i, "Nome"));
+			assertEquals(tbexpected.getValue(i, "Cognome"), tbactual.getValue(i, "Cognome"));
+			assertEquals(tbexpected.getValue(i, "Email"), tbactual.getValue(i, "Email"));
+			assertEquals(tbexpected.getValue(i, "Pass"), tbactual.getValue(i, "Pass"));
+			assertEquals(tbexpected.getValue(i, "DataNascita").toString(),tbactual.getValue(i, "DataNascita").toString());
+			assertEquals(tbexpected.getValue(i, "Coin").toString(), tbactual.getValue(i, "Coin").toString());
+			assertEquals(tbexpected.getValue(i, "Ban").toString(), tbactual.getValue(i, "Ban").toString());
+			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
+			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
+			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
+		}
+	}
+
+	public void testDoUpdateBloccatoEmptyUsernameOrEmail() throws IllegalArgumentException {
+		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato("", Timestamp.valueOf("2023-12-25 00:00:00.0"));});
+	}
+
+	public void testDoUpdateBloccatoNullUsernameOrEmail() throws NullPointerException {
+		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato(null, Timestamp.valueOf("2023-12-25 00:00:00.0"));});
+	}
+
+	public void testDoUpdateUsernameWithInvalidDate() throws NullPointerException {
+		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato("califano87", null);});
+	}
+
+	public void testDoUpdateEmailWithInvalidDate() throws NullPointerException {
+		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato("califano87@gmail.com", null);});
+	}
 
 
 

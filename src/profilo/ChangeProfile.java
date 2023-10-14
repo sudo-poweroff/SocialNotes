@@ -91,7 +91,8 @@ public class ChangeProfile extends HttpServlet {
 			
 		}
 
-		//CAMBIO UNI/DIPATRIMENTO
+    
+  //CAMBIO UNI/DIPATRIMENTO
 		String nomeuni = request.getParameter("nomeuni");
 		//String indirizzo = request.getParameter("indirizzo");
 		String dipartimento = request.getParameter("dipartimento");
@@ -131,7 +132,8 @@ public class ChangeProfile extends HttpServlet {
 			UserBean bean = new UserBean();
 			//Vedo se la password � corretta
 			try {
-				bean = model_utente.checkLogin(username,current_password);
+				if (model_utente.checkPassword(username,current_password))
+				bean = model_utente.doRetrieveByUsername(username);
 			}catch(SQLException e) {
 				System.out.println("Errore checkLogin in ChangeProfile");
 			}

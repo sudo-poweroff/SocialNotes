@@ -2,8 +2,7 @@ package profilo;
 
 import java.sql.Blob;
 import java.sql.Date;
-
-
+import java.sql.Timestamp;
 
 
 public class UserBean {
@@ -20,7 +19,9 @@ public class UserBean {
 		this.ban=null;
 		this.denominazione="";
 		this.dipName="";
+		this.bloccato = null;
 		this.verificato= false;
+
 	}
 	
 	
@@ -169,18 +170,27 @@ public class UserBean {
 				+ ", coin=" + coin + ", ban=" + ban + ", denominazione="+ denominazione + ", dipName=" + dipName + ", verificato="+verificato+"]";
 	}
 
+	public Timestamp getBloccato() {
+		return bloccato;
+	}
+
+	public void setBloccato(Timestamp bloccato) {
+		this.bloccato = bloccato;
+	}
+
 
 	private String username;
-    private String nome;
-    private String cognome;
-    private Blob img;
-    private String email;
-    private String pass;
-    private Date dataNascita;
-    private int coin;
-    private Date ban;
-    private String denominazione;
-    private String dipName;
-    private int ruolo;
+  private String nome;
+  private String cognome;
+  private Blob img;
+  private String email;
+  private String pass;
+  private Date dataNascita;
+  private int coin;
+  private Date ban;
+  private String denominazione;
+  private String dipName;
+  private int ruolo;
+  private Timestamp bloccato;
 	private boolean verificato;
 }
