@@ -1,6 +1,5 @@
 <%@ page import="javax.sql.DataSource" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import ="java.io.InputStream" %>
 <%@ page import="java.util.*" %>
 <%@ page import="materiale.CourseModelDS" %>
 <%@ page import="materiale.CourseBean" %>
@@ -22,6 +21,12 @@
 
 <body class="text-center">
 <%
+    if (session.getAttribute("username")==null)
+        response.sendRedirect("login.jsp");
+    if((int)session.getAttribute("accessNumber")!=0)
+        response.sendRedirect("homepage_user.jsp");
+    else
+        session.removeAttribute("accessNumber");
     DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 %>
 <h1 class="h3 mb-3 font-weight-normal">Inserisci i tuoi interessi</h1>

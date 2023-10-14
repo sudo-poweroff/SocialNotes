@@ -107,9 +107,16 @@ public class Login extends HttpServlet {
 					session.setAttribute("role", userRole);
 					Collection<MaterialBean>cart=new LinkedList<MaterialBean>();
 					session.setAttribute("cart", cart);
-					//System.out.println("user role in login.java"+userRole);
-					String homeURL = response.encodeURL("homepage.jsp");
-					response.sendRedirect(homeURL);
+					int accessNumber= (int) session.getAttribute("accessNumber");
+					if(accessNumber==0){
+						String setInteressiURL= response.encodeURL("setInteressi.jsp");
+						response.sendRedirect(setInteressiURL);
+					}
+					else{
+						//System.out.println("user role in login.java"+userRole);
+						String homeURL = response.encodeURL("homepage.jsp");
+						response.sendRedirect(homeURL);
+					}
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
