@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
- <Materiale codiceMateriale="3" DataCaricamento="2021-08-26" Keywords="" Costo="15" Descrizione= "lezione 16" Hidden="0" CodiceCorso="4" Username="alfonso00" Anteprima="'ciao'" idFile="1" />
-<Materiale codiceMateriale="4" DataCaricamento="2021-01-03" Keywords="" Costo="20" Descrizione= "provaInf" Hidden="0" CodiceCorso="1" Username="alfonso00" Anteprima="'ciao'" idFile="2" />
-<Materiale codiceMateriale="5" DataCaricamento="2020-08-02" Keywords="" Costo="0" Descrizione= "provaAde" Hidden="1" CodiceCorso="1" Username="sime00" Anteprima="'ciao'" idFile="3" ></Materiale>
-<Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="0" CodiceCorso="2" Username="sime00" Anteprima="'ciao'" idFile="4" ></Materiale>
-<Materiale codiceMateriale="1" DataCaricamento="2021-03-20" Keywords="" Costo="0" Hidden="1" CodiceCorso="3" Username="fry" Anteprima="'ciao'" idFile="2" Descrizione="AppuntiMMI"></Materiale>
+    <Materiale codiceMateriale="3" DataCaricamento="2021-08-26" Keywords="" Costo="15" Descrizione= "lezione 16" Hidden="false" CodiceCorso="4" Username="alfonso00" nomeFile="appuntiADE.pdf" />
+    <Materiale codiceMateriale="4" DataCaricamento="2021-01-03" Keywords="" Costo="20" Descrizione= "provaInf" Hidden="false" CodiceCorso="1" Username="alfonso00" nomeFile="provaProg.pdf" />
+    <Materiale codiceMateriale="5" DataCaricamento="2020-08-02" Keywords="" Costo="0" Descrizione= "provaAde" Hidden="true" CodiceCorso="1" Username="sime00" nomeFile="provaADE.pdf" />
+    <Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "provaSO" Hidden="false" CodiceCorso="2" Username="sime00" nomeFile="provaSO.pdf" />
+    <Materiale codiceMateriale="1" DataCaricamento="2021-03-20" Keywords="" Costo="0" Descrizione="AppuntiMMI" Hidden="true" CodiceCorso="3" Username="fry" nomeFile="appuntiMMI.pdf" />
 
 
     <Corso CodiceCorso="6" Nome="cddc" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>

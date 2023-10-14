@@ -101,7 +101,7 @@
   }
   
   
-  Collection<MaterialBean> materials=material.doRetrieveByOrderDate();
+  Collection<MaterialBean> materials=null;
 %>
 
 	<%@ include file="header_user.jsp"%>
@@ -246,10 +246,7 @@
 											<label>File PDF</label> <input class="form-control" required
 												type="file" id="formFile" name="Contenuto"
 												onchange="return fileValidation()"
-												accept=".pdf,.doc,.docx,.odt,.ppt,.pptx"> <br>
-											<label>Immagine anteprima del materiale</label> <input
-												class="form-control" type="file" id="formFile" required
-												name="Anteprima" accept=".jpeg,.png,.jpg,.PNG" onchange="return fileValidation()">
+												accept=".pdf"> <br>
 										</div>
 
 										<br>
@@ -285,7 +282,6 @@
 					int i=0;
 					while(it.hasNext()&&i<10){
 					MaterialBean mat=(MaterialBean)it.next();
-					//cart.add(mat);//togliere è solo per provare
 					FriendsModelDS friend=new FriendsModelDS(ds);
 					if(friend.isFriend(mat.getUsername(), username)){
 						UserBean us=user.doRetrieveByUsername(mat.getUsername());

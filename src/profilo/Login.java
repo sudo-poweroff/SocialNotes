@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -40,26 +43,20 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-		HttpSession session = request.getSession(true);
-		System.out.println("SSSSSS:"+session.getId());
-		if(session.getAttribute("username")!=null){
-			String username=(String)session.getAttribute("username");
-			UserModelDS role=new UserModelDS(ds);
-			
-			response.sendRedirect("homepage.jsp");
 
+		HttpSession session = request.getSession(true);
+		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+		UserModelDS model= new UserModelDS(ds);
+		if(session.getAttribute("username")!=null){
+			response.sendRedirect("homepage.jsp");
 		}
 		else {
-
-			String login = request.getParameter("login");
+			String usernameEmail = request.getParameter("utente");
 			String pwd = request.getParameter("password");
-			//System.out.println(login);
-			//System.out.println(pwd);
 
 			//validazione
 
-			if(login==null || login.trim().equals("") || pwd==null || pwd.trim().equals("") || !Validation.validatePassword(pwd)) {
+			if(usernameEmail==null || usernameEmail.trim().equals("") || pwd==null || pwd.trim().equals("") || !Validation.validatePassword(pwd)) {
 				String error="Accesso negato";
 				request.setAttribute("error",error);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
@@ -67,29 +64,104 @@ public class Login extends HttpServlet {
 				return;
 			}
 
-			UserModelDS model= new UserModelDS(ds);
+			UserBean bean = null;
 			try {
-				UserBean bean = model.checkLogin(login, pwd);
-				if (bean==null) {
-					String error="Login e/o password non corretti.";
+				bean = model.doRetrieveByUsername(usernameEmail);
+			} catch (SQLException e) {
+				//tento con l'email
+				System.out.println("Non c'e' match con username");
+			}
+
+			if (bean==null){
+				try {
+					bean = model.doRetrieveByEmail(usernameEmail);
+				} catch (SQLException e) {
+					//l'utente non esiste nel DB
+					String error="Utente e/o password non corretti.";
 					request.setAttribute("error",error);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
 					dispatcher.forward(request, response);
 					return;
-
 				}
+			}
+
+      
+      if (!bean.isVerificato()){ //CR2
+				String error="Mail non verificata";
+				request.setAttribute("error",error);
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
+
+			if(bean.getBloccato()!=null){
+				try{
+					long istanteCorrente = System.currentTimeMillis();
+					cal.setTimeInMillis(istanteCorrente);
+					if(bean.getBloccato().after(new Timestamp(cal.getTimeInMillis()))){
+						String error="Sei attualmente bloccato";
+						request.setAttribute("error",error);
+						RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+						dispatcher.forward(request, response);
+						return;
+					}
+				} catch (Exception e){
+					return;
+				}
+			}
+			try {
+				HashMap<String, Integer> bloccati = (HashMap<String, Integer>) session.getAttribute("bloccati");
+        if(!model.checkPassword(bean.getUsername(), pwd)){
+					if(bloccati == null || !bloccati.containsKey(bean.getUsername())){
+						HashMap<String, Integer> temp = new HashMap<>();
+						temp.put(bean.getUsername(), 0);
+						session.setAttribute("bloccati", temp);
+						String error="Login e/o password non corretti";
+						request.setAttribute("error",error);
+						RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+						dispatcher.forward(request, response);
+						return;
+					} else if(bloccati.get(bean.getUsername())==3){
+						try{
+							cal.add(Calendar.MINUTE, 5);
+							long istanteAggiornato = cal.getTimeInMillis();
+							java.sql.Timestamp dataAggiornata = new java.sql.Timestamp(istanteAggiornato);
+							model.doUpdateBloccato(bean.getUsername(), dataAggiornata);
+						} catch (Exception e){
+							e.printStackTrace();
+							return;
+						}
+						String error="Accesso negato, eccessivo numero di tentativi falliti. Riprova tra 5 minuti";
+						request.setAttribute("error",error);
+						RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+						dispatcher.forward(request, response);
+						return;
+					} else {
+						int valoreAttuale = bloccati.get(bean.getUsername());
+						bloccati.put(bean.getUsername(),valoreAttuale+1);
+						String error="Login e/o password non corretti";
+						request.setAttribute("error",error);
+						RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+						dispatcher.forward(request, response);
+						return;
+					}
+				}
+			} catch (SQLException | ServletException | IOException e) {
+          String error="Utente e/o password non corretti.";
+          request.setAttribute("error",error);
+          RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+          dispatcher.forward(request, response);
+          return;
+			}
+
+			try {
 				Date dataAttuale=new Date(System.currentTimeMillis());
-				System.out.println("Data attuale "+dataAttuale);
 				Date ban=bean.getBan();
-				System.out.println("Data ban "+ban);
 				if(bean.getBan()!=null&&bean.getBan().after(dataAttuale)) {
 					System.out.println("Sei bannato");
-					PrintWriter out = response.getWriter();	
+					PrintWriter out = response.getWriter();
 					out.write("Spiacente, sei stato bannato");
-
-				}
-				else {
-					// System.out.println("USERNAME: "+bean.getUsername());		
+				} else {
 					session.setAttribute("username",bean.getUsername());
 					session.setAttribute("nome",bean.getNome());
 					session.setAttribute("cognome",bean.getCognome());
@@ -101,8 +173,7 @@ public class Login extends HttpServlet {
 					session.setAttribute("ban",bean.getBan());
 					session.setAttribute("denominazione",bean.getDenominazione());
 					session.setAttribute("dipName",bean.getDipName());
-					UserModelDS role=new UserModelDS(ds);
-					int userRole=role.getRole(bean.getUsername());
+					int userRole=model.getRole(bean.getUsername());
 
 					session.setAttribute("role", userRole);
 					Collection<MaterialBean>cart=new LinkedList<MaterialBean>();
@@ -124,12 +195,12 @@ public class Login extends HttpServlet {
 				request.setAttribute("error",error);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
 				dispatcher.forward(request, response);
+			}catch (IOException i){
+				i.printStackTrace();
 			}
-
-
-			doGet(request, response);
 		}
 
-
 	}
+
+	Calendar cal = Calendar.getInstance();
 }

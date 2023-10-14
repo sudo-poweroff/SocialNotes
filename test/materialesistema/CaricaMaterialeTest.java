@@ -6,33 +6,25 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 public class CaricaMaterialeTest {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+	  //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+	System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
@@ -54,83 +46,117 @@ public class CaricaMaterialeTest {
   
   @Test
   public void testCaricamentoMaterialeEffettuato() {
-    driver.get("http://localhost:8080/SocialNotes/homepage.jsp");
-    driver.manage().window().setSize(new Dimension(1181, 852));
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1552, 832));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("fry");
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
-    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
-    driver.findElement(By.id("formFile")).click();
-    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\Laboratorio-esempio0.pdf");
-    driver.findElement(By.name("Anteprima")).click();
-    driver.findElement(By.name("Anteprima")).sendKeys("C:\\fakepath\\pngtree-a-pile-of-books-png-image_3271610.png");
-    driver.findElement(By.name("Descrizione")).click();
-    driver.findElement(By.name("Descrizione")).sendKeys("prova laboratorio Mobile programming");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\03.Ispezione.pdf");
+    driver.findElement(By.id("descrizione")).click();
+    driver.findElement(By.id("descrizione")).sendKeys("appunti iges");
     driver.findElement(By.name("Corso")).click();
-    driver.findElement(By.name("Corso")).sendKeys("MP");
+    driver.findElement(By.name("Corso")).sendKeys("IGES");
     driver.findElement(By.cssSelector(".bottone-principale")).click();
     {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
       assert(elements.size() > 0);
     }
   }
+
+  @Test
+  public void testCaricamentoMaterialeCorsoNotPresent() {
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1552, 832));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.id("inputEmail")).sendKeys("simo");
+    driver.findElement(By.id("inputPassword")).click();
+    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\02.cvs.pdf");
+    driver.findElement(By.id("descrizione")).click();
+    driver.findElement(By.id("descrizione")).sendKeys("appunti GPS");
+    driver.findElement(By.name("Corso")).click();
+    driver.findElement(By.name("Corso")).sendKeys("GPS");
+    driver.findElement(By.cssSelector(".bottone-principale")).click();
+    {
+      List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
+      assert(elements.size() > 0);
+    }
+  }
+
+  @Test
+  public void testCaricamentoMaterialeCorsoNotInserted() {
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1552, 832));
+    driver.findElement(By.linkText("Accedi")).click();
+    driver.findElement(By.id("inputEmail")).click();
+    driver.findElement(By.id("inputEmail")).sendKeys("simo");
+    driver.findElement(By.id("inputPassword")).click();
+    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\03.Ispezione.pdf");
+    driver.findElement(By.id("descrizione")).click();
+    driver.findElement(By.id("descrizione")).sendKeys("appuniti iges");
+    driver.findElement(By.cssSelector(".bottone-principale")).click();
+    assertEquals(isAttributePresent(driver.findElement(By.name("Corso")),"required"),true);
+  }
+
+
   @Test
   public void testCaricamentoMaterialeDescrizioneNonPresente() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1936, 1056));
+    driver.manage().window().setSize(new Dimension(1552, 832));
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("fry");
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
-    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
-    driver.findElement(By.id("formFile")).click();
-    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\Laboratorio-esempio0.pdf");
-    driver.findElement(By.name("Anteprima")).click();
-    driver.findElement(By.name("Anteprima")).sendKeys("C:\\fakepath\\pngtree-a-pile-of-books-png-image_3271610.png");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\03.Ispezione.pdf");
+    driver.findElement(By.name("Corso")).click();
+    driver.findElement(By.name("Corso")).sendKeys("IGES");
     driver.findElement(By.cssSelector(".bottone-principale")).click();
     assertEquals(isAttributePresent(driver.findElement(By.id("descrizione")),"required"),true);
   }
   @Test
   public void testCaricamentoMaterialeFileDimensioneEccessiva() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1936, 1056));
+    driver.manage().window().setSize(new Dimension(1552, 832));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).click();
-    driver.findElement(By.id("inputEmail")).sendKeys("fry");
+    driver.findElement(By.id("inputEmail")).sendKeys("simo");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
-    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
-    driver.findElement(By.id("formFile")).click();
-    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\reti di calcolatori e internet - top down.pdf");
+    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\Basi di Dati - Modelli e Linguaggi di interrogazione - Terza edizione.pdf");
     assertThat(driver.switchTo().alert().getText(), is("Dimensione file eccessiva, seleziona un file che sia grande al massimo 50MB"));
   }
   @Test
   public void testCaricamentoMaterialeFileNonInserito() {
-    driver.get("http://localhost:8080/SocialNotes/homepage.jsp");
-    driver.manage().window().setSize(new Dimension(1936, 1056));
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1552, 832));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).click();
-    driver.findElement(By.id("inputEmail")).sendKeys("fry");
+    driver.findElement(By.id("inputEmail")).sendKeys("simo");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
-    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
+    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("descrizione")).click();
+    driver.findElement(By.id("descrizione")).sendKeys("appunti iges");
+    driver.findElement(By.name("Corso")).click();
+    driver.findElement(By.name("Corso")).sendKeys("IGES");
     driver.findElement(By.cssSelector(".bottone-principale")).click();
     assertEquals(isAttributePresent(driver.findElement(By.id("formFile")),"required"),true);
   }
   @Test
   public void testCaricamentoMaterialeFileNonValido() {
-    driver.get("http://localhost:8080/SocialNotes/homepage.jsp");
-    driver.manage().window().setSize(new Dimension(1936, 1056));
+    driver.get("http://localhost:8080/SocialNotes/");
+    driver.manage().window().setSize(new Dimension(1552, 832));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).click();
-    driver.findElement(By.id("inputEmail")).sendKeys("fry");
+    driver.findElement(By.id("inputEmail")).sendKeys("simo");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Despacit0");
-    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
-    driver.findElement(By.id("formFile")).click();
-    driver.findElement(By.id("formFile")).sendKeys("‪C:\\fakepath\\file.dat");
+    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.cssSelector(".btn")).click();
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\chromedriver.exe");
     assertThat(driver.switchTo().alert().getText(), is("Tipo del file non valido"));
   }
 }

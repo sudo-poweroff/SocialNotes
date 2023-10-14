@@ -1,9 +1,6 @@
 package acquisto;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,12 +33,12 @@ public class DownloadZip extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 
 	}
 
-  
-   
+
+
 
 
 
@@ -52,75 +49,44 @@ public class DownloadZip extends HttpServlet {
 		}
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 		MaterialModelDS mModel = new MaterialModelDS(ds);
-		
-		
-		String[] materials = request.getParameterValues("materiale");
-		
-		
-		List<FileBean> fileList = new ArrayList<FileBean>();
-		FileModelDS fileModel=new FileModelDS(ds);
 
-			if(materials!=null){
-				for(String m: materials) {
-					MaterialBean material=null;
+
+		String[] materials = request.getParameterValues("materiale");
+		response.setContentType("application/zip");
+		response.setHeader("Content-Disposition", "attachment; filename=\"SocialNotes.zip\"");
+		ZipOutputStream output = null;
+		byte[] buffer = new byte[16777];
+
+		if(materials!=null){
+			output = new ZipOutputStream(new BufferedOutputStream(response.getOutputStream(), 16777));
+			try {
+				for (String m : materials) {
+					MaterialBean material = null;
 					try {
 						material = mModel.doRetrieveByKey(m);
-	
-						FileBean file=fileModel.doRetrieveByKey(material.getIdFile());
-						fileList.add(file);
+						String filePath = "C:\\Users\\sdell\\projects\\SocialNotes\\material\\" + material.getNomeFile();
+
+						File pdfFile = new File(filePath);
+						InputStream is = new FileInputStream(pdfFile);
+
+
+						output.putNextEntry(new ZipEntry(material.getNomeFile()));
+						for (int length = 0; (length = is.read(buffer)) > 0; ) {
+							output.write(buffer, 0, length);
+						}
+						output.closeEntry();
 					} catch (SQLException e) {
-						System.out.println("Errore nella restituzione di file");
+						e.printStackTrace();
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				response.setContentType("application/zip");
-				response.setHeader("Content-Disposition", "attachment; filename=\"SocialNotes.zip\"");
-
-				ZipOutputStream output = null;
-				byte[] buffer = new byte[16777];
-				try {
-					output = new ZipOutputStream(new BufferedOutputStream(response.getOutputStream(), 16777));
-					for (FileBean file: fileList){
-						InputStream input = null;
-						try {
-							input = new BufferedInputStream(file.getContenuto(),16777);
-
-							output.putNextEntry(new ZipEntry(file.getFilename()));
-							for (int length = 0; (length = input.read(buffer)) > 0;){
-								output.write(buffer, 0, length);
-							}
-							output.closeEntry();
-						}catch(Exception e){
-							e.printStackTrace();
-						}
-						finally{
-							if (input != null)
-								try { input.close(); 
-								}catch (IOException logOrIgnore) {
-									logOrIgnore.printStackTrace();
-								}
-						}
-					}
-					/*
-					 * Acquisto fatto,non è più necessario farlo qua in buyMaterial
-					 * cart.clear();
-					UserModelDS userModel=new UserModelDS(ds);
-					String username=(String)session.getAttribute("username");
-					userModel.doUpdateCoin(username, coin-totale);
-					session.setAttribute("coin", coin-totale);
-					session.setAttribute("cart", cart);
-					String success="Acquisto effettuato con successo";
-					request.setAttribute("success", success);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace(); */
-				}
-				finally{
-					output.close();
-				}
-			}else {
-				response.sendRedirect(response.encodeURL("storicoMateriale.jsp"));
+			}finally {
+				output.close();
 			}
+		}else {
+			response.sendRedirect(response.encodeURL("storicoMateriale.jsp"));
+		}
 	}
 
 }

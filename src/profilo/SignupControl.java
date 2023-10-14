@@ -59,107 +59,80 @@ public class SignupControl extends HttpServlet {
 		else {
 			  
 		
-		String username = request.getParameter("username");
-		String nome = request.getParameter("firstName");
-		String cognome = request.getParameter("lastName");
-		String pwd = request.getParameter("password");
-		String email = request.getParameter("email");
-        String nascita = request.getParameter("nascita");
-		String denomonazione = request.getParameter("uni");
-		String dipName = request.getParameter("corso");
+			String username = request.getParameter("username");
+			String nome = request.getParameter("firstName");
+			String cognome = request.getParameter("lastName");
+			String pwd = request.getParameter("password");
+			String email = request.getParameter("email");
+			String nascita = request.getParameter("nascita");
+			String denomonazione = request.getParameter("uni");
+			String dipName = request.getParameter("corso");
 		
-		System.out.println("data:"+nascita);
-		Date dataNascita = Date.valueOf(nascita);
+			System.out.println("data:"+nascita);
+			Date dataNascita = Date.valueOf(nascita);
+
 		
-		/*try {
-			SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-gg");
-			java.util.Date data = formatter.parse(nascita);
-			dataNascita = new Date(data.getTime());
-		}catch(Exception e) {
-			
-		}*/
+			if(!checkValidity(nome,cognome,username,pwd,email)) {
+				String error = "Spiacenti, la registrazione non e' andata a buon fine.";
+				request.setAttribute("error", error);
+				//Mando una alert
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/signup.jsp");
+				dispatcher.forward(request, response);
+			}else {
+				request.removeAttribute("error");
+			}
+			DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+			UserBean user = new UserBean();
 		
-		
-		if(!checkValidity(nome,cognome,username,pwd,email)) {
-			String error = "Spiacenti, la registrazione non � andata a buon fine.";
-			request.setAttribute("error", error);
-			//Mando una alert 
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/signup.jsp");
-			dispatcher.forward(request, response);	
-		}else {
-			request.removeAttribute("error");
-		}
-		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-		UserBean user = new UserBean();
-		
-		user.setNome(nome);
-		user.setCognome(cognome);
-		user.setUsername(username);
-		user.setPass(pwd);
-		user.setEmail(email);
-		user.setDenominazione(denomonazione);
-		user.setDipName(dipName);
-		user.setDataNascita(dataNascita);
-		user.setCoin(50);
-		user.setRuolo(0);
-		String path=getServletContext().getResource("/img/avatar7.png").getPath();
-		File file=new File(path);
-		InputStream image=new FileInputStream(file);
-		
-		UserModelDS model= new UserModelDS(ds);
+			user.setNome(nome);
+			user.setCognome(cognome);
+			user.setUsername(username);
+			user.setPass(pwd);
+			user.setEmail(email);
+			user.setDenominazione(denomonazione);
+			user.setDipName(dipName);
+			user.setDataNascita(dataNascita);
+			user.setCoin(50);
+			user.setRuolo(0);
+			String path=getServletContext().getResource("/img/avatar7.png").getPath();
+			File file=new File(path);
+			InputStream image=new FileInputStream(file);
+
+			UserModelDS model= new UserModelDS(ds);
 	
 		
 			try {
 				model.doSave(user);
-				
-			    String from = "socialnotes2021@gmail.com";
-		        String pass = "Despacito21";
-		        String[] to = { user.getEmail() }; // list of recipient email addresses
-		        String subject = "CONFERMA DI AVVENUTA REGISTRAZIONE SU Social Notes";
-		        String body = "Ciao! , "+user.getUsername()+ "  Il team di SocialNotes � lieto di accoglierti sul sito!";
-				
-		        SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
-		        sendEmail.SendMail();
-		        
-		        
+
+				String from = "socialnotes2021@gmail.com";
+				String pass = "fxyffsvvabkrvqrj";
+				String[] to = { user.getEmail() }; // list of recipient email addresses
+				String subject = "CONFERMA DI AVVENUTA REGISTRAZIONE SU Social Notes";
+				String body = "Ciao "+user.getUsername()+ " ! Il team di SocialNotes e' lieto di accoglierti sul sito! Verifica la tua mail tramite questo link:\n"+
+															"http://localhost:8080/SocialNotes/Verifica?username="+user.getUsername()+"&mail="+user.getEmail()+"&accessNumber=0";
+
+				SendEmail sendEmail = new SendEmail(from,pass,to,subject,body);
+				sendEmail.SendMail();
+
+
 				 model.doUpdateImage(username, image);
-				user=model.doRetrieveByUsername(username);
+				 user=model.doRetrieveByUsername(username);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				//System.out.println("ho lanciato l'eccezione");
-				String error = "Spiacenti, la registrazione non � andata a buon fine.";
+				String error = "Spiacenti, la registrazione non e' andata a buon fine.";
 				request.setAttribute("error", error);
-				//Mando una alert 
+				//Mando una alert
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/signup.jsp");
 				dispatcher.forward(request, response);
 				e.printStackTrace();
 			}
-		//	System.out.println("Ciao");
-	
-			session.setAttribute("username",user.getUsername());
-			session.setAttribute("nome",user.getNome());
-			session.setAttribute("cognome",user.getCognome());
-			session.setAttribute("img",user.getImg());
-			session.setAttribute("email",user.getEmail());
-			session.setAttribute("password",user.getPass());
-			session.setAttribute("dataNascita",user.getDataNascita());
-			session.setAttribute("coin",user.getCoin());
-			session.setAttribute("ban",user.getBan());
-			session.setAttribute("denominazione",user.getDenominazione());
-			session.setAttribute("dipName",user.getDipName());
-			session.setAttribute("role",user.getRuolo());
-			System.out.println("Ruolo in sessione:"+session.getAttribute("role"));
-		    System.out.println("ID SESSIONE:"+session.getId());
-			Collection<MaterialBean>cart=new LinkedList<MaterialBean>();
-			session.setAttribute("cart", cart);
-		
-				String link = "setInteressi.jsp";
-				 String encodedURL = response.encodeRedirectURL(link);
-				 response.sendRedirect(encodedURL);
-		
-		
+
+			String link = "Success.jsp";
+			String encodedURL = response.encodeRedirectURL(link);
+			response.sendRedirect(encodedURL);
 		  
-		doGet(request, response);
+			doGet(request, response);
 		}
 	}
 	//Da migliorare il filtro

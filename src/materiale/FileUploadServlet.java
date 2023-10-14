@@ -1,7 +1,6 @@
 package materiale;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Date;
 import java.sql.SQLException;
 
@@ -37,54 +36,60 @@ public class FileUploadServlet extends HttpServlet {
 		InputStream is = null; // input stream of the upload file
 
 		// obtains the upload file part in this multipart request
-		FileBean file=new FileBean();
 		MaterialBean material=new MaterialBean();
 		Part filePart = request.getPart("Contenuto");
-		Part materialPart=request.getPart("Anteprima");
 		if (filePart != null) {
-			// prints out some information for debugging
-			//System.out.println(filePart.getName());
-			//System.out.println(filePart.getSize());
-			//System.out.println(filePart.getContentType());
-			//inserimento informazioni nel filebean
-			file.setFilename(filePart.getSubmittedFileName());
-			file.setFormato(filePart.getContentType());
-			file.setDimensione((int)filePart.getSize());
-			is=filePart.getInputStream();
-			file.setContenuto(is);
-			
-			//inserimento informazioni nel materialBean
-			if(materialPart!=null) {
-				Date dataCaricamento = new Date(System.currentTimeMillis());
-				material.setDataCaricamento(dataCaricamento);
-				String descrizione=(String)request.getParameter("Descrizione");
-				System.out.println("Descrizione "+descrizione);
-				material.setDescrizione(descrizione);
-				material.setHidden(true);
-				//ottengo la chiave esterna codiceCorso
-				DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-				CourseModelDS course=new CourseModelDS(ds);
-				String nome=(String) request.getParameter("Corso");
-				System.out.println("nome corso in fileupserv: "+nome);
-				int codiceCorso=course.doRetrieveByName(nome,(String) session.getAttribute("dipName"),(String) session.getAttribute("denominazione"));
-				//continuo inserimento dati
-				material.setCodiceCorso(codiceCorso);
-				material.setUsername((String)session.getAttribute("username"));
-				is=materialPart.getInputStream();
-				material.setAnteprima(is);	
-				
+			//salvataggio del file nella cartella del server
+			String savePath="C:\\Users\\sdell\\projects\\SocialNotes\\material";
+			File directory = new File(savePath);
+
+			//ottengo il numero di file salvati nella directory per evitare di avere errori in fase di salvataggio dovuti a file con lo stesso nome
+			int fileCount=0;
+			if (directory.exists() && directory.isDirectory()) {
+				File[] files = directory.listFiles();
+				fileCount = files.length;
+				fileCount++;
 			}
+
+			//ottengo il nome del file e lo salvo nella cartella del server
+			String fileName = filePart.getSubmittedFileName();
+			fileName=fileName.substring(0,fileName.length()-4)+"_"+fileCount+".pdf";
+			String filePath = savePath + File.separator + fileName;
+			try (InputStream input = filePart.getInputStream();
+				 OutputStream output = new FileOutputStream(filePath)) {
+
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length = input.read(buffer)) > 0) {
+					output.write(buffer, 0, length);
+				}
+			}
+
+			//inserimento informazioni nel materialBean
+			Date dataCaricamento = new Date(System.currentTimeMillis());
+			material.setDataCaricamento(dataCaricamento);
+			String descrizione=request.getParameter("Descrizione");
+			material.setDescrizione(descrizione);
+			material.setHidden(true);
+
+			//ottengo la chiave esterna codiceCorso
+			DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+			CourseModelDS course=new CourseModelDS(ds);
+			String nome=request.getParameter("Corso");
+			int codiceCorso=course.doRetrieveByName(nome);
+
+			//continuo inserimento dati
+			material.setCodiceCorso(codiceCorso);
+			material.setUsername((String)session.getAttribute("username"));
+			material.setNomeFile(fileName);
+
 		}
 
 
 
 		DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
-		FileModelDS fileModel= new FileModelDS(ds);
 		MaterialModelDS materialModel=new MaterialModelDS(ds);
 		try {
-			fileModel.doSave(file);
-			int idFile=fileModel.doRetrieveKey();
-			material.setIdFile(idFile);
 			materialModel.doSave(material);
 			String success = "Il materiale è stato caricato correttamente!";
 			request.setAttribute("success", success);

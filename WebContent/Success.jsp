@@ -58,13 +58,8 @@ i {
 
 <body>
 <%
-
-if (session.getAttribute("username")==null)
-	response.sendRedirect("signup.jsp");
-else{
-	
-	String linkHomepage= "homepage_user.jsp";
-	 String encodedURL = response.encodeURL(linkHomepage);
+	String linkHomepage= "homepage.jsp";
+	String encodedURL = response.encodeURL(linkHomepage);
 %>
 
 
@@ -79,8 +74,5 @@ else{
 		<br>
 		<button class="btn btn-principale btn-lg" onclick="window.location.href='<%=encodedURL%>'">Vai alla Home</button>
 	</div>
-<%
-}
-%>
 </body>
 </html>
