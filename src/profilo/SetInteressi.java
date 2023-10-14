@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -52,9 +53,11 @@ public class SetInteressi extends HttpServlet {
             String[] interessi = objectMapper.readValue(jsonData, String[].class);
             for (int i = 0; i < interessi.length; i++) {
                 try{
+                    Date dataInserimento = new Date(System.currentTimeMillis());
                     InteresseBean interesse = new InteresseBean();
                     interesse.setUsername(username);
                     interesse.setCodiceCorso(Integer.parseInt(interessi[i]));
+                    interesse.setDataInserimento(dataInserimento);
                     interesseModel.doSave(interesse);
                 } catch (Exception e) {
                     e.printStackTrace();

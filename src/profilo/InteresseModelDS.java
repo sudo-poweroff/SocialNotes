@@ -21,12 +21,13 @@ public class InteresseModelDS {
             throw new NullPointerException();
         Connection con =null;
         PreparedStatement ps=null;
-        String sql="INSERT INTO Interesse(Username,CodiceCorso) values (?,?);";
+        String sql="INSERT INTO Interesse(Username,CodiceCorso,DataInserimento) values (?,?,?);";
         try{
             con=ds.getConnection();
             ps=con.prepareStatement(sql);
             ps.setString(1,interesse.getUsername());
             ps.setInt(2,interesse.getCodiceCorso());
+            ps.setDate(3,interesse.getDataInserimento());
             ps.executeUpdate();
         }finally {
             try {
@@ -59,6 +60,7 @@ public class InteresseModelDS {
                 InteresseBean bean=new InteresseBean();
                 bean.setUsername(rs.getString("Username"));
                 bean.setCodiceCorso(rs.getInt("CodiceCorso"));
+                bean.setDataInserimento(rs.getDate("DataInserimento"));
                 interessi.add(bean);
             }
         }finally {
@@ -92,6 +94,7 @@ public class InteresseModelDS {
                 InteresseBean bean=new InteresseBean();
                 bean.setUsername(rs.getString("Username"));
                 bean.setCodiceCorso(rs.getInt("CodiceCorso"));
+                bean.setDataInserimento(rs.getDate("DataInserimento"));
                 interessi.add(bean);
             }
         }finally {
@@ -129,7 +132,7 @@ public class InteresseModelDS {
 
     public ArrayList<CourseBean> doRetrieveNewInteressi(String Username) throws SQLException {
         if(Username==null||Username.equals(""))
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         ArrayList<CourseBean>newInteressi=new ArrayList<>();
         Connection con=null;
         PreparedStatement ps=null;
@@ -163,7 +166,7 @@ public class InteresseModelDS {
 
     public ArrayList<CourseBean> getInteressi(String Username) throws SQLException {
         if(Username==null||Username.equals(""))
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         ArrayList<CourseBean>interessi=new ArrayList<>();
         Connection con=null;
         PreparedStatement ps=null;

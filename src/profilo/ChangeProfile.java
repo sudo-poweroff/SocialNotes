@@ -312,7 +312,9 @@ public class ChangeProfile extends HttpServlet {
 			InteresseModelDS interesseModel=new InteresseModelDS(ds);
 			boolean esito=true;
 			for(int i=0;i<addInteressi.length;i++) {
+				Date dataInserimento = new Date(System.currentTimeMillis());
 				InteresseBean bean=new InteresseBean();
+				bean.setDataInserimento(dataInserimento);
 				bean.setUsername(username);
 				bean.setCodiceCorso(Integer.parseInt(addInteressi[i]));
 				try {
