@@ -99,9 +99,9 @@
 	  documentPreviewLink=response.encodeURL(documentPreviewLink);
 	  addCartLink = response.encodeURL(addCartLink);
   }
-  
-  
-  Collection<MaterialBean> materials=null;
+
+
+		Collection<MaterialBean> materials=material.doRetrieveByOrderDate();
 %>
 
 	<%@ include file="header_user.jsp"%>

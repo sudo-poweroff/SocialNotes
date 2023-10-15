@@ -50,6 +50,7 @@
 <%
 	String errore = (String) request.getAttribute("error");
 	if (errore != null) {
+%>
 
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Attenzione!</strong> <small><%=errore%></small>
