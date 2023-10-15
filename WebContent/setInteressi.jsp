@@ -23,10 +23,14 @@
 <%
     if (session.getAttribute("username")==null)
         response.sendRedirect("login.jsp");
-    if((int)session.getAttribute("accessNumber")!=0)
-        response.sendRedirect("homepage_user.jsp");
-    else
+    else if(session.getAttribute("accessNumber")!=null && (int)session.getAttribute("accessNumber")!=0) {
         session.removeAttribute("accessNumber");
+        response.sendRedirect("homepage_user.jsp");
+    }
+    else if (session.getAttribute("accessNumber")==null)
+        response.sendRedirect("homepage_user.jsp");
+
+
     DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 %>
 <h1 class="h3 mb-3 font-weight-normal">Inserisci i tuoi interessi</h1>
