@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,9 +43,16 @@ public class PrintAnteprima extends HttpServlet {
 			MaterialBean bean=material.doRetrieveByKey(code);
 
 			String fileName=bean.getNomeFile();
-			String filePath="C:\\Users\\sdell\\projects\\SocialNotes\\material\\"+fileName;
+			String relativePath="WebContent\\material\\";
+			ServletContext context = request.getServletContext();
+			String absolutePath = context.getRealPath("");
+			String[] path=absolutePath.split("\\\\");
+			String effectivePath="";
+			for(int i=0;i<path.length-3;i++)
+				effectivePath+=path[i]+"\\";
+			effectivePath+=relativePath+fileName;
 
-			PDDocument document = PDDocument.load(new File(filePath));
+			PDDocument document = PDDocument.load(new File(effectivePath));
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
 
 			// Estrai la pagina come immagine

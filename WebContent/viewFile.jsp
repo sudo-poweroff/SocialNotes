@@ -17,10 +17,17 @@
 	response.setHeader("Content-Disposition", "filename="+fileName);//attachment dopo la virgola per scaricare direttamente
 	response.setContentType("application/pdf");
 	System.out.println(fileName);
-	String filePath="C:\\Users\\sdell\\projects\\SocialNotes\\material\\"+fileName;
+		String relativePath="WebContent\\material\\";
+		ServletContext context = request.getServletContext();
+		String absolutePath = context.getRealPath("");
+		String[] path=absolutePath.split("\\\\");
+		String effectivePath="";
+		for(int i=0;i<path.length-3;i++)
+			effectivePath+=path[i]+"\\";
+		effectivePath+=relativePath+fileName;
 
 		try{
-			File pdfFile = new File(filePath);
+			File pdfFile = new File(effectivePath);
 			InputStream is = new FileInputStream(pdfFile);
 
 			OutputStream outStream = response.getOutputStream();
