@@ -1,6 +1,7 @@
 package profilo;
 
 import materiale.CourseBean;
+import materiale.MaterialBean;
 import org.checkerframework.checker.units.qual.A;
 
 import javax.sql.DataSource;
@@ -18,7 +19,7 @@ public class InteresseModelDS {
 
     public void doSave(InteresseBean interesse)throws SQLException {
         if(interesse==null)
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         Connection con =null;
         PreparedStatement ps=null;
         String sql="INSERT INTO Interesse(Username,CodiceCorso,DataInserimento) values (?,?,?);";
@@ -45,7 +46,7 @@ public class InteresseModelDS {
 
     public ArrayList<InteresseBean> doRetrieveByUsername(String username) throws SQLException {
         if(username==null||username.equals(""))
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         Connection con=null;
         PreparedStatement ps=null;
         ResultSet rs=null;
@@ -79,7 +80,7 @@ public class InteresseModelDS {
     }
     public ArrayList<InteresseBean> doRetrieveByCorso(int codiceCorso) throws SQLException {
         if(codiceCorso<0)
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         Connection con=null;
         PreparedStatement ps=null;
         ResultSet rs=null;
@@ -113,7 +114,7 @@ public class InteresseModelDS {
     }
     public  void doDelete(String username,int codiceCorso) throws SQLException {
         if(username==null||username.equals("")||codiceCorso<0)
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         Connection con=null;
         PreparedStatement ps=null;
         String sql="DELETE FROM Interesse WHERE Username=? AND CodiceCorso=?";
@@ -198,5 +199,53 @@ public class InteresseModelDS {
         return interessi;
     }
 
+    public ArrayList<MaterialBean> doRetrieveMaterialByInteressi(String username) throws SQLException {
+        if(username==null||username.equals(""))
+            throw new IllegalArgumentException();
+        ArrayList<MaterialBean> materials=new ArrayList<>();
+        Connection con=null;
+        PreparedStatement ps=null;
+        String sql="SELECT CodiceCorso FROM interesse WHERE Username=? ORDER BY DataInserimento DESC;";
+        try {
+            con=ds.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,username);
+            ResultSet rs=ps.executeQuery();
+            int i=0;
+            while(rs.next()&&i<3) {
+                PreparedStatement psMat=null;
+                String sqlMat="SELECT * FROM materiale WHERE CodiceCorso=? AND Username!=? AND Hidden=false ORDER BY DataCaricamento DESC LIMIT 3";
+                psMat=con.prepareStatement(sqlMat);
+                psMat.setInt(1,rs.getInt("CodiceCorso"));
+                psMat.setString(2,username);
+                ResultSet rsMat=psMat.executeQuery();
+                while(rsMat.next()) {
+                    MaterialBean bean = new MaterialBean();
+                    bean.setCodiceMateriale(rsMat.getInt("CodiceMateriale"));
+                    bean.setDataCaricamento(rsMat.getDate("DataCaricamento"));
+                    bean.setKeywords(rsMat.getString("Keywords"));
+                    bean.setCosto(rsMat.getInt("Costo"));
+                    bean.setDescrizione(rsMat.getString("Descrizione"));
+                    bean.setHidden(rsMat.getBoolean("Hidden"));
+                    bean.setCodiceCorso(rsMat.getInt("CodiceCorso"));
+                    bean.setUsername(rsMat.getString("Username"));
+                    bean.setNomeFile(rsMat.getString("nomeFile"));
+                    materials.add(bean);
+                }
+                i++;
+            }
+        }
+        finally {
+            try {
+                if(ps!=null)
+                    ps.close();
+            }
+            finally {
+                if(con!=null)
+                    con.close();
+            }
+        }
+        return materials;
+    }
 
 }
