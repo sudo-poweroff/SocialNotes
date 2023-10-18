@@ -1,6 +1,9 @@
 package profilo;
 
+import com.sun.source.tree.AssertTree;
 import materiale.CourseBean;
+import materiale.MaterialBean;
+import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 import org.dbunit.Assertion;
 import org.dbunit.DataSourceBasedDBTestCase;
@@ -103,7 +106,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
            interesseModel.doRetrieveByUsername(null);
-        }catch (NullPointerException e){
+        }catch (IllegalArgumentException e){
             flag=true;
         }
         assertTrue(flag);
@@ -115,7 +118,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
             interesseModel.doRetrieveByUsername("");
-        }catch (NullPointerException e){
+        }catch (IllegalArgumentException e){
             flag=true;
         }
         assertTrue(flag);
@@ -175,7 +178,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
             interesseModel.doSave(null);
-        }catch(NullPointerException e){flag=true;}
+        }catch(IllegalArgumentException e){flag=true;}
         assertTrue(flag);
     }
 
@@ -208,7 +211,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
             interesseModel.doDelete(null,3);
-        }catch (NullPointerException e){
+        }catch (IllegalArgumentException e){
             flag=true;
         }
         assertTrue(flag);
@@ -220,7 +223,7 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
             interesseModel.doDelete("",3);
-        }catch (NullPointerException e){
+        }catch (IllegalArgumentException e){
             flag=true;
         }
         assertTrue(flag);
@@ -319,6 +322,98 @@ public class InteresseModelDSTest extends DataSourceBasedDBTestCase {
         boolean flag=false;
         try{
             interesseModel.getInteressi("");
+        }catch (IllegalArgumentException e){
+            flag=true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testDoRetrieveMaterialByInteressiOk() throws SQLException {
+        ArrayList<MaterialBean> materialByInteressi=interesseModel.doRetrieveMaterialByInteressi("sime00");
+        ArrayList<MaterialBean> expected=new ArrayList<>();
+        MaterialBean m1=new MaterialBean();
+        m1.setCodiceMateriale(1);
+        m1.setDataCaricamento(Date.valueOf("2021-03-20"));
+        m1.setCosto(10);
+        m1.setDescrizione("Appunti programmazione 1");
+        m1.setHidden(false);
+        m1.setCodiceCorso(3);
+        m1.setUsername("fry");
+        m1.setNomeFile("appuntiP1.pdf");
+        expected.add(m1);
+
+        MaterialBean m2=new MaterialBean();
+        m2.setCodiceMateriale(3);
+        m2.setDataCaricamento(Date.valueOf("2021-08-26"));
+        m2.setCosto(15);
+        m2.setDescrizione("lezione 16");
+        m2.setHidden(false);
+        m2.setCodiceCorso(46);
+        m2.setUsername("alfonso00");
+        m2.setNomeFile("lezione16IGES.pdf");
+        expected.add(m2);
+
+        MaterialBean m3=new MaterialBean();
+        m3.setCodiceMateriale(6);
+        m3.setDataCaricamento(Date.valueOf("2021-04-26"));
+        m3.setCosto(50);
+        m3.setDescrizione("lezione 20");
+        m3.setHidden(false);
+        m3.setCodiceCorso(46);
+        m3.setUsername("alfonso00");
+        m3.setNomeFile("lezione20IGES.pdf");
+        expected.add(m3);
+
+        MaterialBean m4=new MaterialBean();
+        m4.setCodiceMateriale(4);
+        m4.setDataCaricamento(Date.valueOf("2021-01-03"));
+        m4.setCosto(20);
+        m4.setDescrizione("lezione 17");
+        m4.setHidden(false);
+        m4.setCodiceCorso(46);
+        m4.setUsername("alfonso00");
+        m4.setNomeFile("lezione17IGES.pdf");
+        expected.add(m4);
+
+
+
+        assertEquals(materialByInteressi.size(),expected.size());
+        for (int i=0;i<materialByInteressi.size();i++) {
+            assertEquals(materialByInteressi.get(i).getCodiceMateriale(),expected.get(i).getCodiceMateriale() );
+            assertEquals(materialByInteressi.get(i).getDataCaricamento(),expected.get(i).getDataCaricamento() );
+            assertEquals(materialByInteressi.get(i).getKeywords(),expected.get(i).getKeywords());
+            assertEquals(materialByInteressi.get(i).getCosto(),expected.get(i).getCosto());
+            assertEquals(materialByInteressi.get(i).getDescrizione(),expected.get(i).getDescrizione() );
+            assertEquals(materialByInteressi.get(i).isHidden(),expected.get(i).isHidden() );
+            assertEquals(materialByInteressi.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso() );
+            assertEquals(materialByInteressi.get(i).getUsername(),expected.get(i).getUsername() );
+            assertEquals(materialByInteressi.get(i).getNomeFile(), expected.get(i).getNomeFile());
+        }
+    }
+
+    @Test
+    public void testDoRetrieveMaterialByInteressiUsernameNonPresente() throws SQLException {
+        ArrayList<MaterialBean> materialByInteressi=interesseModel.doRetrieveMaterialByInteressi("ab");
+        assertEquals(materialByInteressi.size(),0);
+    }
+
+    @Test
+    public void testDoRetrieveMaterialByInteressiUsernameNull() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.doRetrieveMaterialByInteressi(null);
+        }catch (IllegalArgumentException e){
+           flag=true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testDoRetrieveMaterialByInteressiEmptyUsername() throws SQLException {
+        boolean flag=false;
+        try{
+            interesseModel.doRetrieveMaterialByInteressi("");
         }catch (IllegalArgumentException e){
             flag=true;
         }
