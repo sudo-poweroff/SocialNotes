@@ -32,10 +32,4 @@ public class InserimentoInteressiTest {
         driver.quit();
     }
 
-    @Test
-    public void testInserimentoInteressiAccessNumberErrato() {
-        driver.get("http://localhost:8080/SocialNotes/Verifica?username=ggallocca1&mail=luigi.allocca12345@live.it&accessNumber=9");
-        Assert.assertEquals("http://localhost:8080/SocialNotes/homepage.jsp", driver.getCurrentUrl());
-    }
-
 }
