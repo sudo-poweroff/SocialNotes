@@ -3,6 +3,7 @@ package materiale;
 
 import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
@@ -117,7 +118,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	@Test
 	public void testDoRetrieveByNameNotPresent() throws Exception  {
 		int codiceCorso = course.doRetrieveByName("ADE3");
-		assertEquals(codiceCorso, 1);
+		assertEquals(codiceCorso, -1);
 	}
 
 	@Test
@@ -146,7 +147,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 	@Test
 	public void testDoSave() throws Exception{
 		CourseBean bean=new CourseBean();
-		bean.setCodiceCorso(2);
+		bean.setCodiceCorso(1);
 		bean.setNome("Glottologia");
 		bean.setNomeDipartimento("Dipartimento di \'Lettere Lingue Arti\'. Italianistica e culture comparate");
 		bean.setDenominazione("Politecnico di Milano");
@@ -156,7 +157,7 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));
 
 	}
-	
+
 	
 	@Test
 	public void testDoSaveNull() throws SQLException {
@@ -168,5 +169,54 @@ public class CourseModelDSTest extends DataSourceBasedDBTestCase{
 		}
 		assertTrue(flag);
 	}
+
+	@Test
+	public void testDoRetrieveAllPresent(){
+		ArrayList<CourseBean> courses=course.doRetrieveAll();
+		ArrayList<CourseBean> expected= new ArrayList<>();
+		CourseBean b1=new CourseBean();
+		b1.setCodiceCorso(3);
+		b1.setNome("programmazione1");
+		b1.setNomeDipartimento("Dipartimento di Informatica");
+		b1.setDenominazione("Universita' Degli Studi Di Salerno");
+		expected.add(b1);
+
+		CourseBean b2=new CourseBean();
+		b2.setCodiceCorso(4);
+		b2.setNome("architettura degli elaboratori");
+		b2.setNomeDipartimento("Dipartimento di Informatica");
+		b2.setDenominazione("Universita' Degli Studi Di Salerno");
+		expected.add(b2);
+
+		CourseBean b3=new CourseBean();
+		b3.setCodiceCorso(5);
+		b3.setNome("progettazione di algoritmi");
+		b3.setNomeDipartimento("Dipartimento di Informatica");
+		b3.setDenominazione("Universita' Degli Studi Di Salerno");
+		expected.add(b3);
+
+		CourseBean b4=new CourseBean();
+		b4.setCodiceCorso(6);
+		b4.setNome("cddc");
+		b4.setNomeDipartimento("Dipartimento di Informatica");
+		b4.setDenominazione("Universita' Degli Studi Di Salerno");
+		expected.add(b4);
+
+		assertEquals(courses.size(),expected.size());
+		for(int i=0;i<courses.size();i++){
+			assertEquals(courses.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso());
+			assertEquals(courses.get(i).getNome(),expected.get(i).getNome());
+			assertEquals(courses.get(i).getNomeDipartimento(),expected.get(i).getNomeDipartimento());
+			assertEquals(courses.get(i).getDenominazione(),expected.get(i).getDenominazione());
+		}
+	}
+
+	@Test
+	public void testDoRetrieveAllNotPresent() throws SQLException {
+		ds.getConnection().prepareStatement("DELETE FROM Corso WHERE CodiceCorso IN (3,4,5,6)").execute();
+		ArrayList<CourseBean> courses=course.doRetrieveAll();
+		assertEquals(courses.size(),0);
+	}
+
 
 }

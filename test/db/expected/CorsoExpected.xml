@@ -4,7 +4,7 @@
     <Corso CodiceCorso="3" Nome="programmazione1" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
     <Corso CodiceCorso="4" Nome="architettura degli elaboratori" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
     <Corso CodiceCorso="5" Nome="progettazione di algoritmi" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
-    <Corso CodiceCorso="2" Nome="Glottologia" NomeDipartimento="Dipartimento di 'Lettere Lingue Arti'. Italianistica e culture comparate" Denominazione="Politecnico di Milano" />
+    <Corso CodiceCorso="1" Nome="Glottologia" NomeDipartimento="Dipartimento di 'Lettere Lingue Arti'. Italianistica e culture comparate" Denominazione="Politecnico di Milano" />
     
 
 
