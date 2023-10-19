@@ -84,8 +84,19 @@ public class FileUploadServlet extends HttpServlet {
 			DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
 			CourseModelDS course=new CourseModelDS(ds);
 			String nome=request.getParameter("Corso");
-			int codiceCorso=course.doRetrieveByName(nome,(String) session.getAttribute("dipName"),(String) session.getAttribute("denominazione"));
-
+			int codiceCorso=course.doRetrieveByName(nome);
+			if(codiceCorso==-1) {
+				CourseBean newCourse=new CourseBean();
+				newCourse.setNome(nome);
+				newCourse.setNomeDipartimento((String) session.getAttribute("dipName"));
+				newCourse.setDenominazione((String) session.getAttribute("denominazione"));
+				try {
+					course.doSave(newCourse);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				codiceCorso=course.doRetrieveByName(nome);
+			}
 			//continuo inserimento dati
 			material.setCodiceCorso(codiceCorso);
 			material.setUsername((String)session.getAttribute("username"));

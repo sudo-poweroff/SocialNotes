@@ -71,7 +71,7 @@ public class CourseModelDS {
 	}
 
 
-	public int doRetrieveByName(String name,String nomeDipatimento,String denominazione)  {
+	public int doRetrieveByName(String name)  {
 		if(name==null||name.equals(""))
 			throw new NullPointerException();
 		Connection con=null;
@@ -86,18 +86,6 @@ public class CourseModelDS {
 			rs=ps.executeQuery();
 			if(rs.next())
 				return rs.getInt("CodiceCorso");
-			else {
-				CourseBean course=new CourseBean();
-				course.setNome(name);
-				course.setNomeDipartimento(nomeDipatimento);
-				course.setDenominazione(denominazione);
-				CourseModelDS newCourse=new CourseModelDS(ds);
-				newCourse.doSave(course);
-				rs=ps.executeQuery();
-				if(rs.next())
-					return rs.getInt("CodiceCorso");
-			}
-
 
 
 		} catch (SQLException e) {
