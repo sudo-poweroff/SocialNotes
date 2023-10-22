@@ -1,15 +1,3 @@
-<%-- <%@page import="java.io.InputStream"%>
-<%@page import="profilo.*"%>
-<%@page import="materiale.*"%>
-<%@page import="java.util.Collection"%>
-<%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@page import="javax.sql.DataSource"%>
-<%@page import="com.mysql.cj.jdbc.Blob"%>
-<%@page import="java.sql.Date"%>
-<%@page import="java.util.concurrent.TimeUnit"%>--%>
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="java.util.*,javax.sql.DataSource,com.mysql.cj.jdbc.Blob,java.sql.Date,java.io.InputStream,
     profilo.*,materiale.*,javax.sql.DataSource,java.util.concurrent.TimeUnit,acquisto.*"%>
@@ -99,9 +87,12 @@
 	  documentPreviewLink=response.encodeURL(documentPreviewLink);
 	  addCartLink = response.encodeURL(addCartLink);
   }
-  
-  
-  Collection<MaterialBean> materials=null;
+  	InteresseModelDS interessi=new InteresseModelDS(ds);
+	ArrayList<MaterialBean> interestMaterials=interessi.doRetrieveMaterialByInteressi(username);
+	Collection<MaterialBean> materials=material.doRetrieveByOrderDate();
+
+
+
 %>
 
 	<%@ include file="header_user.jsp"%>
@@ -276,21 +267,97 @@
 
 					</div>
 				</div>
+				<div class="h5 m-0 text-blue">Materiale consigliato</div>
+				<br>
 				<%
+				if(interestMaterials!=null && interestMaterials.size()>0){
+					Iterator<?> it=interestMaterials.iterator();
+					while (it.hasNext()){
+					MaterialBean mat=(MaterialBean)it.next();
+					UserBean us=user.doRetrieveByUsername(mat.getUsername());
+					Date dataAttuale = new Date(System.currentTimeMillis());
+					Date dataCaricamento=mat.getDataCaricamento();
+					long diffInMillies=dataAttuale.getTime()-dataCaricamento.getTime();
+					long diff=TimeUnit.DAYS.convert(diffInMillies,TimeUnit.MILLISECONDS);
+				%>
+				<div class="card social-timeline-card">
+					<div class="card-header">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="d-flex justify-content-between align-items-center">
+								<div class="mr-2">
+									<img class="rounded-circle"src="PrintImage?username=<%=mat.getUsername() %>" alt="ciao" width="45">
+								</div>
+								<div class="ml-2">
+									<div class="h5 m-0 text-blue"><%=mat.getUsername() %></div>
+									<div class="h7 text-muted"><%=us.getNome() %> <%=us.getCognome() %></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="text-muted h7 mb-2">
+							<i class="fa fa-clock-o"></i><%=diff %> days ago
+						</div>
+
+						<%   documentPreviewLink =response.encodeURL("documentPreview.jsp?codice="+mat.getCodiceMateriale());
+
+						%>
+
+						<a href="<%=documentPreviewLink%>">	<h5 class="card-title"><%=mat.getDescrizione() %></h5></a> <img
+							src="PrintAnteprima?codice=<%=mat.getCodiceMateriale() %>" height="500px" width="500px"
+							class="img-fluid">
+					</div>
+					<div class="card-footer">
+						<%
+							//verifico se l'utente ha già comprato quel materiale
+
+							PurchaseModelDS acquistiModel = new PurchaseModelDS(ds);
+							Collection<PurchaseBean> acquistiEffettuati = acquistiModel.doRetrieveByUsername(username);
+
+							boolean acquistato=false;
+							for(PurchaseBean acquisto : acquistiEffettuati){
+							if(acquisto.getCodiceMateriale()==mat.getCodiceMateriale())
+							acquistato=true;
+							}
+
+							if(acquistato){
+
+						%>
+
+						<a href="<%=response.encodeURL("storicoMateriale.jsp")%>" style="color:#9697e7">Visualizza tra gli acquisti </a>
+
+						<%
+							}else{
+						%>
+						<a href="<%=addCartLink%>?codice=<%=mat.getCodiceMateriale() %>&url=homepage_user.jsp" style="color:#9697e7">Aggiungi al carello <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+							<path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+						</svg></a>
+						<%
+							}
+						%>
+					</div>
+				</div>
+
+				<%
+					}
+				}
+
 				if(materials!=null&&materials.size()>0){
 					Iterator<?> it=materials.iterator();
 					int i=0;
 					while(it.hasNext()&&i<10){
-					MaterialBean mat=(MaterialBean)it.next();
-					FriendsModelDS friend=new FriendsModelDS(ds);
-					if(friend.isFriend(mat.getUsername(), username)){
-						UserBean us=user.doRetrieveByUsername(mat.getUsername());
-						Date dataAttuale = new Date(System.currentTimeMillis());
-						Date dataCaricamento=mat.getDataCaricamento();
-						long diffInMillies=dataAttuale.getTime()-dataCaricamento.getTime();
-						long diff=TimeUnit.DAYS.convert(diffInMillies,TimeUnit.MILLISECONDS);
-						i++;
+						MaterialBean mat=(MaterialBean)it.next();
+						FriendsModelDS friend=new FriendsModelDS(ds);
+						if(friend.isFriend(mat.getUsername(), username)){
+							UserBean us=user.doRetrieveByUsername(mat.getUsername());
+							Date dataAttuale = new Date(System.currentTimeMillis());
+							Date dataCaricamento=mat.getDataCaricamento();
+							long diffInMillies=dataAttuale.getTime()-dataCaricamento.getTime();
+							long diff=TimeUnit.DAYS.convert(diffInMillies,TimeUnit.MILLISECONDS);
+							i++;
 				%>
+				<div class="h5 m-0 text-blue">Materiale amici</div>
+				<br>
 				<div class="card social-timeline-card">
 					<div class="card-header">
 						<div class="d-flex justify-content-between align-items-center">
@@ -348,7 +415,11 @@
 						%>
 					</div>
 				</div>
-				<%}}} %>
+				<%
+						}
+					}
+				}
+				%>
 				<br>
 
 			</div>

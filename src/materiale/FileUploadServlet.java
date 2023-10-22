@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -40,8 +41,15 @@ public class FileUploadServlet extends HttpServlet {
 		Part filePart = request.getPart("Contenuto");
 		if (filePart != null) {
 			//salvataggio del file nella cartella del server
-			String savePath="C:\\Users\\sdell\\projects\\SocialNotes\\material";
-			File directory = new File(savePath);
+			String relativePath="WebContent\\material\\";
+			ServletContext context = request.getServletContext();
+			String absolutePath = context.getRealPath("");
+			String[] path=absolutePath.split("\\\\");
+			String effectivePath="";
+			for(int i=0;i<path.length-3;i++)
+				effectivePath+=path[i]+"\\";
+			effectivePath+=relativePath;
+			File directory = new File(effectivePath);
 
 			//ottengo il numero di file salvati nella directory per evitare di avere errori in fase di salvataggio dovuti a file con lo stesso nome
 			int fileCount=0;
@@ -54,7 +62,7 @@ public class FileUploadServlet extends HttpServlet {
 			//ottengo il nome del file e lo salvo nella cartella del server
 			String fileName = filePart.getSubmittedFileName();
 			fileName=fileName.substring(0,fileName.length()-4)+"_"+fileCount+".pdf";
-			String filePath = savePath + File.separator + fileName;
+			String filePath = effectivePath + File.separator + fileName;
 			try (InputStream input = filePart.getInputStream();
 				 OutputStream output = new FileOutputStream(filePath)) {
 
@@ -77,7 +85,18 @@ public class FileUploadServlet extends HttpServlet {
 			CourseModelDS course=new CourseModelDS(ds);
 			String nome=request.getParameter("Corso");
 			int codiceCorso=course.doRetrieveByName(nome);
-
+			if(codiceCorso==-1) {
+				CourseBean newCourse=new CourseBean();
+				newCourse.setNome(nome);
+				newCourse.setNomeDipartimento((String) session.getAttribute("dipName"));
+				newCourse.setDenominazione((String) session.getAttribute("denominazione"));
+				try {
+					course.doSave(newCourse);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				codiceCorso=course.doRetrieveByName(nome);
+			}
 			//continuo inserimento dati
 			material.setCodiceCorso(codiceCorso);
 			material.setUsername((String)session.getAttribute("username"));

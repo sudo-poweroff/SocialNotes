@@ -70,7 +70,7 @@ public class SignupControl extends HttpServlet {
 		
 			System.out.println("data:"+nascita);
 			Date dataNascita = Date.valueOf(nascita);
-		
+
 		
 			if(!checkValidity(nome,cognome,username,pwd,email)) {
 				String error = "Spiacenti, la registrazione non e' andata a buon fine.";

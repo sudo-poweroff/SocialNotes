@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <Interesse Username="sime00" CodiceCorso="46" DataInserimento="2023-10-13"/>
+    <Interesse Username="sime00" CodiceCorso="3" DataInserimento="2023-10-13"/>
+    <Interesse Username="sime00" CodiceCorso="11" DataInserimento="2023-10-13"/>
+    <Interesse Username="fry" CodiceCorso="20" DataInserimento="2023-10-13"/>
+    <Interesse Username="fry" CodiceCorso="26" DataInserimento="2023-10-13"/>
+
+
+    <Corso CodiceCorso="46" Nome="IGES" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="3" Nome="programmazione1" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="11" Nome="ADE" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="20" Nome="BD" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+    <Corso CodiceCorso="26" Nome="TSW" NomeDipartimento="Dipartimento di Informatica" Denominazione="Universita' Degli Studi Di Salerno"/>
+
+    <Materiale codiceMateriale="3" DataCaricamento="2021-08-26" Keywords="" Costo="15" Descrizione= "lezione 16" Hidden="false" CodiceCorso="46" Username="alfonso00" nomeFile="lezione16IGES.pdf" />
+    <Materiale codiceMateriale="4" DataCaricamento="2021-01-03" Keywords="" Costo="20" Descrizione= "lezione 17" Hidden="false" CodiceCorso="46" Username="alfonso00" nomeFile="lezione17IGES.pdf" />
+    <Materiale codiceMateriale="5" DataCaricamento="2020-08-02" Keywords="" Costo="30" Descrizione= "lezione 18" Hidden="false" CodiceCorso="46" Username="alfonso00" nomeFile="lezione18IGES.pdf" />
+    <Materiale codiceMateriale="6" DataCaricamento="2021-04-26" Keywords="" Costo="50" Descrizione= "lezione 20" Hidden="false" CodiceCorso="46" Username="alfonso00" nomeFile="lezione20IGES.pdf" />
+    <Materiale codiceMateriale="1" DataCaricamento="2021-03-20" Keywords="" Costo="10" Descrizione="Appunti programmazione 1" Hidden="false" CodiceCorso="3" Username="fry" nomeFile="appuntiP1.pdf" />
+</dataset>

@@ -88,10 +88,10 @@ public class ChangeProfile extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			
+
 		}
 
-    
+
   //CAMBIO UNI/DIPATRIMENTO
 		String nomeuni = request.getParameter("nomeuni");
 		//String indirizzo = request.getParameter("indirizzo");
@@ -261,6 +261,59 @@ public class ChangeProfile extends HttpServlet {
 			}
 		}
 
+
+//AGGIUNGI INTERESSI
+		String[] addInteressi=request.getParameterValues("addInteressi");
+		if(addInteressi!=null&&addInteressi.length>0){
+			InteresseModelDS interesseModel=new InteresseModelDS(ds);
+			boolean esito=true;
+			for(int i=0;i<addInteressi.length;i++) {
+				Date dataInserimento = new Date(System.currentTimeMillis());
+				InteresseBean bean=new InteresseBean();
+				bean.setDataInserimento(dataInserimento);
+				bean.setUsername(username);
+				bean.setCodiceCorso(Integer.parseInt(addInteressi[i]));
+				try {
+					interesseModel.doSave(bean);
+				} catch (SQLException e) {
+					esito=false;
+					e.printStackTrace();
+				}
+			}
+			if(esito){
+				success+=" Interessi aggiunti";
+				request.setAttribute("success", success);
+			}
+			else{
+				error+=" Errore: interessi non inseriti correttamente";
+				request.setAttribute("error",error);
+			}
+
+		}
+
+	//ELIMINA INTERESSI
+		String[] removeInteressi=request.getParameterValues("removeInteressi");
+		if(removeInteressi!=null&&removeInteressi.length>0){
+			InteresseModelDS interesseModel=new InteresseModelDS(ds);
+			boolean esito=true;
+			for(int i=0;i<removeInteressi.length;i++) {
+				try {
+					interesseModel.doDelete(username,Integer.parseInt(removeInteressi[i]));
+				} catch (SQLException e) {
+					esito=true;
+					e.printStackTrace();
+				}
+			}
+			if (esito){
+				success+=" Interessi rimossi";
+				request.setAttribute("success", success);
+			}
+			else{
+				error+=" Errore: interessi non eliminati correttamente";
+				request.setAttribute("error",error);
+			}
+		}
+
 		//CAMBIO MAIL
 		String mail = request.getParameter("mail");
 
@@ -310,7 +363,7 @@ public class ChangeProfile extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		
+
 		
 		doGet(request, response);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/change.jsp");

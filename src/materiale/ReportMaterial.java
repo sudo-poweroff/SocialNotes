@@ -1,9 +1,11 @@
 package materiale;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,6 +67,17 @@ public class ReportMaterial extends HttpServlet {
 			MaterialModelDS mModel = new MaterialModelDS(ds);
 			
 			try {
+				MaterialBean bean=mModel.doRetrieveByKey(String.valueOf(codiceMateriale));
+				String relativePath="WebContent\\material\\";
+				ServletContext context = request.getServletContext();
+				String absolutePath = context.getRealPath("");
+				String[] path=absolutePath.split("\\\\");
+				String effectivePath="";
+				for(int i=0;i<path.length-3;i++)
+					effectivePath+=path[i]+"\\";
+				effectivePath+=relativePath+bean.getNomeFile();
+				File fileToDelete = new File(effectivePath);
+				fileToDelete.delete();
 				mModel.doDelete(codiceMateriale);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
