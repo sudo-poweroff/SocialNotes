@@ -12,9 +12,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.sql.*;
 import java.util.*;
 public class CaricaMaterialeTest {
   private WebDriver driver;
@@ -68,13 +68,13 @@ public class CaricaMaterialeTest {
   @Test
   public void testCaricamentoMaterialeCorsoNotPresent() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1552, 832));
+    driver.manage().window().setSize(new Dimension(1382, 736));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).sendKeys("simo");
+    driver.findElement(By.id("inputEmail")).sendKeys("sime00");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Simo1");
+    driver.findElement(By.id("inputPassword")).sendKeys("Sime00");
     driver.findElement(By.cssSelector(".btn")).click();
-    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\02.cvs.pdf");
+    driver.findElement(By.id("formFile")).sendKeys("C:\\fakepath\\appuntiGPS.pdf");
     driver.findElement(By.id("descrizione")).click();
     driver.findElement(By.id("descrizione")).sendKeys("appunti GPS");
     driver.findElement(By.name("Corso")).click();
@@ -84,6 +84,46 @@ public class CaricaMaterialeTest {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
       assert(elements.size() > 0);
     }
+    driver.findElement(By.linkText("Logout")).click();
+    Connection connection = null;
+    try {
+      // Carica il driver JDBC appropriato
+      Class.forName("com.mysql.jdbc.Driver");
+
+      // Connetti al database
+      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnotes", "socialNotes", "socialNotes2023");
+
+      // Esegui una query SQL per verificare lo stato del database
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery("SELECT * FROM corso WHERE nome='GPS';");
+
+      // Analizza i risultati e verifica lo stato del database
+      while (resultSet.next()) {
+        // Effettua le tue verifiche sui dati del database
+        assertEquals("GPS",resultSet.getString("nome"));
+      }
+
+      resultSet = statement.executeQuery("SELECT * FROM materiale WHERE descrizione='appunti GPS' and hidden=1;");
+
+      // Analizza i risultati e verifica lo stato del database
+      while (resultSet.next()) {
+        // Effettua le tue verifiche sui dati del database
+        assertEquals("appunti GPS",resultSet.getString("descrizione"));
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (connection != null) {
+          connection.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+
+    driver.close();
   }
 
   @Test
