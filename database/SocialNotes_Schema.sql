@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `socialnotes` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `socialnotes`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: socialnotes
@@ -97,7 +99,7 @@ CREATE TABLE `corso` (
   PRIMARY KEY (`CodiceCorso`),
   KEY `fk_dipartimento` (`NomeDipartimento`,`Denominazione`),
   CONSTRAINT `fk_dipartimento` FOREIGN KEY (`NomeDipartimento`, `Denominazione`) REFERENCES `dipartimento` (`Nome`, `Denominazione`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +153,7 @@ CREATE TABLE `files` (
   `Dimensione` int NOT NULL,
   `IdFile` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`IdFile`)
-) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,6 +166,7 @@ DROP TABLE IF EXISTS `interesse`;
 CREATE TABLE `interesse` (
   `Username` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `CodiceCorso` int NOT NULL,
+  `DataInserimento` date NOT NULL,
   PRIMARY KEY (`Username`,`CodiceCorso`),
   KEY `CodiceCorso` (`CodiceCorso`),
   CONSTRAINT `interesse_ibfk_1` FOREIGN KEY (`CodiceCorso`) REFERENCES `corso` (`CodiceCorso`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -193,7 +196,7 @@ CREATE TABLE `materiale` (
   KEY `Username` (`Username`),
   CONSTRAINT `Materiale_ibfk_1` FOREIGN KEY (`CodiceCorso`) REFERENCES `corso` (`CodiceCorso`) ON UPDATE CASCADE,
   CONSTRAINT `Materiale_ibfk_2` FOREIGN KEY (`Username`) REFERENCES `utente` (`Username`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +256,7 @@ CREATE TABLE `news` (
   PRIMARY KEY (`CodiceNews`),
   KEY `Username` (`Username`),
   CONSTRAINT `News_ibfk_1` FOREIGN KEY (`Username`) REFERENCES `utente` (`Username`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -329,7 +332,7 @@ CREATE TABLE `utente` (
   `dipName` varchar(400) CHARACTER SET latin1 DEFAULT NULL,
   `Ruolo` int NOT NULL,
   `Verificato` tinyint NOT NULL DEFAULT '0',
-  `Bloccato` date DEFAULT NULL,
+  `Bloccato` datetime DEFAULT NULL,
   PRIMARY KEY (`Username`),
   KEY `Denominazione` (`Denominazione`),
   KEY `DipName` (`dipName`),
@@ -347,4 +350,4 @@ CREATE TABLE `utente` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-26 16:26:59
+-- Dump completed on 2023-10-18 11:05:51
