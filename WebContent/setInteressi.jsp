@@ -32,6 +32,17 @@
 
 
     DataSource ds=(DataSource)getServletContext().getAttribute("DataSource");
+    String errore = (String) request.getAttribute("error");
+    if (errore!=null){
+%>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Attenzione!</strong> <small><%=errore%></small>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+<%
+    }
 %>
 <h1 class="h3 mb-3 font-weight-normal">Inserisci i tuoi interessi</h1>
 <div class="button-container">
@@ -95,7 +106,16 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(interessiSelezionati),
-        }).then(()=>window.location.href = "homepage.jsp");
+        })
+        .then(response => response.json()) // Parse the JSON response
+        .then((data) => {
+            if (data.messaggio!="") {
+                alert(data.messaggio);
+            }
+            else {
+                window.location.href = "homepage_user.jsp";
+            }
+        });
     });
 
     skipButton.addEventListener("click", function () {

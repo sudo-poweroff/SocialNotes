@@ -51,6 +51,17 @@ public class SetInteressi extends HttpServlet {
             ObjectMapper objectMapper = new ObjectMapper();
 
             String[] interessi = objectMapper.readValue(jsonData, String[].class);
+            if (interessi.length==0){
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"messaggio\": \"Errore, interessi non inseriti!.\"}");
+            }
+            else{
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"messaggio\": \"\"}");
+            }
+
             for (int i = 0; i < interessi.length; i++) {
                 try{
                     Date dataInserimento = new Date(System.currentTimeMillis());
