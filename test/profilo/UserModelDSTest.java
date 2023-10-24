@@ -1183,6 +1183,7 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 			assertEquals(tbexpected.getValue(i, "Denominazione"), tbactual.getValue(i, "Denominazione"));
 			assertEquals(tbexpected.getValue(i, "dipName"), tbactual.getValue(i, "dipName"));
 			assertEquals(tbexpected.getValue(i, "Ruolo").toString(), tbactual.getValue(i, "Ruolo").toString());
+			assertEquals(tbexpected.getValue(i, "Verificato").toString(), tbactual.getValue(i, "Verificato").toString());
 			assertEquals(tbexpected.getValue(i, "Bloccato").toString(),tbactual.getValue(i, "Bloccato").toString());
 		}
 	}
