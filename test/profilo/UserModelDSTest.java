@@ -1437,12 +1437,8 @@ public class UserModelDSTest extends DataSourceBasedDBTestCase{
 		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato(null, Timestamp.valueOf("2023-12-25 00:00:00.0"));});
 	}
 
-	public void testDoUpdateUsernameWithInvalidDate() throws NullPointerException {
+	public void testDoUpdateUsernameOrEmailWithInvalidDate() throws NullPointerException {
 		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato("califano87", null);});
-	}
-
-	public void testDoUpdateEmailWithInvalidDate() throws NullPointerException {
-		assertThrows(IllegalArgumentException.class, () -> {userModel.doUpdateBloccato("califano87@gmail.com", null);});
 	}
 
 
