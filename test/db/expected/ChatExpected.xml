@@ -5,6 +5,6 @@
 	<Chat ChatID="65" Titolo="progetto IS"/>
 	<Partecipazione Username="fry" ChatID="65"/>
 	<Partecipazione Username="fry" ChatID="16"/>
-	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0"/>	
+	<Utente Username="fry" Nome="Francesco" Cognome="Di Lauro" Email="fry@gmail.com" Pass="Fry1" DataNascita="2000-05-18" Coin="1100" Ban="2022-01-27" Denominazione="Universita degli studi di Salerno" dipName="Dipartimento di Informatica" Ruolo="0" Verificato="true" Bloccato="2011-11-11 00:00:00.0"/>
 	<Chat ChatID="1" Titolo="nuova chat"/>	
 </dataset>
