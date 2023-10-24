@@ -27,7 +27,7 @@ public class FeedbackModelDS  {
 		String selectSQL="SELECT Utente.Username AS Username, ROUND(AVG(ValutazioneMedia)) AS feedback, Nome, Cognome, Denominazione, dipName, Img\n"
 				+ "FROM Utente LEFT JOIN (SELECT Materiale.Username AS US, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n"
 				+ "FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n"
-				+ "WHERE Materiale.Hidden = 0\n"
+				+ "WHERE Materiale.Hidden = false\n"
 				+ "GROUP BY Materiale.Username\n"
 				+ "ORDER BY ValutazioneMedia) AS FeedbackMedio ON Utente.Username = FeedbackMedio.US\n"
 				+ "WHERE Username = ? AND Ruolo=0\n"
