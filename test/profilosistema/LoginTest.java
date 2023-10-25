@@ -26,8 +26,8 @@ public class LoginTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-    //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-    System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+    System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+    //System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
     driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
@@ -74,7 +74,7 @@ public class LoginTest {
     driver.findElement(By.cssSelector(".btn")).click();
     {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
-      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Login e/o password non corretti.\n" +"×"));
+      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Accesso negato\n" +"×"));
     }
   }
   @Test
@@ -101,11 +101,11 @@ public class LoginTest {
     driver.findElement(By.id("inputEmail")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("Fabio");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Cannavaro");
+    driver.findElement(By.id("inputPassword")).sendKeys("Cannavaro0");
     driver.findElement(By.cssSelector(".btn")).click();
     {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
-      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Sei attualmente bloccato.\n" +"×"));
+      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Sei attualmente bloccato\n" +"×"));
     }
   }
   @Test
@@ -115,14 +115,14 @@ public class LoginTest {
     driver.findElement(By.linkText("Accedi")).click();
     for (int i = 0; i<5; i++){
       driver.findElement(By.id("inputEmail")).click();
-      driver.findElement(By.id("inputEmail")).sendKeys("vandack1");
+      driver.findElement(By.id("inputEmail")).sendKeys("VanDack1");
       driver.findElement(By.id("inputPassword")).click();
-      driver.findElement(By.id("inputPassword")).sendKeys("Cannavaro");
+      driver.findElement(By.id("inputPassword")).sendKeys("Cannavaro0");
       driver.findElement(By.cssSelector(".btn")).click();
     }
     {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
-      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Accesso negato, eccessivo numero di tentativi falliti. Riprova tra 5 minuti.\n" + "×"));
+      assert(elements.size()==1 && elements.get(0).getText().equals("Attenzione! Accesso negato, eccessivo numero di tentativi falliti. Riprova tra 5 minuti\n" + "×"));
     }
   }
 }

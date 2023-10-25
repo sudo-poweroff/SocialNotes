@@ -47,11 +47,11 @@ public class RecuperoPasswordTest {
     driver.manage().window().setSize(new Dimension(1181, 852));
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.linkText("Hai dimenticato la password?")).click();
-    driver.findElement(By.id("inputUser")).click();
-    driver.findElement(By.id("inputUser")).sendKeys("fry");
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("fry");
     driver.findElement(By.cssSelector(".btn")).click();
-    driver.findElement(By.id("inputUser")).click();
-    driver.findElement(By.id("inputUser")).sendKeys("fry");
+    driver.findElement(By.id("username")).click();
+    driver.findElement(By.id("username")).sendKeys("fry");
     driver.findElement(By.id("inputPin")).click();
     driver.findElement(By.id("inputPin")).sendKeys("123");
     driver.findElement(By.cssSelector(".btn")).click();

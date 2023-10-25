@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
@@ -30,7 +31,7 @@ public class EliminazioneMetodoDiPagamentoTest {
   public void setUp() {
 	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
 	  //System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
@@ -45,7 +46,7 @@ public class EliminazioneMetodoDiPagamentoTest {
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("califano03");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Alfonso32!");
+    driver.findElement(By.id("inputPassword")).sendKeys("Califano03");
     driver.findElement(By.cssSelector(".btn")).click();
     driver.findElement(By.cssSelector(".bi-person-lines-fill")).click();
     driver.findElement(By.linkText("Modifica profilo")).click();
@@ -66,7 +67,7 @@ public class EliminazioneMetodoDiPagamentoTest {
     driver.findElement(By.linkText("Accedi")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("califano03");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Alfonso32!");
+    driver.findElement(By.id("inputPassword")).sendKeys("Califano03");
     driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
     driver.findElement(By.cssSelector(".bi-person-lines-fill")).click();
     driver.findElement(By.linkText("Modifica profilo")).click();
@@ -95,11 +96,10 @@ public class EliminazioneMetodoDiPagamentoTest {
     driver.get("http://127.0.0.1:8080/SocialNotes/");
     driver.manage().window().setSize(new Dimension(1936, 1056));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).sendKeys("cali");
     driver.findElement(By.id("inputEmail")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("califano03");
     driver.findElement(By.id("inputPassword")).click();
-    driver.findElement(By.id("inputPassword")).sendKeys("Alfonso32!");
+    driver.findElement(By.id("inputPassword")).sendKeys("Califano03");
     driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
     driver.findElement(By.cssSelector(".bi-person-lines-fill > path")).click();
     driver.findElement(By.cssSelector(".bi-person-lines-fill > path")).click();
