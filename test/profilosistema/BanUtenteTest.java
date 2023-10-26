@@ -5,35 +5,23 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
-import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 public class BanUtenteTest {
   private WebDriver driver;
-  private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+	//System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
   }
   @After
   public void tearDown() {
@@ -42,18 +30,27 @@ public class BanUtenteTest {
   @Test
   public void testBanUtenteDataNonValida() {
     driver.get("http://localhost:8080/SocialNotes/");
-    driver.manage().window().setSize(new Dimension(1920, 1040));
+    driver.manage().window().setSize(new Dimension(1382, 736));
     driver.findElement(By.linkText("Accedi")).click();
-    driver.findElement(By.id("inputEmail")).click();
     driver.findElement(By.id("inputEmail")).sendKeys("UsersManager");
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Users1");
     driver.findElement(By.cssSelector(".btn")).click();
     driver.findElement(By.cssSelector(".col:nth-child(3) .card-title")).click();
-    driver.findElement(By.id("userdate")).click();
-    driver.findElement(By.id("userdate")).sendKeys("10-02-2022");
+    //driver.findElement(By.id("userdate")).click();
+    driver.findElement(By.id("userdate")).clear();
+    driver.findElement(By.id("userdate")).sendKeys("02-10-2022");
     driver.findElement(By.cssSelector(".candidates-list:nth-child(1) button > .fas")).click();
-    assertThat(driver.switchTo().alert().getText(), is("La data deve essere successiva o uguale alla data odierna."));
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    Alert alert= driver.switchTo().alert();
+    String alertString = driver.switchTo().alert().getText();
+    assertEquals(alertString, "La data deve essere successiva o uguale alla data odierna.");
+    alert.accept();
+    driver.close();
   }
   @Test
   public void testBanUtenteEffettuato(){
@@ -66,9 +63,9 @@ public class BanUtenteTest {
     driver.findElement(By.id("inputPassword")).sendKeys("Users1");
     driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
     driver.findElement(By.cssSelector(".col:nth-child(3) .card-title")).click();
-    driver.findElement(By.id("userdate")).click();
-    driver.findElement(By.id("userdate")).sendKeys("31-03-2022");
-    driver.findElement(By.cssSelector(".candidates-list:nth-child(1) button")).click();
-    assertThat(driver.findElement(By.cssSelector(".candidates-list:nth-child(1) .candidate-list-time")).getText(), is("	Bloccato"));
+    //driver.findElement(By.id("userdate")).click();
+    driver.findElement(By.id("userdate")).sendKeys("31-03-2046");
+    driver.findElement(By.cssSelector(".candidates-list:nth-child(1) button > .fas")).click();
+    assertThat(driver.findElement(By.cssSelector(".candidates-list:nth-child(1) .candidate-list-time")).getText(), is("Bloccato"));
   }
 }
