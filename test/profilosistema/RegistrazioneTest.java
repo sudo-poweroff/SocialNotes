@@ -18,15 +18,13 @@ import java.util.*;
 
 public class RegistrazioneTest {
   private WebDriver driver;
-  private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
     //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+	System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
     driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
   }
   @After
   public void tearDown() {
@@ -40,45 +38,32 @@ public class RegistrazioneTest {
     driver.findElement(By.linkText("Registrati")).click();
     driver.findElement(By.id("firstName")).click();
     driver.findElement(By.id("firstName")).sendKeys("rocco");
+    driver.findElement(By.id("lastName")).click();
     driver.findElement(By.id("lastName")).sendKeys("rocco");
     driver.findElement(By.id("username")).click();
     driver.findElement(By.id("username")).sendKeys("rock1");
     driver.findElement(By.id("password")).click();
     driver.findElement(By.id("password")).sendKeys("Mensa0");
     driver.findElement(By.id("email")).click();
-    {
-      WebElement element = driver.findElement(By.cssSelector("html"));
-      Actions builder = new Actions(driver);
-      builder.moveToElement(element).clickAndHold().perform();
-    }
-    {
-      WebElement element = driver.findElement(By.cssSelector("html"));
-      Actions builder = new Actions(driver);
-      builder.moveToElement(element).perform();
-    }
-    {
-      WebElement element = driver.findElement(By.cssSelector("html"));
-      Actions builder = new Actions(driver);
-      builder.moveToElement(element).release().perform();
-    }
     driver.findElement(By.id("email")).sendKeys("rocco.iul2000@gmail.com");
     driver.findElement(By.id("uni")).click();
     {
       WebElement dropdown = driver.findElement(By.id("uni"));
       dropdown.findElement(By.xpath("//option[. = 'Politecnico di Milano']")).click();
     }
-    driver.findElement(By.cssSelector("option:nth-child(2)")).click();
+    driver.findElement(By.cssSelector("option:nth-child(10)")).click();
     driver.findElement(By.id("corso")).click();
     {
       WebElement dropdown = driver.findElement(By.id("corso"));
+      Thread.sleep(5000);
       dropdown.findElement(By.xpath("//option[. = 'Dipartimento di Informatica']")).click();
     }
-    driver.findElement(By.cssSelector("#corso > option:nth-child(9)")).click();
-    driver.findElement(By.id("nascita")).click();
-    driver.findElement(By.id("nascita")).click();
+    driver.findElement(By.cssSelector("#corso > option")).click();
     driver.findElement(By.id("nascita")).sendKeys("03-09-2021");
     driver.findElement(By.cssSelector(".btn")).click();
-    assertThat(driver.findElement(By.cssSelector("h1")).getText(), is("Registrazione completata"));
+    String successString= driver.findElement(By.cssSelector("h1")).getText();
+    System.out.println(successString);
+    assertEquals(successString, "Registrazione completata");
     driver.close();
   }
   
