@@ -129,11 +129,11 @@ public class ChangeProfile extends HttpServlet {
 		String confirm_password = request.getParameter("confirm_password");
 		
 		if(current_password !=null && !current_password.trim().equals("")) {
-			UserBean bean = new UserBean();
+			UserBean bean = null;
 			//Vedo se la password � corretta
 			try {
 				if (model_utente.checkPassword(username,current_password))
-				bean = model_utente.doRetrieveByUsername(username);
+					bean = model_utente.doRetrieveByUsername(username);
 			}catch(SQLException e) {
 				System.out.println("Errore checkLogin in ChangeProfile");
 			}
