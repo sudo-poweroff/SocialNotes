@@ -91,7 +91,7 @@ public class CaricaMaterialeTest {
       Class.forName("com.mysql.jdbc.Driver");
 
       // Connetti al database
-      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnotes", "socialNotes", "socialNotes2023");
+      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnotes?serverTimezone=UTC", "SocialNotes", "SocialNotes2023");
 
       // Esegui una query SQL per verificare lo stato del database
       Statement statement = connection.createStatement();

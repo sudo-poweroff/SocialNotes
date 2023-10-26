@@ -2,37 +2,29 @@ package materialesistema;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 public class VisualizzazioneSegnalazioniTest {
   private WebDriver driver;
-  private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	 // System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+    //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
   }
   @After
   public void tearDown() {
@@ -55,6 +47,19 @@ public class VisualizzazioneSegnalazioniTest {
   }
   @Test
   public void testVisualizzazioneSegnalazioneNotNull() {
+    Connection connection=null;
+    String url = "jdbc:mysql://localhost:3306/socialnotes?serverTimezone=UTC";
+    String username = "SocialNotes";
+    String password = "SocialNotes2023";
+    try {
+      connection = DriverManager.getConnection(url, username, password);
+      String sql = "INSERT INTO Segnalazione (Stato,Motivo,Username) VALUES (0,'test segnalazione','simo')";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);  // Esegui l'inserimento
+      preparedStatement.executeUpdate();
+      preparedStatement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     driver.get("http://127.0.0.1:8080/SocialNotes/");
     driver.manage().window().setSize(new Dimension(1936, 1056));
     driver.findElement(By.linkText("Accedi")).click();
@@ -66,6 +71,14 @@ public class VisualizzazioneSegnalazioniTest {
     {
       List<WebElement> elements = driver.findElements(By.id("sortable"));
       assert(elements.size() > 0);
+    }
+    try {
+      String sql="DELETE FROM Segnalazione WHERE Stato=0 AND Motivo='test segnalazione' AND Username='simo'";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.executeUpdate();
+      connection.close();
+    }catch (Exception e){
+      e.printStackTrace();
     }
   }
 }

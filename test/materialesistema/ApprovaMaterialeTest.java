@@ -5,36 +5,29 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 public class ApprovaMaterialeTest {
   private WebDriver driver;
-  private Map<String, Object> vars;
   JavascriptExecutor js;
   @Before
   public void setUp() {
-	  System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-	//System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
-    driver = new ChromeDriver();
+    System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+    //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+    driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
   }
   @After
   public void tearDown() {
@@ -54,6 +47,19 @@ public class ApprovaMaterialeTest {
   
   @Test
   public void testApprovaMaterialePrezzoNonValido() {
+    Connection connection=null;
+    String url = "jdbc:mysql://localhost:3306/socialnotes?serverTimezone=UTC";
+    String username = "SocialNotes";
+    String password = "SocialNotes2023";
+    try {
+      connection = DriverManager.getConnection(url, username, password);
+      String sql = "INSERT INTO Materiale (DataCaricamento,Keywords,Costo,Descrizione,Hidden,CodiceCorso,Username,nomeFile) VALUES ('2021-01-03', '', -1, 'test', true, 46, 'simo', 'appuntiGPS_48.pdf')";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);  // Esegui l'inserimento
+      preparedStatement.executeUpdate();
+      preparedStatement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     driver.get("http://localhost:8080/SocialNotes/");
     driver.manage().window().setSize(new Dimension(1181, 852));
     driver.findElement(By.linkText("Accedi")).click();
@@ -61,15 +67,35 @@ public class ApprovaMaterialeTest {
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Notes1");
     driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
-    driver.findElement(By.id("costo")).click();
     driver.findElement(By.id("costo")).sendKeys("-1");
     driver.findElement(By.cssSelector(".btn")).click();
     
     assertEquals(isAttributePresent(driver.findElement(By.id("costo")),"required"),true);
     assertEquals(isAttributePresent(driver.findElement(By.id("costo")),"min"),true);
+    try {
+      String sql="DELETE FROM Materiale WHERE DataCaricamento='2021-01-03' AND Keywords='' AND Costo=-1 AND  Descrizione='test' AND Hidden=true AND CodiceCorso=46 AND Username='simo' AND nomeFile='appuntiGPS_48.pdf';";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.executeUpdate();
+      connection.close();
+    }catch (Exception e){
+      e.printStackTrace();
+    }
   }
   @Test
   public void testApprovaMaterialePrezzoValido() {
+    Connection connection=null;
+    String url = "jdbc:mysql://localhost:3306/socialnotes?serverTimezone=UTC";
+    String username = "SocialNotes";
+    String password = "SocialNotes2023";
+    try {
+      connection = DriverManager.getConnection(url, username, password);
+      String sql = "INSERT INTO Materiale (DataCaricamento,Keywords,Costo,Descrizione,Hidden,CodiceCorso,Username,nomeFile) VALUES ('2021-01-03', '', -1, 'test', true, 46, 'simo', 'appuntiGPS_48.pdf')";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);  // Esegui l'inserimento
+      preparedStatement.executeUpdate();
+      preparedStatement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     driver.get("http://localhost:8080/SocialNotes/");
     driver.manage().window().setSize(new Dimension(1181, 852));
     driver.findElement(By.linkText("Accedi")).click();
@@ -77,12 +103,19 @@ public class ApprovaMaterialeTest {
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Notes1");
     driver.findElement(By.cssSelector(".btn")).click();
-    driver.findElement(By.id("costo")).click();
     driver.findElement(By.id("costo")).sendKeys("50");
     driver.findElement(By.cssSelector(".btn")).click();
     {
       List<WebElement> elements = driver.findElements(By.cssSelector(".alert"));
       assert(elements.size() > 0);
+    }
+    try {
+      String sql="DELETE FROM Materiale WHERE DataCaricamento='2021-01-03' AND Keywords='' AND Costo=-1 AND  Descrizione='test' AND Hidden=true AND CodiceCorso=46 AND Username='simo' AND nomeFile='appuntiGPS_48.pdf';";
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.executeUpdate();
+      connection.close();
+    }catch (Exception e){
+      e.printStackTrace();
     }
   }
   
