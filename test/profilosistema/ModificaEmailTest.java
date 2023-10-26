@@ -5,13 +5,10 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.*;
@@ -22,7 +19,7 @@ public class ModificaEmailTest {
   @Before
   public void setUp() {
       //System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-      System.setProperty("webdriver.chrome.driver","test/profilosistema/chromedriver.exe");
+      System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
       driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
       js = (JavascriptExecutor) driver;
   }
@@ -39,8 +36,8 @@ public class ModificaEmailTest {
     driver.findElement(By.id("inputEmail")).sendKeys("rock1");
     driver.findElement(By.id("inputPassword")).click();
     driver.findElement(By.id("inputPassword")).sendKeys("Mensa0");
-    driver.findElement(By.cssSelector(".btn")).click();
-    driver.findElement(By.id("navbarDropdown")).click();
+    driver.findElement(By.id("inputPassword")).sendKeys(Keys.ENTER);
+    driver.findElement(By.cssSelector(".bi-person-lines-fill")).click();
     driver.findElement(By.linkText("Modifica profilo")).click();
     driver.findElement(By.cssSelector(".editable-main-row .grid__item > .btn")).click();
     driver.findElement(By.name("mail")).click();
