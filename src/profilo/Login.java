@@ -83,6 +83,14 @@ public class Login extends HttpServlet {
 					dispatcher.forward(request, response);
 					return;
 				}
+				if (bean==null){
+					//l'utente non esiste nel DB
+					String error="Utente e/o password non corretti.";
+					request.setAttribute("error",error);
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
 			}
 
       
