@@ -40,7 +40,7 @@ public class VerificaEmailTest {
 
     @Test
     public void testVerificaEmailModificata(){
-        driver.get("http://localhost:8080/SocialNotes/Verifica?username=rock1&mail=rocco.iuliano65@gmail.com&accessNumber=1");
+        driver.get("http://localhost:8080/SocialNotes/Verifica?username=Siuuummm&mail=cristiano@ronaldo.com&accessNumber=1");
         driver.manage().window().setSize(new Dimension(1147, 720));
         assertThat(driver.findElement(By.cssSelector("h1")).getText(), is("Mail verificata!"));
         {
