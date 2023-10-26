@@ -3,36 +3,24 @@ package profilosistema;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 public class RicercaUtentiTest {
 	private WebDriver driver;
-	private Map<String, Object> vars;
 	JavascriptExecutor js;
 	@Before
 	public void setUp() {
-		System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
-		driver = new ChromeDriver();
+		//System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver");
+		System.setProperty("webdriver.chrome.driver","test/materialesistema/chromedriver.exe");
+		driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
 		js = (JavascriptExecutor) driver;
-		vars = new HashMap<String, Object>();
 	}
 	@After
 	public void tearDown() {
@@ -133,7 +121,7 @@ public class RicercaUtentiTest {
 		driver.findElement(By.id("inputPassword")).click();
 		driver.findElement(By.id("inputPassword")).sendKeys("Sime00");
 		driver.findElement(By.cssSelector(".btn")).click();
-		driver.findElement(By.cssSelector(".bi-person-lines-fill > path")).click();
+		driver.findElement(By.cssSelector(".bi-person-lines-fill")).click();
 		driver.findElement(By.linkText("Cerca persone")).click();
 		driver.findElement(By.name("search")).click();
 		driver.findElement(By.name("search")).sendKeys("j");
@@ -184,6 +172,11 @@ public class RicercaUtentiTest {
 		driver.findElement(By.cssSelector(".btn-default:nth-child(2)")).click();
 		{
 			List<WebElement> elements = driver.findElements(By.cssSelector(".table-responsive"));
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 			assert(elements.size() > 0);
 		}
 	}
@@ -283,11 +276,17 @@ public class RicercaUtentiTest {
 		driver.findElement(By.linkText("Cerca persone")).click();
 		driver.findElement(By.name("search")).click();
 		driver.findElement(By.name("search")).sendKeys("francesco");
-		driver.findElement(By.cssSelector("label:nth-child(6)")).click();
 		driver.findElement(By.cssSelector("label:nth-child(10)")).click();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 		driver.findElement(By.cssSelector(".btn-default:nth-child(2)")).click();
+
 		{
 			List<WebElement> elements = driver.findElements(By.cssSelector(".table-responsive"));
+
 			assert(elements.size() > 0);
 		}
 	}
@@ -361,7 +360,7 @@ public class RicercaUtentiTest {
 		driver.findElement(By.id("inputPassword")).click();
 		driver.findElement(By.id("inputPassword")).sendKeys("Sime00");
 		driver.findElement(By.cssSelector(".btn")).click();
-		driver.findElement(By.cssSelector(".bi-person-lines-fill > path")).click();
+		driver.findElement(By.cssSelector(".bi-person-lines-fill")).click();
 		driver.findElement(By.linkText("Cerca persone")).click();
 		driver.findElement(By.name("search")).click();
 		driver.findElement(By.name("search")).sendKeys("j");
