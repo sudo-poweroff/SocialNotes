@@ -76,15 +76,15 @@ public class NewsModelDSTest extends DataSourceBasedDBTestCase{
 		b1.setCodiceNews(24);
 		b1.setTitolo("Ateneo | UNISA Studenti Vax Day");
 		b1.setArgomento("8 settembre (dalle 14 alle 20) al Centro Vaccinale Ruggi");
-		b1.setContenuto("Nell ottica di un auspicabile ripresa della vita universitaria in presenza, mercoledì 8 settembre, dalle ore 14.00 e fino alle ore 20.00, presso il Centro Vaccinale dell A.O.U. San Giovanni di Dio e Ruggi d Aragona, si terra l UNISA STUDENTI VAX DAY, una seduta di vaccinazione riservata agli studenti dell Ateneo.");
+		b1.setContenuto("Nell ottica di un auspicabile ripresa della vita universitaria in presenza, mercoledi 8 settembre, dalle ore 14.00 e fino alle ore 20.00, presso il Centro Vaccinale dell A.O.U. San Giovanni di Dio e Ruggi d Aragona, si terra l UNISA STUDENTI VAX DAY, una seduta di vaccinazione riservata agli studenti dell Ateneo.");
 		b1.setUsername("NewsManager");
 		b1.setDataCaricamento(Date.valueOf("2021-09-06"));
 		
 		NewsBean b2 = new NewsBean();
 		b2.setCodiceNews(41);
 		b2.setTitolo("Virtual Job Meeting STEM GIRLS ");
-		b2.setArgomento("(Giovedì 16 settembre, 9:30-16:30 - Registrazioni aperte)");
-		b2.setContenuto("Una grande opportunità per studentesse e laureate in materie scientifiche, tecnologiche, ingegneristiche e matematiche di tutte le Università italiane.");
+		b2.setArgomento("(Giovedi 16 settembre, 9:30-16:30 - Registrazioni aperte)");
+		b2.setContenuto("Una grande opportunita per studentesse e laureate in materie scientifiche, tecnologiche, ingegneristiche e matematiche di tutte le Universita italiane.");
 		b2.setUsername("NewsManager");
 		b2.setDataCaricamento(Date.valueOf("2021-09-14"));
 		
@@ -117,7 +117,7 @@ public class NewsModelDSTest extends DataSourceBasedDBTestCase{
 		assertEquals(b.getCodiceNews(),24);
 		assertEquals(b.getTitolo(),"Ateneo | UNISA Studenti Vax Day");
 		assertEquals(b.getArgomento(),"8 settembre (dalle 14 alle 20) al Centro Vaccinale Ruggi");
-		assertEquals(b.getContenuto(),"Nell ottica di un auspicabile ripresa della vita universitaria in presenza, mercoledì 8 settembre, dalle ore 14.00 e fino alle ore 20.00, presso il Centro Vaccinale dell A.O.U. San Giovanni di Dio e Ruggi d Aragona, si terra l UNISA STUDENTI VAX DAY, una seduta di vaccinazione riservata agli studenti dell Ateneo.");
+		assertEquals(b.getContenuto(),"Nell ottica di un auspicabile ripresa della vita universitaria in presenza, mercoledi 8 settembre, dalle ore 14.00 e fino alle ore 20.00, presso il Centro Vaccinale dell A.O.U. San Giovanni di Dio e Ruggi d Aragona, si terra l UNISA STUDENTI VAX DAY, una seduta di vaccinazione riservata agli studenti dell Ateneo.");
 		assertEquals(b.getUsername(),"NewsManager");
 		assertEquals(b.getDataCaricamento(),Date.valueOf("2021-09-06"));	
 	}
