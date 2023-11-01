@@ -64,7 +64,8 @@ public class ModificaEmailTest {
     driver.findElement(By.name("mail")).click();
     driver.findElement(By.name("mail")).sendKeys("acalifano123@gmail.com");
     driver.findElement(By.cssSelector(".editable-main-row > .hidden-form")).click();
-    assertThat(driver.findElement(By.id("email-feedback")).getText(), is("L'indirizzo scelto è già esistente."));
+    String message=driver.findElement(By.id("email-feedback")).getText();
+    assertEquals(message,"L'indirizzo scelto e' gia' esistente.");
     {
       WebElement element = driver.findElement(By.cssSelector(".btn--primary"));
       Actions builder = new Actions(driver);

@@ -30,8 +30,8 @@ function usernameValidation(uid,mx,my){
 	var feedback = document.getElementById("username-feedback");
   	var uid_len = uid.value.length;
 
-	var stringLunghezza = "Il nome utente \u00E8 obbligatorio. La lunghezza deve essere compresa tra 3 e 15 caratteri. Non sono ammessi caratteri speciali o spazi.";
-	var stringDisponibile = "Il nome utente \u00E8 gi\u00E0 stato preso, si prega di selezionarne un altro";
+	var stringLunghezza = "Il nome utente è obbligatorio. La lunghezza deve essere compresa tra 3 e 15 caratteri. Non sono ammessi caratteri speciali o spazi.";
+	var stringDisponibile = "Il nome utente è già stato preso, si prega di selezionarne un altro";
 	
 	var usernameFormat = /^[A-Za-z0-9]{3,15}$/
 	
@@ -100,7 +100,7 @@ function validateEmail(uemail){
   	uemail.classList.remove("is-valid");
 	var feedback = document.getElementById("email-feedback");
 	var stringValid="Per favore inserisci un indirizzo Email valido.";
-	var stringUnavailable="L'indirizzo scelto \u00E8 gi\u00E0 esistente."
+	var stringUnavailable="L'indirizzo scelto e' gia' esistente."
   	var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 	if(!uemail.value.match(mailformat)){
