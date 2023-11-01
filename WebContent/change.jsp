@@ -166,7 +166,7 @@
 		if (success!=null){
 		%>
 		<div class="alert alert-success alert-dismissible fade show" role="alert">
-  			<strong>Fatto!</strong> Le modifiche sono state salvate con successo:<%=success%>
+  			<strong>Fatto!</strong> <small>Le modifiche sono state salvate con successo:<%=success%></small>
   			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
     		<span aria-hidden="true">&times;</span>
  			 </button>

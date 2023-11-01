@@ -45,7 +45,7 @@ public class ModificaInteressiTest {
         }
         driver.findElement(By.cssSelector(".btn--primary")).click();
         driver.findElement(By.cssSelector(".alert")).click();
-        assertThat(driver.findElement(By.cssSelector(".alert")).getText(), is("Fatto! Le modifiche sono state salvate con successo: Interessi aggiunti\n" + "×"));
+        assertThat(driver.findElement(By.cssSelector("small")).getText(), is("Le modifiche sono state salvate con successo: Interessi aggiunti"));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ModificaInteressiTest {
         }
         driver.findElement(By.cssSelector(".btn--primary")).click();
         driver.findElement(By.cssSelector(".alert")).click();
-        assertThat(driver.findElement(By.cssSelector(".alert")).getText(), is("Fatto! Le modifiche sono state salvate con successo: Interessi rimossi\n" + "×"));
+        assertThat(driver.findElement(By.cssSelector("small")).getText(), is("Le modifiche sono state salvate con successo: Interessi rimossi"));
     }
 
 }
