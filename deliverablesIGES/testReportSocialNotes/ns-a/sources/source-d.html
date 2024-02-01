@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > VerificaEmailTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilosistema</a>
+</div>
+
+<h1>Coverage Summary for Class: VerificaEmailTest (profilosistema)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VerificaEmailTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (40/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilosistema;
+&nbsp;
+&nbsp;import org.junit.Assert;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.After;
+&nbsp;import static org.junit.Assert.*;
+&nbsp;import static org.hamcrest.CoreMatchers.is;
+&nbsp;
+&nbsp;import org.openqa.selenium.*;
+&nbsp;import org.openqa.selenium.chrome.ChromeDriver;
+&nbsp;import org.openqa.selenium.chrome.ChromeOptions;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="fc">&nbsp;public class VerificaEmailTest {</b>
+&nbsp;    private WebDriver driver;
+&nbsp;    JavascriptExecutor js;
+&nbsp;
+&nbsp;    @Before
+&nbsp;    public void setUp() {
+<b class="fc">&nbsp;        System.setProperty(&quot;webdriver.chrome.driver&quot;,&quot;test/materialesistema/chromedriver.exe&quot;);</b>
+<b class="fc">&nbsp;        driver = new ChromeDriver(new ChromeOptions().addArguments(&quot;--remote-allow-origins=*&quot;));</b>
+<b class="fc">&nbsp;        js = (JavascriptExecutor) driver;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @After
+&nbsp;    public void tearDown() {
+<b class="fc">&nbsp;        driver.quit();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailPrimaVerifica(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=rock1&amp;mail=rocco.iul2000@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(1382, 736));</b>
+<b class="fc">&nbsp;        assertThat(driver.findElement(By.cssSelector(&quot;h1&quot;)).getText(), is(&quot;Mail verificata!&quot;));</b>
+<b class="fc">&nbsp;        assertThat(driver.findElement(By.cssSelector(&quot;p&quot;)).getText(), is(&quot;Dopo aver effettuato il login potrai inserire le tue materie di interesse.&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailModificata(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=Siuuummm&amp;mail=cristiano@ronaldo.com&amp;accessNumber=1&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(1147, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.findElement(By.cssSelector(&quot;h1&quot;)).getText(), is(&quot;Mail verificata!&quot;));</b>
+&nbsp;        {
+<b class="fc">&nbsp;            List&lt;WebElement&gt; elements = driver.findElements(By.tagName(&quot;p&quot;));</b>
+<b class="fc">&nbsp;            Assert.assertEquals(elements.size(),0);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailAccessNumberNO(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=rock1&amp;mail=rocco.iul2000@gmail.com&amp;accessNumber=3&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(1147, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailNonAssociata(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=rock1&amp;mail=prova@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(777, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailNonInserita(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=rock1&amp;mail=&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(777, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailGiaVerificata(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=acalifano&amp;mail=acalifano123@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(777, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailUsernameNonEsistente(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=prova00&amp;mail=abc123@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(777, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testVerificaEmailUsernameEmpty(){
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=&amp;mail=rocco.iul2000@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(777, 720));</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes&quot;));</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

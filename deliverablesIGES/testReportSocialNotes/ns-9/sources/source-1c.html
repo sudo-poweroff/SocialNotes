@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SearchFriend</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: SearchFriend (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SearchFriend</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import materiale.MaterialBean;
+&nbsp;import materiale.MaterialModelDS;
+&nbsp;
+&nbsp;/**
+&nbsp; * Servlet implementation class SearchFriend
+&nbsp; */
+&nbsp;@WebServlet(&quot;/SearchFriend&quot;)
+&nbsp;public class SearchFriend extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;       
+&nbsp;    /**
+&nbsp;     * @see HttpServlet#HttpServlet()
+&nbsp;     */
+&nbsp;    public SearchFriend() {
+<b class="nc">&nbsp;        super();</b>
+&nbsp;        // TODO Auto-generated constructor stub
+&nbsp;    }
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+&nbsp;	 */
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// TODO Auto-generated method stub
+<b class="nc">&nbsp;		HttpSession session = request.getSession(false);</b>
+&nbsp;		
+<b class="nc">&nbsp;		String url = &quot;errorSearch.jsp&quot;;</b>
+<b class="nc">&nbsp;		String homeLink = &quot;homepage.jsp&quot;;</b>
+&nbsp;		//System.out.println(&quot;ID &quot;+session.getAttribute(&quot;username&quot;));
+<b class="nc">&nbsp;		if (session!=null) {</b>
+<b class="nc">&nbsp;		if (session.getAttribute(&quot;username&quot;)!=null) {</b>
+&nbsp;			
+<b class="nc">&nbsp;			url = response.encodeRedirectURL(url);</b>
+<b class="nc">&nbsp;			homeLink = response.encodeRedirectURL(homeLink);</b>
+&nbsp;		}
+&nbsp;		}else {
+<b class="nc">&nbsp;			response.sendRedirect(homeLink);</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		String str = (String)request.getParameter(&quot;search&quot;);</b>
+&nbsp;
+&nbsp;	
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;		UserModelDS userDS = new UserModelDS(ds);</b>
+&nbsp;		
+&nbsp;		
+&nbsp;try {
+&nbsp;			
+<b class="nc">&nbsp;			String ratOrder=&quot;novalue&quot;;</b>
+<b class="nc">&nbsp;			int rating = 0;</b>
+<b class="nc">&nbsp;			if (request.getParameter(&quot;stars&quot;)!=null)</b>
+<b class="nc">&nbsp;			rating= Integer.parseInt(request.getParameter(&quot;stars&quot;));</b>
+&nbsp;		
+&nbsp;			
+<b class="nc">&nbsp;			if(request.getParameter(&quot;ratingOrder&quot;)!=null)</b>
+<b class="nc">&nbsp;				ratOrder=(String)request.getParameter(&quot;ratingOrder&quot;);</b>
+&nbsp;			
+&nbsp;			
+<b class="nc">&nbsp;			System.out.println(&quot;VALORI :&quot;+ str +&quot; &quot;+ratOrder+&quot; &quot;+rating);</b>
+&nbsp;			
+<b class="nc">&nbsp;			Collection&lt;UserBean&gt; bean= userDS.doRetrieveByParametersUser(str, ratOrder, rating);</b>
+<b class="nc">&nbsp;			if(bean.size()==0)</b>
+<b class="nc">&nbsp;				request.setAttribute(&quot;error&quot;,&quot;Errore&quot;);</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;utente&quot;, bean);</b>
+<b class="nc">&nbsp;			String urlSearch = response.encodeRedirectURL(&quot;/searchFriend.jsp&quot;);</b>
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(urlSearch);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+&nbsp;	
+&nbsp;			
+<b class="nc">&nbsp;		}catch(SQLException e) {</b>
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+&nbsp;		
+&nbsp;		
+<b class="nc">&nbsp;	}</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+&nbsp;	 */
+&nbsp;/*	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// TODO Auto-generated method stub
+&nbsp;		doGet(request, response);
+&nbsp;	}
+&nbsp;   */
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

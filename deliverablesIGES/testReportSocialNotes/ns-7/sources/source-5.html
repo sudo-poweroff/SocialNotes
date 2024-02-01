@@ -1,0 +1,260 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > NewsModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">news</a>
+</div>
+
+<h1>Coverage Summary for Class: NewsModelDS (news)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NewsModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,3%
+  </span>
+  <span class="absValue">
+    (84/93)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package news;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;
+&nbsp;public class NewsModelDS {
+&nbsp;
+<b class="fc">&nbsp;	public NewsModelDS(DataSource ds) {</b>
+<b class="fc">&nbsp;		this.ds=ds;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public Collection&lt;NewsBean&gt; doRetrieveAll() throws SQLException {
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM News;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;NewsBean&gt; news=new LinkedList&lt;NewsBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+&nbsp;			//Utility.print(&quot;doRetrieveAll:&quot;+ps.toString());
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				NewsBean bean=new NewsBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceNews(rs.getInt(&quot;CodiceNews&quot;));</b>
+<b class="fc">&nbsp;				bean.setTitolo(rs.getString(&quot;Titolo&quot;));</b>
+<b class="fc">&nbsp;				bean.setArgomento(rs.getString(&quot;Argomento&quot;));</b>
+<b class="fc">&nbsp;				bean.setContenuto(rs.getString(&quot;Contenuto&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				news.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return news;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public NewsBean doRetrieveByCodiceNews(int codiceNews) throws SQLException {
+<b class="fc">&nbsp;		if(codiceNews&lt;0)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM News WHERE CodiceNews = ?&quot;;</b>
+<b class="fc">&nbsp;		NewsBean bean= new NewsBean();</b>
+&nbsp;		//System.out.println(&quot;doRetrieveByCodiceNews-codice:&quot;+codiceNews);
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+&nbsp;			//Utility.print(&quot;doRetrieveAll:&quot;+ps.toString());
+<b class="fc">&nbsp;			ps.setInt(1, codiceNews);</b>
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			if(rs.next()) {</b>
+<b class="fc">&nbsp;				bean.setCodiceNews(rs.getInt(&quot;CodiceNews&quot;));</b>
+<b class="fc">&nbsp;				bean.setTitolo(rs.getString(&quot;Titolo&quot;));</b>
+<b class="fc">&nbsp;				bean.setArgomento(rs.getString(&quot;Argomento&quot;));</b>
+<b class="fc">&nbsp;				bean.setContenuto(rs.getString(&quot;Contenuto&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+&nbsp;				//System.out.println(&quot;News trovata&quot;);
+&nbsp;			}
+&nbsp;			else {
+&nbsp;				//System.out.println(&quot;News non trovata&quot;);
+<b class="fc">&nbsp;				return null;</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return bean;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public int doRetrieveKey()throws SQLException{
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String sql=&quot;SELECT CodiceNews FROM News ORDER BY CodiceNews;&quot;;</b>
+<b class="fc">&nbsp;		ResultSet rs=null;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			if(rs.last()) {</b>
+<b class="fc">&nbsp;				return rs.getInt(&quot;CodiceNews&quot;);</b>
+&nbsp;			}
+<b class="fc">&nbsp;			return -1;</b>
+&nbsp;		}finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(rs!=null)</b>
+<b class="fc">&nbsp;					rs.close();</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public void doSave(NewsBean item) throws SQLException {
+<b class="fc">&nbsp;		if(item==null)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection connection = null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps = null;</b>
+&nbsp;
+<b class="fc">&nbsp;		String insertSQL = &quot;INSERT INTO News (Titolo, Argomento, Contenuto, Username, DataCaricamento) VALUES (?, ?, ?, ?, ?)&quot;;</b>
+&nbsp;
+&nbsp;		try {
+<b class="fc">&nbsp;			connection = ds.getConnection();</b>
+<b class="fc">&nbsp;			ps = connection.prepareStatement(insertSQL);</b>
+<b class="fc">&nbsp;			ps.setString(1, item.getTitolo());</b>
+<b class="fc">&nbsp;			ps.setString(2, item.getArgomento());</b>
+<b class="fc">&nbsp;			ps.setString(3, item.getContenuto());</b>
+<b class="fc">&nbsp;			ps.setString(4, item.getUsername());</b>
+<b class="fc">&nbsp;			ps.setDate(5, item.getDataCaricamento());</b>
+&nbsp;
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+<b class="fc">&nbsp;			System.out.println(&quot;News Salvata nel Database&quot;);</b>
+&nbsp;		} finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(connection!=null)</b>
+<b class="fc">&nbsp;					connection.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private DataSource ds;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

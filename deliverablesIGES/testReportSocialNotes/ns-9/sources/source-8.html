@@ -1,0 +1,265 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DepartmentModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: DepartmentModelDSTest (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DepartmentModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,9%
+  </span>
+  <span class="absValue">
+    (70/73)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class DepartmentModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;	
+&nbsp;	
+&nbsp;	private DataSource ds;
+&nbsp;	private DepartmentModelDS department;
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;        dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Dipartimento.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;        return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Dipartimento.xml&quot;));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;	
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		department=new DepartmentModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveAll() throws Exception{
+<b class="fc">&nbsp;		Collection&lt;DepartmentBean&gt; result= department.doRetrieveAll();</b>
+<b class="fc">&nbsp;		ArrayList&lt;DepartmentBean&gt; rs = new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;DepartmentBean&gt; expected = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		DepartmentBean b1 = new DepartmentBean();</b>
+<b class="fc">&nbsp;		b1.setNome(&quot;Dipartimento di Biologia&quot;);</b>
+<b class="fc">&nbsp;		b1.setDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		b1.setDescrizione(&quot;http://www.uniba.it/ricerca/dipartimenti/biologia&quot;);</b>
+<b class="fc">&nbsp;		DepartmentBean b2 = new DepartmentBean();</b>
+<b class="fc">&nbsp;		b2.setNome(&quot;Dipartimento di Chimica&quot;);</b>
+<b class="fc">&nbsp;		b2.setDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		b2.setDescrizione(&quot;http://www.chimica.uniba.it/&quot;);</b>
+<b class="fc">&nbsp;		DepartmentBean b3 = new DepartmentBean();</b>
+<b class="fc">&nbsp;		b3.setNome(&quot;Dipartimento di Giurisprudenza&quot;);</b>
+<b class="fc">&nbsp;		b3.setDenominazione(&quot;Universita&#39; degli Studi del Sannio&quot;);</b>
+<b class="fc">&nbsp;		b3.setDescrizione(&quot;http://www.uniba.it/ricerca/dipartimenti/lex&quot;);</b>
+&nbsp;		
+&nbsp;		
+<b class="fc">&nbsp;		expected.add(b1);</b>
+<b class="fc">&nbsp;		expected.add(b2);</b>
+<b class="fc">&nbsp;		expected.add(b3);</b>
+&nbsp;		
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),expected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDescrizione(),expected.get(i).getDescrizione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),expected.get(i).getDenominazione());</b>
+&nbsp;		}
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testdoRetrieveAllNotPresent() throws SQLException{
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Dipartimento WHERE Nome=&#39;Dipartimento di Biologia&#39;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Dipartimento WHERE Nome=&#39;Dipartimento di Chimica&#39;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Dipartimento WHERE Nome=&#39;Dipartimento di Giurisprudenza&#39;&quot;).execute();</b>
+&nbsp;		
+<b class="fc">&nbsp;		Collection&lt;DepartmentBean&gt; result= department.doRetrieveAll();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(),0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByDenominazione() throws Exception{
+<b class="fc">&nbsp;		Collection&lt;DepartmentBean&gt; result= department.doRetrieveByDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;DepartmentBean&gt; rs = new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;DepartmentBean&gt; expected = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		DepartmentBean b1 = new DepartmentBean();</b>
+<b class="fc">&nbsp;		b1.setNome(&quot;Dipartimento di Biologia&quot;);</b>
+<b class="fc">&nbsp;		b1.setDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		b1.setDescrizione(&quot;http://www.uniba.it/ricerca/dipartimenti/biologia&quot;);</b>
+<b class="fc">&nbsp;		DepartmentBean b2 = new DepartmentBean();</b>
+<b class="fc">&nbsp;		b2.setNome(&quot;Dipartimento di Chimica&quot;);</b>
+<b class="fc">&nbsp;		b2.setDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		b2.setDescrizione(&quot;http://www.chimica.uniba.it/&quot;);</b>
+&nbsp;	
+<b class="fc">&nbsp;		expected.add(b1);</b>
+<b class="fc">&nbsp;		expected.add(b2);</b>
+&nbsp;		
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),expected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDescrizione(),expected.get(i).getDescrizione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),expected.get(i).getDenominazione());</b>
+&nbsp;		}
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByDenominazioneNonPresente() throws Exception{
+<b class="fc">&nbsp;		Collection&lt;DepartmentBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=department.doRetrieveByDenominazione(&quot;Universit? degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), 0);		</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByDenominazioneVuoto() throws SQLException{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			department.doRetrieveByDenominazione(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByDenominazioneNull() throws SQLException{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			department.doRetrieveByDenominazione(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;		
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

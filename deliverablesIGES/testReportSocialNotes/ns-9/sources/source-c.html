@@ -1,0 +1,664 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FriendsModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: FriendsModelDSTest (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FriendsModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96,1%
+  </span>
+  <span class="absValue">
+    (49/51)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,4%
+  </span>
+  <span class="absValue">
+    (216/256)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+<b class="fc">&nbsp;public class FriendsModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;	private DataSource ds;
+&nbsp;	private FriendsModelDS friendsModel;
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;		dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Amicizia.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;		return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Amicizia.xml&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		friendsModel=new FriendsModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception {
+<b class="fc">&nbsp;		FriendsBean bean=new FriendsBean();</b>
+<b class="fc">&nbsp;		bean.setUsername1(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		bean.setUsername2(&quot;pipp8&quot;);</b>
+<b class="fc">&nbsp;		bean.setDataInizio(Date.valueOf(&quot;2022-02-08&quot;));</b>
+<b class="fc">&nbsp;		friendsModel.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/AmiciziaExpected.xml&quot;)).getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void doSaveAlreadyPresent(){
+<b class="nc">&nbsp;		boolean flag=false;</b>
+<b class="nc">&nbsp;		FriendsBean bean=new FriendsBean();</b>
+<b class="nc">&nbsp;		bean.setUsername1(&quot;sime00&quot;);</b>
+<b class="nc">&nbsp;		bean.setUsername2(&quot;fry&quot;);</b>
+<b class="nc">&nbsp;		bean.setDataInizio(Date.valueOf(&quot;2021-09-15&quot;));</b>
+&nbsp;		try {
+<b class="nc">&nbsp;			friendsModel.doSave(bean);</b>
+<b class="nc">&nbsp;		}catch(SQLException e) {</b>
+<b class="nc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="nc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e){</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doDeleteFriend()
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriend() throws Exception {
+<b class="fc">&nbsp;		friendsModel.doDeleteFriend(&quot;pipp8&quot;,&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/AmiciziaExpectedDelete.xml&quot;)).getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendUserNonPresente() throws Exception {
+<b class="fc">&nbsp;		friendsModel.doDeleteFriend(&quot;pipp8&quot;,&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/AmiciziaExpectedDeleteUsNotPresent.xml&quot;)).getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;fry&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;fry&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNonPresente() throws Exception {
+<b class="fc">&nbsp;		friendsModel.doDeleteFriend(&quot;despacito&quot;,&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/AmiciziaExpectedDeleteUsNotPresent.xml&quot;)).getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNonPresenteUserNonPresente() throws Exception {
+<b class="fc">&nbsp;		friendsModel.doDeleteFriend(&quot;xiao&quot;,&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/AmiciziaExpectedDeleteUsNotPresent.xml&quot;)).getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Amicizia&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNonPresenteUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;despacito&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNonPresenteUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;despacito&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;&quot;, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendVuotoUserNonPresente() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;&quot;, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendVuotoUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendVutoUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(null, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNullUserNonPresente() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(null, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNullUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(null, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFriendNullUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doDeleteFriend(null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST isFriend()
+&nbsp;	@Test
+&nbsp;	public void testIsFriend() throws SQLException {
+<b class="fc">&nbsp;		boolean result=friendsModel.isFriend(&quot;sime00&quot;, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		assertTrue(result);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendUserNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean result=friendsModel.isFriend(&quot;sime00&quot;, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertFalse(result);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;sime00&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;sime00&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean result=friendsModel.isFriend(&quot;sim&quot;, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		assertFalse(result);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNonPresenteUserNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean result=friendsModel.isFriend(&quot;sim&quot;, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertFalse(result);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNonPresenteUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;sim&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNonPresenteUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;sim&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendVuotoUserNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendVuotoUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendVuotoUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, &quot;fry&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNullUserNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(&quot;&quot;, &quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNullUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(null, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testIsFriendNullUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.isFriend(null, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST getNumberFriends()
+&nbsp;	@Test
+&nbsp;	public void testGetNumberFriends() throws SQLException {
+<b class="fc">&nbsp;		int numFriend=friendsModel.getNumberFriends(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(numFriend, 2);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetNumberFriendsUserNonPresente() throws SQLException {
+<b class="fc">&nbsp;		int numFriend=friendsModel.getNumberFriends(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(numFriend, 0);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetNumberFriendsUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.getNumberFriends(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testGetNumberFriendsUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.getNumberFriends(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	//TEST doRetrieveByUsername()
+&nbsp;	@Test 
+&nbsp;	public void testDoRetrieveByUsername() throws SQLException{
+<b class="fc">&nbsp;		Collection&lt;FriendsBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=friendsModel.doRetrieveByUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;FriendsBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;FriendsBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		FriendsBean fr1=new FriendsBean();</b>
+<b class="fc">&nbsp;		fr1.setUsername2(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		fr1.setUsername1(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		fr1.setDataInizio(Date.valueOf(&quot;2021-09-15&quot;));</b>
+<b class="fc">&nbsp;		aspected.add(fr1);</b>
+<b class="fc">&nbsp;		FriendsBean fr2=new FriendsBean();</b>
+<b class="fc">&nbsp;		fr2.setUsername2(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		fr2.setUsername1(&quot;califano87&quot;);</b>
+<b class="fc">&nbsp;		fr2.setDataInizio(Date.valueOf(&quot;2021-09-10&quot;));</b>
+<b class="fc">&nbsp;		aspected.add(fr2);</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;rs.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername1(), aspected.get(i).getUsername1());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername2(), aspected.get(i).getUsername2());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDataInizio(), aspected.get(i).getDataInizio());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testRetrieveByUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;FriendsBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=friendsModel.doRetrieveByUsername(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), 0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testRetrieveByUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doRetrieveByUsername(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testRetrieveByUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			friendsModel.doRetrieveByUsername(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

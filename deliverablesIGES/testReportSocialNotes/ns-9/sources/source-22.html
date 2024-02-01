@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UniversityModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: UniversityModelDS (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UniversityModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,3%
+  </span>
+  <span class="absValue">
+    (24/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;
+&nbsp;public class UniversityModelDS {
+&nbsp;	
+<b class="fc">&nbsp;	 public UniversityModelDS(DataSource ds) {</b>
+<b class="fc">&nbsp;		 this.ds=ds;</b>
+&nbsp;	 }
+&nbsp;
+&nbsp;
+&nbsp;	public Collection&lt;UniversityBean&gt; doRetrieveAll() throws SQLException {
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Universita;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;UniversityBean&gt; universities=new LinkedList&lt;UniversityBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+&nbsp;			//Utility.print(&quot;doRetrieveAll:&quot;+ps.toString());
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				UniversityBean bean=new UniversityBean();</b>
+<b class="fc">&nbsp;				bean.setDenominazione(rs.getString(&quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;				bean.setIndirizzo(rs.getString(&quot;Indirizzo&quot;));</b>
+<b class="fc">&nbsp;				bean.setTelefono(rs.getString(&quot;Telefono&quot;));</b>
+<b class="fc">&nbsp;				bean.setEmail(rs.getString(&quot;Email&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				universities.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return universities;</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	private DataSource ds;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

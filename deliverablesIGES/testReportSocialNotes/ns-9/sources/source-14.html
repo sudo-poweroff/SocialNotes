@@ -1,0 +1,400 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PaymentMethodModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: PaymentMethodModelDSTest (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PaymentMethodModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (24/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,2%
+  </span>
+  <span class="absValue">
+    (130/141)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+<b class="fc">&nbsp;public class PaymentMethodModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;	private DataSource ds;
+&nbsp;	private PaymentMethodModelDS paymentModel;
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;		dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/MetodoPagamento.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;		return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/MetodoPagamento.xml&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		paymentModel=new PaymentMethodModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKey() throws SQLException {
+<b class="fc">&nbsp;		PaymentMethodBean payment=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		payment.setNumeroCarta(&quot;0000000000000000&quot;);</b>
+<b class="fc">&nbsp;		payment.setDataScadenza(Date.valueOf(&quot;2024-05-15&quot;));</b>
+<b class="fc">&nbsp;		payment.setNomeIntestatario(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		payment.setCognomeIntestatario(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		payment.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		PaymentMethodBean result=paymentModel.doRetrieveByKey(&quot;0000000000000000&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(payment.getNumeroCarta(), result.getNumeroCarta());</b>
+<b class="fc">&nbsp;		assertEquals(payment.getDataScadenza(), result.getDataScadenza());</b>
+<b class="fc">&nbsp;		assertEquals(payment.getNomeIntestatario(), result.getNomeIntestatario());</b>
+<b class="fc">&nbsp;		assertEquals(payment.getCognomeIntestatario(), result.getCognomeIntestatario());</b>
+<b class="fc">&nbsp;		assertEquals(payment.getUsername(), result.getUsername());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNotPresent() throws SQLException {
+<b class="fc">&nbsp;		PaymentMethodBean payment=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		PaymentMethodBean result=paymentModel.doRetrieveByKey(&quot;2222222222222222&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(payment, result);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyFormatoNonCorretto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doRetrieveByKey(&quot;1234&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doRetrieveByKey(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doRetrieveByKey(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveByUsername()
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsername() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;PaymentMethodBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=paymentModel.doRetrieveByUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;PaymentMethodBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;PaymentMethodBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		PaymentMethodBean pb1=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		pb1.setNumeroCarta(&quot;0000000000000000&quot;);</b>
+<b class="fc">&nbsp;		pb1.setDataScadenza(Date.valueOf(&quot;2024-05-15&quot;));</b>
+<b class="fc">&nbsp;		pb1.setNomeIntestatario(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		pb1.setCognomeIntestatario(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		pb1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(pb1);</b>
+<b class="fc">&nbsp;		PaymentMethodBean pb2=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		pb2.setNumeroCarta(&quot;1111111111111111&quot;);</b>
+<b class="fc">&nbsp;		pb2.setDataScadenza(Date.valueOf(&quot;2024-07-12&quot;));</b>
+<b class="fc">&nbsp;		pb2.setNomeIntestatario(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		pb2.setCognomeIntestatario(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		pb2.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(pb2);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;rs.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNumeroCarta(),aspected.get(i).getNumeroCarta());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDataScadenza(),aspected.get(i).getDataScadenza());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNomeIntestatario(),aspected.get(i).getNomeIntestatario());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognomeIntestatario(),aspected.get(i).getCognomeIntestatario());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+&nbsp;		}
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;PaymentMethodBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=paymentModel.doRetrieveByUsername(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), 0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doRetrieveByUsername(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doRetrieveByUsername(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	//TEST doSave()
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception {
+<b class="fc">&nbsp;		PaymentMethodBean bean=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		bean.setNumeroCarta(&quot;3333333333333333&quot;);</b>
+<b class="fc">&nbsp;		bean.setDataScadenza(Date.valueOf(&quot;2025-06-18&quot;));</b>
+<b class="fc">&nbsp;		bean.setNomeIntestatario(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		bean.setCognomeIntestatario(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		bean.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		paymentModel.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MetodoPagamentoExpectedSave.xml&quot;)).getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveAlreadyExist() throws Exception {
+<b class="fc">&nbsp;		PaymentMethodBean bean=new PaymentMethodBean();</b>
+<b class="fc">&nbsp;		bean.setNumeroCarta(&quot;1111111111111111&quot;);</b>
+<b class="fc">&nbsp;		bean.setDataScadenza(Date.valueOf(&quot;2024-07-12&quot;));</b>
+<b class="fc">&nbsp;		bean.setNomeIntestatario(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		bean.setCognomeIntestatario(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		bean.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;		paymentModel.doSave(bean);</b>
+<b class="fc">&nbsp;		}catch(SQLException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	//TEST doDelete()
+&nbsp;	@Test
+&nbsp;	public void testDoDelete() throws Exception {
+<b class="fc">&nbsp;		paymentModel.doDeleteByNumber(&quot;1111111111111111&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MetodoPagamentoExpectedDelete.xml&quot;)).getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteCartaNonPresente()throws Exception {
+<b class="fc">&nbsp;		paymentModel.doDeleteByNumber(&quot;5555555555555555&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MetodoPagamentoExpectedDeleteCardNotPreset.xml&quot;)).getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;MetodoPagamento&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteFormatoNonCorretto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doDeleteByNumber(&quot;1234&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}	
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doDeleteByNumber(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoDeleteNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			paymentModel.doDeleteByNumber(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

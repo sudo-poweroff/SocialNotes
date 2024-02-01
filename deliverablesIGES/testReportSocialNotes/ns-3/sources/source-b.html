@@ -1,0 +1,204 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ParticipationModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">chat</a>
+</div>
+
+<h1>Coverage Summary for Class: ParticipationModelDSTest (chat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParticipationModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,7%
+  </span>
+  <span class="absValue">
+    (33/36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package chat;
+&nbsp;
+&nbsp;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+<b class="fc">&nbsp;public class ParticipationModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;
+&nbsp;	private DataSource ds;
+&nbsp;	private ParticipationModelDS partecipazione;
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;        dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Partecipazione.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;        return dataSource;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Partecipazione.xml&quot;));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;	
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		partecipazione=new ParticipationModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception{
+<b class="fc">&nbsp;		ParticipationBean bean= new ParticipationBean();</b>
+<b class="fc">&nbsp;		bean.setChatID(18);</b>
+<b class="fc">&nbsp;		bean.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		partecipazione.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/PartecipazioneExpected.xml&quot;)).getTable(&quot;Partecipazione&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Partecipazione&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveAlreadyPresent() throws Exception{
+<b class="fc">&nbsp;		ParticipationBean bean= new ParticipationBean();</b>
+<b class="fc">&nbsp;		bean.setChatID(65);</b>
+<b class="fc">&nbsp;		bean.setUsername(&quot;fry&quot;);		</b>
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			partecipazione.doSave(bean);</b>
+<b class="fc">&nbsp;		}catch(SQLException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			partecipazione.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

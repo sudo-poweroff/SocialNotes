@@ -1,0 +1,1407 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MaterialModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: MaterialModelDSTest (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MaterialModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,7%
+  </span>
+  <span class="absValue">
+    (78/79)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,3%
+  </span>
+  <span class="absValue">
+    (621/680)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import static org.junit.Assert.*;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.ByteArrayInputStream;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.io.InputStreamReader;
+&nbsp;import java.io.OutputStream;
+&nbsp;import java.io.UnsupportedEncodingException;
+&nbsp;import java.nio.charset.StandardCharsets;
+&nbsp;import java.sql.Blob;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.servlet.http.Part;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import javax.sql.rowset.serial.SerialBlob;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.datatype.BlobDataType;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+<b class="fc">&nbsp;public class MaterialModelDSTest extends DataSourceBasedDBTestCase {</b>
+&nbsp;
+&nbsp;	private DataSource ds;
+&nbsp;	private MaterialModelDS material;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;        dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Materiale.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;        return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Materiale.xml&quot;));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;	
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		material=new MaterialModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyPresent() throws Exception {
+<b class="fc">&nbsp;		MaterialBean mBean = material.doRetrieveByKey(&quot;3&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(mBean.getCodiceMateriale(), 3);</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getDataCaricamento(),Date.valueOf(&quot;2021-08-26&quot;));</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getKeywords(),&quot;&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getCosto(), 15);</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getDescrizione(), &quot;lezione 16&quot;);</b>
+<b class="fc">&nbsp;		assertFalse(mBean.isHidden());</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getCodiceCorso(), 4);</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getUsername(),&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(mBean.getNomeFile(),&quot;appuntiADE.pdf&quot;);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNotPresent() throws Exception {
+<b class="fc">&nbsp;		MaterialBean mBean = material.doRetrieveByKey(&quot;9&quot;);</b>
+<b class="fc">&nbsp;		MaterialBean mBeanExpected = new MaterialBean();</b>
+<b class="fc">&nbsp;		assertEquals(mBean, mBeanExpected);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByVoidKey() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByKey(&quot;&quot;);</b>
+&nbsp;		
+<b class="fc">&nbsp;		} catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByKey(null);</b>
+&nbsp;		
+<b class="fc">&nbsp;		} catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;	    
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testNotValidated() throws Exception {
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materialCollection = material.notValidated();</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; arrayMaterial = new ArrayList&lt;&gt;(materialCollection);</b>
+&nbsp;		
+<b class="fc">&nbsp;		for (MaterialBean mBean : arrayMaterial) {</b>
+&nbsp;
+<b class="fc">&nbsp;			assertEquals(mBean.getCodiceMateriale(),5 );</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getDataCaricamento(),Date.valueOf(&quot;2020-08-02&quot;) );</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getKeywords(),&quot;&quot;);</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getCosto(),0);</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getDescrizione(),&quot;provaAde&quot; );</b>
+<b class="fc">&nbsp;			assertTrue(mBean.isHidden());</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getCodiceCorso(),1 );</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getUsername(),&quot;sime00&quot; );</b>
+<b class="fc">&nbsp;			assertEquals(mBean.getNomeFile(),&quot;provaADE.pdf&quot;);</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testNotValidatedVoidTable() throws Exception {
+&nbsp;		
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Materiale WHERE codiceMateriale=&#39;3&#39;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Materiale WHERE codiceMateriale=&#39;4&#39;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Materiale WHERE codiceMateriale=&#39;5&#39;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Materiale WHERE codiceMateriale=&#39;6&#39;&quot;).execute();</b>
+&nbsp;		
+&nbsp;		
+&nbsp;		
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materialCollection = material.notValidated();</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(materialCollection.size(), 0);</b>
+&nbsp;		
+&nbsp;		
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testSetPriceCodMaterialePresentePrezzoValido() throws Exception {
+&nbsp;	
+<b class="fc">&nbsp;		material.setPrice(5, 20);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MaterialeExpectedUpdate.xml&quot;)).getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testSetPriceCodMaterialePresentePrezzoNonValido() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;		material.setPrice(5, -20);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testSetPriceCodMaterialeNonPresentePrezzoValido() throws Exception {
+&nbsp;		
+<b class="fc">&nbsp;		material.setPrice(10, 10);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Materiale.xml&quot;)).getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testSetPriceCodMaterialeNonPresentePrezzoNonValido() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;		material.setPrice(10, -20);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByStringPresent() throws Exception {
+&nbsp;		
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materials = material.doRetrieveByString(&quot;prova&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;	    //materiale m1
+<b class="fc">&nbsp;	    MaterialBean m1 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m1.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m1.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m1.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m1.setCosto(20);</b>
+<b class="fc">&nbsp;	    m1.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m1.setHidden(false);</b>
+<b class="fc">&nbsp;	    m1.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m1.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m1.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(0);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(true);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(50);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(false);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m1);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(), materialExpected.get(i).getNomeFile());</b>
+&nbsp;	    }
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByStringNotPresent() throws Exception {
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materials = material.doRetrieveByString(&quot;APPUNTI-ADE&quot;);</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(materials.size(), 0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByStringVuota() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByString(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByStringNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByString(null);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernamePresent() throws Exception {
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materials = material.doRetrieveByUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(0);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(true);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(50);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(false);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile());</b>
+&nbsp;	    }
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNotPresent() throws Exception {
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materials = material.doRetrieveByUsername(&quot;mario01292&quot;);</b>
+&nbsp;		
+<b class="fc">&nbsp;		assertEquals(materials.size(), 0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByVoidUsername() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByUsername(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doRetrieveByUsername(null);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByOrderDateTableNotVoid() throws Exception {
+&nbsp;		
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; materials = material.doRetrieveByOrderDate();</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;	    //materiale m1
+<b class="fc">&nbsp;	    MaterialBean m1 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m1.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m1.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m1.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m1.setCosto(20);</b>
+<b class="fc">&nbsp;	    m1.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m1.setHidden(false);</b>
+<b class="fc">&nbsp;	    m1.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m1.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m1.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(0);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(true);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(50);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(false);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    //materiale m4
+<b class="fc">&nbsp;	    MaterialBean m4 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m4.setCodiceMateriale(3);</b>
+<b class="fc">&nbsp;	    m4.setDataCaricamento(Date.valueOf(&quot;2021-08-26&quot;));</b>
+<b class="fc">&nbsp;	    m4.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m4.setCosto(15);</b>
+<b class="fc">&nbsp;	    m4.setDescrizione(&quot;lezione 16&quot;);</b>
+<b class="fc">&nbsp;	    m4.setHidden(false);</b>
+<b class="fc">&nbsp;	    m4.setCodiceCorso(4);</b>
+<b class="fc">&nbsp;	    m4.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m4.setNomeFile(&quot;appuntiADE.pdf&quot;);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m4);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m1);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile());</b>
+&nbsp;	    }
+&nbsp;	    
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByOrderDateTableVoid() throws Exception {
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Materiale&quot;).execute();</b>
+<b class="fc">&nbsp;	    Collection&lt;MaterialBean&gt; materials = material.doRetrieveByOrderDate();</b>
+&nbsp;	    
+<b class="fc">&nbsp;	    assertEquals(materials.size(), 0);</b>
+&nbsp;	
+&nbsp;	}
+&nbsp;	
+&nbsp;    @Test
+&nbsp;    public void testDoSaveMaterialNotPresent() throws Exception {
+<b class="fc">&nbsp;    	MaterialBean materialBean = new MaterialBean();</b>
+<b class="fc">&nbsp;materialBean.setDataCaricamento(Date.valueOf(&quot;2021-03-20&quot;));</b>
+<b class="fc">&nbsp;    	materialBean.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;    	materialBean.setCosto(0);</b>
+<b class="fc">&nbsp;    	materialBean.setHidden(true);</b>
+<b class="fc">&nbsp;    	materialBean.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;    	materialBean.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;    	materialBean.setDescrizione(&quot;AppuntiMMI&quot;);</b>
+<b class="fc">&nbsp;    	materialBean.setNomeFile(&quot;appuntiMMI.pdf&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;		material.doSave(materialBean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MaterialeExpected.xml&quot;)).getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;    
+&nbsp;    
+&nbsp;    @Test
+&nbsp;	public void testDoSaveNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testGetQuantitaMaterialeCondivisoUsernamePresent() throws Exception {
+<b class="fc">&nbsp;    	int quantitaMaterialeExpected = material.getQuantitaMaterialeCondiviso(&quot;sime00&quot;);</b>
+&nbsp;    	
+<b class="fc">&nbsp;    	assertEquals(quantitaMaterialeExpected,2);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testGetQuantitaMaterialeCondivisoUsernameNotPresent() throws Exception {
+<b class="fc">&nbsp;    	int quantitaMaterialeExpected = material.getQuantitaMaterialeCondiviso(&quot;mario0129239&quot;);</b>
+&nbsp;    	
+<b class="fc">&nbsp;    	assertEquals(quantitaMaterialeExpected,0);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testGetQuantitaMaterialeCondivisoVoidUsername() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.getQuantitaMaterialeCondiviso(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testGetQuantitaMaterialeCondivisoUsernameNull() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			material.getQuantitaMaterialeCondiviso(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteCodiceMaterialePresent() throws Exception {
+&nbsp;    	
+<b class="fc">&nbsp;    	material.doDelete(6);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/MaterialeExpectedDelete.xml&quot;)).getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteCodiceMaterialeNotPresent() throws Exception {
+&nbsp;    	
+<b class="fc">&nbsp;    	material.doDelete(7);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Materiale.xml&quot;)).getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Materiale&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveFeedback() throws SQLException {
+<b class="fc">&nbsp;    	int result=material.doRetrieveFeedback(3);</b>
+<b class="fc">&nbsp;    	assertEquals(result, 3);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveFeedbackMaterialNotPresent() throws SQLException {
+<b class="fc">&nbsp;    	int result=material.doRetrieveFeedback(10);</b>
+<b class="fc">&nbsp;    	assertEquals(result, 0);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveFeedbackCodeMaterialNotValid() throws SQLException {
+<b class="fc">&nbsp;    	boolean flag=false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    		material.doRetrieveFeedback(-1);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;    		flag=true;</b>
+<b class="nc">&nbsp;    	}</b>
+<b class="fc">&nbsp;    	assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    
+&nbsp;    
+&nbsp;    //caso STU1-RTO1-RT1
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingASCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;ASC&quot;,4);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	  //materiale m1
+<b class="fc">&nbsp;	    MaterialBean m1 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m1.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m1.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m1.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m1.setCosto(20);</b>
+<b class="fc">&nbsp;	    m1.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m1.setHidden(false);</b>
+<b class="fc">&nbsp;	    m1.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m1.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m1.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m1);</b>
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO  STU1-RTO1-RT2
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingASCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(20);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(false);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(0);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(true);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m4
+<b class="fc">&nbsp;	    MaterialBean m4 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m4.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m4.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m4.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m4.setCosto(50);</b>
+<b class="fc">&nbsp;	    m4.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m4.setHidden(false);</b>
+<b class="fc">&nbsp;	    m4.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m4.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m4.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m4);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO  STU1-RTO2-RT1
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;DESC&quot;,3);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	    
+&nbsp;		  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(0);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(true);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+&nbsp;
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO  STU1-RTO2-RT2
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingDESCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(20);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(false);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	  //materiale m4
+<b class="fc">&nbsp;	    MaterialBean m4 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m4.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m4.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m4.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m4.setCosto(50);</b>
+<b class="fc">&nbsp;	    m4.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m4.setHidden(false);</b>
+<b class="fc">&nbsp;	    m4.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m4.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m4.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m4);</b>
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			System.out.println(&quot;MEDIA &quot;+material.doRetrieveFeedback(materialArray.get(i).getCodiceMateriale())+&quot; CODICE: &quot;+materialArray.get(i).getCodiceMateriale());</b>
+&nbsp;			
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO  STU1-RTO3-RT1
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;novalue&quot;,3);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(20);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(false);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	   
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+&nbsp;
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="nc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU1-RTO3-RT2
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByParamatersStrPresentRatingNoValueRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;MaterialBean&gt; materialArray = new ArrayList&lt;&gt;(materials);</b>
+<b class="fc">&nbsp;	    ArrayList&lt;MaterialBean&gt; materialExpected = new ArrayList&lt;&gt;();</b>
+&nbsp;	    
+&nbsp;
+&nbsp;	    
+&nbsp;	    
+&nbsp;	  //materiale m2
+<b class="fc">&nbsp;	    MaterialBean m2 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m2.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;	    m2.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;	    m2.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m2.setCosto(20);</b>
+<b class="fc">&nbsp;	    m2.setDescrizione(&quot;provaInf&quot;);</b>
+<b class="fc">&nbsp;	    m2.setHidden(false);</b>
+<b class="fc">&nbsp;	    m2.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m2.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;	    m2.setNomeFile(&quot;provaProg.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m3
+<b class="fc">&nbsp;	    MaterialBean m3 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m3.setCodiceMateriale(5);</b>
+<b class="fc">&nbsp;	    m3.setDataCaricamento(Date.valueOf(&quot;2020-08-02&quot;));</b>
+<b class="fc">&nbsp;	    m3.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m3.setCosto(0);</b>
+<b class="fc">&nbsp;	    m3.setDescrizione(&quot;provaAde&quot;);</b>
+<b class="fc">&nbsp;	    m3.setHidden(true);</b>
+<b class="fc">&nbsp;	    m3.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;	    m3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m3.setNomeFile(&quot;provaADE.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	  //materiale m4
+<b class="fc">&nbsp;	    MaterialBean m4 = new MaterialBean();</b>
+<b class="fc">&nbsp;	    m4.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;	    m4.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;	    m4.setKeywords(&quot;&quot;);</b>
+<b class="fc">&nbsp;	    m4.setCosto(50);</b>
+<b class="fc">&nbsp;	    m4.setDescrizione(&quot;provaSO&quot;);</b>
+<b class="fc">&nbsp;	    m4.setHidden(false);</b>
+<b class="fc">&nbsp;	    m4.setCodiceCorso(2);</b>
+<b class="fc">&nbsp;	    m4.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;	    m4.setNomeFile(&quot;provaSO.pdf&quot;);</b>
+&nbsp;	    
+&nbsp;	    
+<b class="fc">&nbsp;	    materialExpected.add(m2);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m4);</b>
+<b class="fc">&nbsp;	    materialExpected.add(m3);</b>
+&nbsp;
+&nbsp;	    
+<b class="fc">&nbsp;	    for (int i=0;i&lt;materials.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceMateriale(),materialExpected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDataCaricamento(),materialExpected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getKeywords(),materialExpected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCosto(),materialExpected.get(i).getCosto());</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getDescrizione(),materialExpected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).isHidden(),materialExpected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getCodiceCorso(),materialExpected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getUsername(),materialExpected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;			assertEquals(materialArray.get(i).getNomeFile(),materialExpected.get(i).getNomeFile() );</b>
+&nbsp;	    }
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU1-RTO4-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrPresentRatingVoidRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU1-RTO4-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrPresentRatingVoidRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,&quot;&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU1-RTO5-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrPresentRatingNullRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,null,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU1-RTO5-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrPresentRatingNullRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;prova&quot;,null,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO1-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingASCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;ASC&quot;,4);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO1-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingASCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;ASC&quot;,0);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO2-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingDESCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;DESC&quot;,4);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO2-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingDESCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;DESC&quot;,0);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO3-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingNoValueRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;novalue&quot;,4);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO3-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingNoValueRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;novalue&quot;,0);</b>
+&nbsp;		
+<b class="fc">&nbsp;    	assertEquals(materials.size(), 0);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO4-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingVoidRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO4-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingVoidRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,&quot;&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO5-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingNullRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,null,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU2-RTO5-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNotPresentRatingNullRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;APPUNTI-GLOTTOLOGIA&quot;,null,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO1-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingASCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;ASC&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO1-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingASCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO2-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingDESCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;DESC&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO2-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingDESCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO3-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingNovalueRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;novalue&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO3-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingNovalueRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO4-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingVoidRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO4-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingVoidRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,&quot;&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO5-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingNullRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,null,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU3-RTO5-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrVoidRatingNullRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(&quot;&quot;,null,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO1-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingASCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;ASC&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO1-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingASCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO2-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingDESCRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;DESC&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO2-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingDESCRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO3-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingNovalueRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;novalue&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO3-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingNovalueRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO4-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingVoidRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;&quot;,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO4-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingVoidRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,&quot;&quot;,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO5-RT1
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingNullRatingPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,null,3);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;    //CASO STU4-RTO5-RT2
+&nbsp;    @Test
+&nbsp;    public void testRetrieveByParamatersStrNullRatingNullRatingNotPresent() throws Exception {
+<b class="fc">&nbsp;    	boolean flag = false;</b>
+&nbsp;    	try {
+<b class="fc">&nbsp;    	Collection&lt;MaterialBean&gt; materials = material.doRetrieveByParameters(null,null,0);</b>
+<b class="fc">&nbsp;    	}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;    	
+&nbsp;    }
+&nbsp;    
+&nbsp;
+&nbsp;    
+&nbsp;    
+&nbsp;    
+&nbsp;    
+&nbsp;    
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

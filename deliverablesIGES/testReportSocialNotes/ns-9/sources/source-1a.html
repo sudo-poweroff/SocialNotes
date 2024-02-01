@@ -1,0 +1,269 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ReportModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: ReportModelDS (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReportModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (90/100)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import materiale.FeedbackBean;
+&nbsp;
+&nbsp;public class ReportModelDS {
+&nbsp;	private DataSource ds;
+&nbsp;
+<b class="fc">&nbsp;	public ReportModelDS(DataSource ds) {</b>
+<b class="fc">&nbsp;		this.ds = ds;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;ReportBean&gt; doRetrieveArchived() throws SQLException{
+&nbsp;		
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Segnalazione WHERE Stato=1;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;ReportBean&gt; reports=new LinkedList&lt;ReportBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				ReportBean bean=new ReportBean();</b>
+<b class="fc">&nbsp;                bean.setCodiceSegnalazione(rs.getInt(&quot;CodiceSegnalazione&quot;));</b>
+<b class="fc">&nbsp;                bean.setMotivo(rs.getString(&quot;Motivo&quot;));</b>
+<b class="fc">&nbsp;                bean.setStato(rs.getInt(&quot;Stato&quot;));</b>
+<b class="fc">&nbsp;                bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;                reports.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;		
+&nbsp;		
+<b class="fc">&nbsp;		return reports;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	public Collection&lt;ReportBean&gt; doRetrieveNotArchived() throws SQLException{
+&nbsp;		
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Segnalazione WHERE Stato=0;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;ReportBean&gt; reports=new LinkedList&lt;ReportBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				ReportBean bean=new ReportBean();</b>
+<b class="fc">&nbsp;                bean.setCodiceSegnalazione(rs.getInt(&quot;CodiceSegnalazione&quot;));</b>
+<b class="fc">&nbsp;                bean.setMotivo(rs.getString(&quot;Motivo&quot;));</b>
+<b class="fc">&nbsp;                bean.setStato(rs.getInt(&quot;Stato&quot;));</b>
+<b class="fc">&nbsp;                bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;                reports.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;		
+&nbsp;		
+<b class="fc">&nbsp;		return reports;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	public void doSave (ReportBean item) throws SQLException {
+<b class="fc">&nbsp;		if(item==null)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+&nbsp;		//ResultSet rs=null;
+<b class="fc">&nbsp;		String sql=&quot;INSERT INTO Segnalazione (Stato, Motivo, Username) VALUES (?,?,?)&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setInt(1, item.getStato());</b>
+<b class="fc">&nbsp;			ps.setString(2, item.getMotivo());</b>
+<b class="fc">&nbsp;			ps.setString(3, item.getUsername());</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+&nbsp;
+&nbsp;
+&nbsp;		}finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if (ps != null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			} finally {
+<b class="fc">&nbsp;				if (con != null) {</b>
+<b class="fc">&nbsp;					con.close();</b>
+&nbsp;				}
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	public void removeReport(String username) throws SQLException {
+<b class="fc">&nbsp;		if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String sql=&quot;DELETE FROM Segnalazione WHERE Username = ?;&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setString(1,username);</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+<b class="fc">&nbsp;			System.out.println(&quot;Segnalazione eliminata&quot;);</b>
+&nbsp;		}finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	public void archiveReport(int codiceSegnalazione) throws SQLException {
+<b class="fc">&nbsp;		if(codiceSegnalazione&lt;0)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String sql=&quot;UPDATE Segnalazione SET Stato = 1 WHERE CodiceSegnalazione = ?;&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setInt(1, codiceSegnalazione);</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+<b class="fc">&nbsp;			System.out.println(&quot;Segnalazione archiviata&quot;);</b>
+&nbsp;		}finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

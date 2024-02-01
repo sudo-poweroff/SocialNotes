@@ -1,0 +1,185 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PurchaseModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">acquisto</a>
+</div>
+
+<h1>Coverage Summary for Class: PurchaseModelDS (acquisto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PurchaseModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,3%
+  </span>
+  <span class="absValue">
+    (42/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package acquisto;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import materiale.FeedbackBean;
+&nbsp;
+&nbsp;
+&nbsp;public class PurchaseModelDS {
+&nbsp;	private DataSource ds;
+&nbsp;
+<b class="fc">&nbsp;	public PurchaseModelDS(DataSource ds) {</b>
+<b class="fc">&nbsp;		this.ds = ds;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	public Collection&lt;PurchaseBean&gt; doRetrieveByUsername(String username)throws SQLException{
+<b class="fc">&nbsp;		if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;		</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Acquisto WHERE username = ?;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;PurchaseBean&gt; purchases=new LinkedList&lt;PurchaseBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ps.setString(1,username);</b>
+&nbsp;		
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				PurchaseBean bean=new PurchaseBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(username);</b>
+<b class="fc">&nbsp;				bean.setDataAcquisto(rs.getDate(&quot;DataAcquisto&quot;));</b>
+<b class="fc">&nbsp;				purchases.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return purchases;</b>
+&nbsp;	}
+&nbsp;	public void doSave(PurchaseBean item) throws SQLException{
+<b class="fc">&nbsp;		if(item==null)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+&nbsp;		//ResultSet rs=null;
+<b class="fc">&nbsp;		String sql=&quot;INSERT INTO Acquisto (Username, CodiceMateriale, DataAcquisto) VALUES (?,?,?)&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setString(1, item.getUsername());</b>
+<b class="fc">&nbsp;			ps.setInt(2, item.getCodiceMateriale());</b>
+<b class="fc">&nbsp;			ps.setDate(3, item.getDataAcquisto());</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+&nbsp;	
+&nbsp;	
+&nbsp;		}finally {
+<b class="fc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if (ps != null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			} finally {
+<b class="fc">&nbsp;				if (con != null) {</b>
+<b class="fc">&nbsp;					con.close();</b>
+&nbsp;				}
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;		}
+&nbsp;	}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

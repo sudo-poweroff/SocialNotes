@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InserimentoInteressiTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilosistema</a>
+</div>
+
+<h1>Coverage Summary for Class: InserimentoInteressiTest (profilosistema)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InserimentoInteressiTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilosistema;
+&nbsp;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;import org.openqa.selenium.*;
+&nbsp;import org.openqa.selenium.chrome.ChromeDriver;
+&nbsp;import org.openqa.selenium.chrome.ChromeOptions;
+&nbsp;import static org.hamcrest.CoreMatchers.is;
+&nbsp;import static org.junit.Assert.assertThat;
+&nbsp;
+<b class="fc">&nbsp;public class InserimentoInteressiTest {</b>
+&nbsp;    private WebDriver driver;
+&nbsp;    JavascriptExecutor js;
+&nbsp;    @Before
+&nbsp;    public void setUp() {
+<b class="fc">&nbsp;        System.setProperty(&quot;webdriver.chrome.driver&quot;,&quot;test/materialesistema/chromedriver.exe&quot;);</b>
+&nbsp;        //System.setProperty(&quot;webdriver.chrome.driver&quot;,&quot;test/materialesistema/chromedriver&quot;);
+<b class="fc">&nbsp;        driver = new ChromeDriver(new ChromeOptions().addArguments(&quot;--remote-allow-origins=*&quot;));</b>
+<b class="fc">&nbsp;        js = (JavascriptExecutor) driver;</b>
+&nbsp;    }
+&nbsp;    @After
+&nbsp;    public void tearDown() {
+<b class="fc">&nbsp;        driver.quit();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testInserimentoInteressiOK() throws InterruptedException {
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=rock1&amp;mail=rocco.iuliano65@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(1382, 736));</b>
+<b class="fc">&nbsp;        driver.findElement(By.cssSelector(&quot;.btn:nth-child(5)&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputEmail&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputEmail&quot;)).sendKeys(&quot;rock1&quot;);</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputPassword&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(&quot;Mensa0&quot;);</b>
+<b class="fc">&nbsp;        driver.findElement(By.cssSelector(&quot;.btn&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.cssSelector(&quot;#\\34 8 span&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;avantiButton&quot;)).click();</b>
+<b class="fc">&nbsp;        assertThat(driver.getTitle(), is(&quot;SocialNotes - Home&quot;));</b>
+<b class="fc">&nbsp;        driver.findElement(By.linkText(&quot;Logout&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testInserimentoInteressiNonInseriti() throws InterruptedException {
+<b class="fc">&nbsp;        driver.get(&quot;http://localhost:8080/SocialNotes/Verifica?username=onco1&amp;mail=oncovision1@gmail.com&amp;accessNumber=0&quot;);</b>
+<b class="fc">&nbsp;        driver.manage().window().setSize(new Dimension(1382, 736));</b>
+<b class="fc">&nbsp;        driver.findElement(By.cssSelector(&quot;.btn:nth-child(5)&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputEmail&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputEmail&quot;)).sendKeys(&quot;onco1&quot;);</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputPassword&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(&quot;Password0&quot;);</b>
+<b class="fc">&nbsp;        driver.findElement(By.cssSelector(&quot;.btn&quot;)).click();</b>
+<b class="fc">&nbsp;        driver.findElement(By.id(&quot;avantiButton&quot;)).click();</b>
+<b class="fc">&nbsp;        Thread.sleep(5000);</b>
+<b class="fc">&nbsp;        assertThat(driver.switchTo().alert().getText(), is(&quot;Errore, interessi non inseriti!.&quot;));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

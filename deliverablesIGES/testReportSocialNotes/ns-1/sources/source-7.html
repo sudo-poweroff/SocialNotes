@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RemoveFromCart</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">acquisto</a>
+</div>
+
+<h1>Coverage Summary for Class: RemoveFromCart (acquisto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RemoveFromCart</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package acquisto;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.Iterator;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;
+&nbsp;import materiale.MaterialBean;
+&nbsp;
+&nbsp;@WebServlet(&quot;/RemoveFromCart&quot;)
+&nbsp;public class RemoveFromCart extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;
+&nbsp;	public RemoveFromCart() {
+<b class="nc">&nbsp;		super();</b>
+&nbsp;		// TODO Auto-generated constructor stub
+&nbsp;	}
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		HttpSession session = request.getSession(false);</b>
+<b class="nc">&nbsp;		if(session==null) {</b>
+<b class="nc">&nbsp;			response.sendRedirect(&quot;homepage.jsp&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		Collection&lt;MaterialBean&gt;cart=(Collection&lt;MaterialBean&gt;)session.getAttribute(&quot;cart&quot;);</b>
+<b class="nc">&nbsp;		String codice=request.getParameter(&quot;codice&quot;);</b>
+<b class="nc">&nbsp;		int codiceMateriale=Integer.parseInt(codice);</b>
+<b class="nc">&nbsp;		System.out.println(&quot;codice materiale in servlet: &quot;+codiceMateriale);</b>
+<b class="nc">&nbsp;		if(cart!=null&amp;&amp;cart.size()&gt;0){</b>
+<b class="nc">&nbsp;			Iterator&lt;?&gt; it=cart.iterator();</b>
+<b class="nc">&nbsp;			while(it.hasNext()) {</b>
+<b class="nc">&nbsp;				MaterialBean material=(MaterialBean)it.next();</b>
+<b class="nc">&nbsp;				if(material.getCodiceMateriale()==codiceMateriale)</b>
+&nbsp;					//cart.remove(material);
+<b class="nc">&nbsp;					it.remove();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="nc">&nbsp;			session.setAttribute(&quot;cart&quot;,cart);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/cart.jsp&quot;);</b>
+<b class="nc">&nbsp;		dispatcher.forward(request, response);</b>
+&nbsp;	}
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

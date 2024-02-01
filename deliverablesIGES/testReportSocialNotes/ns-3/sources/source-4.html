@@ -1,0 +1,301 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ChatModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">chat</a>
+</div>
+
+<h1>Coverage Summary for Class: ChatModelDSTest (chat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChatModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (19/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,7%
+  </span>
+  <span class="absValue">
+    (76/82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package chat;
+&nbsp;
+&nbsp;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class ChatModelDSTest extends DataSourceBasedDBTestCase  {</b>
+&nbsp;	
+&nbsp;	private DataSource ds;
+&nbsp;	private ChatModelDS chat;
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;        dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Chat.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;        return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Chat.xml&quot;));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;	
+&nbsp;	
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		chat=new ChatModelDS(ds);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyPresente() throws SQLException{
+<b class="fc">&nbsp;		ChatBean result= chat.doRetrieveByKey(&quot;18&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result.getChatID(),18);</b>
+<b class="fc">&nbsp;		assertEquals(result.getTitolo(),&quot;friendship&quot;);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNonPresente() throws SQLException{		
+<b class="fc">&nbsp;		ChatBean result= chat.doRetrieveByKey(&quot;19&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result,null);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyVuota() throws SQLException{		
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			chat.doRetrieveByKey(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNull() throws SQLException{		
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			chat.doRetrieveByKey(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveLast() throws SQLException{
+<b class="fc">&nbsp;		ChatBean result= chat.doRetrieveLast();</b>
+<b class="fc">&nbsp;		assertEquals(result.getChatID(),65);</b>
+<b class="fc">&nbsp;		assertEquals(result.getTitolo(),&quot;progetto IS&quot;);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveLastNonPresente() throws SQLException{
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Chat WHERE ChatID=18&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Chat WHERE ChatID=16&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Chat WHERE ChatID=65&quot;).execute();</b>
+&nbsp;		
+<b class="fc">&nbsp;		ChatBean result= chat.doRetrieveLast();</b>
+<b class="fc">&nbsp;		assertNull(result);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception{
+<b class="fc">&nbsp;		ChatBean bean= new ChatBean();</b>
+<b class="fc">&nbsp;		bean.setTitolo(&quot;nuova chat&quot;);</b>
+<b class="fc">&nbsp;		bean.setChatID(1);</b>
+<b class="fc">&nbsp;		chat.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/ChatExpected.xml&quot;)).getTable(&quot;Chat&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Chat&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			chat.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveChatNamePresente() throws SQLException{
+<b class="fc">&nbsp;		Collection&lt;ChatBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=chat.doRetrieveChatName(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		ArrayList&lt;ChatBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;ChatBean&gt; expected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		ChatBean b1 = new ChatBean();</b>
+<b class="fc">&nbsp;		b1.setChatID(65);</b>
+<b class="fc">&nbsp;		b1.setTitolo(&quot;progetto IS&quot;);</b>
+<b class="fc">&nbsp;		ChatBean b2 = new ChatBean();</b>
+<b class="fc">&nbsp;		b2.setChatID(16);</b>
+<b class="fc">&nbsp;		b2.setTitolo(&quot;gruppo di fuoco&quot;);</b>
+<b class="fc">&nbsp;		expected.add(b2);</b>
+<b class="fc">&nbsp;		expected.add(b1);</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getChatID(),expected.get(i).getChatID());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getTitolo(),expected.get(i).getTitolo());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveChatNameNonPresente() throws SQLException{
+<b class="fc">&nbsp;		Collection&lt;ChatBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=chat.doRetrieveChatName(&quot;pluto&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(result.size(),0);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveChatNameVuoto() throws SQLException{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			chat.doRetrieveChatName(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);	</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveChatNameNull() throws SQLException{
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			chat.doRetrieveChatName(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;	</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(true,flag);	</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

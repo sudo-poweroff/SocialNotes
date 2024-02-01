@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CheckUsernameAvailableAJAX</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: CheckUsernameAvailableAJAX (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CheckUsernameAvailableAJAX</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.PrintWriter;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;/**
+&nbsp; * Servlet implementation class Registrazione
+&nbsp; */
+&nbsp;@WebServlet(&quot;/CheckUsernameAvailableAJAX&quot;)
+&nbsp;public class CheckUsernameAvailableAJAX extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;       
+&nbsp;    public CheckUsernameAvailableAJAX() {
+<b class="nc">&nbsp;        super();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		response.setContentType(&quot;text/strings&quot;);</b>
+<b class="nc">&nbsp;		String name=request.getParameter(&quot;param&quot;);</b>
+<b class="nc">&nbsp;		PrintWriter out = response.getWriter();</b>
+<b class="nc">&nbsp;		if(name!=null) {</b>
+&nbsp;			//System.out.println(name);
+&nbsp;			
+<b class="nc">&nbsp;			DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;			UserModelDS model= new UserModelDS(ds);</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				if(model.doRetrieveByUsername(name)==null) {</b>
+<b class="nc">&nbsp;					out.write(&quot;true&quot;);</b>
+&nbsp;					//disponibile
+&nbsp;				}
+&nbsp;				else {
+<b class="nc">&nbsp;					out.write(&quot;false&quot;);</b>
+&nbsp;				}
+<b class="nc">&nbsp;			}catch(SQLException e) {</b>
+&nbsp;				
+<b class="nc">&nbsp;			}</b>
+&nbsp;			/*if(name.equals(&quot;Cristiano&quot;)||name.equals(&quot;Ronaldo&quot;)) {
+&nbsp;				out.write(&quot;false&quot;);
+&nbsp;				System.out.println(&quot;non disponibile&quot;);
+&nbsp;			}
+&nbsp;			else {
+&nbsp;				out.write(&quot;true&quot;);
+&nbsp;				System.out.println(&quot;disponibile&quot;);
+&nbsp;			}
+&nbsp;			*/
+&nbsp;			
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

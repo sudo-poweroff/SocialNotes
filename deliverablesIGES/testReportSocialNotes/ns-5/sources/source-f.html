@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PrintAnteprima</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: PrintAnteprima (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PrintAnteprima</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.io.OutputStream;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletContext;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import com.mysql.cj.Session;
+&nbsp;
+&nbsp;import profilo.UserBean;
+&nbsp;import profilo.UserModelDS;
+&nbsp;import org.apache.pdfbox.pdmodel.PDDocument;
+&nbsp;import org.apache.pdfbox.rendering.PDFRenderer;
+&nbsp;import org.apache.pdfbox.rendering.ImageType;
+&nbsp;
+&nbsp;@WebServlet(&quot;/PrintAnteprima&quot;)
+&nbsp;public class PrintAnteprima extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;
+&nbsp;	public PrintAnteprima() {
+<b class="nc">&nbsp;		super();</b>
+&nbsp;		// TODO Auto-generated constructor stub
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		response.setContentType(&quot;image/png&quot;);</b>
+<b class="nc">&nbsp;		String code=request.getParameter(&quot;codice&quot;);</b>
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+&nbsp;		try{
+<b class="nc">&nbsp;			MaterialModelDS material=new MaterialModelDS(ds);</b>
+<b class="nc">&nbsp;			MaterialBean bean=material.doRetrieveByKey(code);</b>
+&nbsp;
+<b class="nc">&nbsp;			String fileName=bean.getNomeFile();</b>
+<b class="nc">&nbsp;			String relativePath=&quot;WebContent\\material\\&quot;;</b>
+<b class="nc">&nbsp;			ServletContext context = request.getServletContext();</b>
+<b class="nc">&nbsp;			String absolutePath = context.getRealPath(&quot;&quot;);</b>
+<b class="nc">&nbsp;			String[] path=absolutePath.split(&quot;\\\\&quot;);</b>
+<b class="nc">&nbsp;			String effectivePath=&quot;&quot;;</b>
+<b class="nc">&nbsp;			for(int i=0;i&lt;path.length-3;i++)</b>
+<b class="nc">&nbsp;				effectivePath+=path[i]+&quot;\\&quot;;</b>
+<b class="nc">&nbsp;			effectivePath+=relativePath+fileName;</b>
+&nbsp;
+<b class="nc">&nbsp;			PDDocument document = PDDocument.load(new File(effectivePath));</b>
+<b class="nc">&nbsp;			PDFRenderer pdfRenderer = new PDFRenderer(document);</b>
+&nbsp;
+&nbsp;			// Estrai la pagina come immagine
+<b class="nc">&nbsp;			BufferedImage bim = pdfRenderer.renderImageWithDPI(1 - 1, 300, ImageType.RGB);</b>
+&nbsp;
+&nbsp;			// Scrivi l&#39;immagine nella risposta HTTP
+<b class="nc">&nbsp;			OutputStream out = response.getOutputStream();</b>
+<b class="nc">&nbsp;			ImageIO.write(bim, &quot;jpg&quot;, out);</b>
+<b class="nc">&nbsp;			out.close();</b>
+&nbsp;
+<b class="nc">&nbsp;			document.close();</b>
+<b class="nc">&nbsp;		}catch (Exception e){</b>
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;	
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

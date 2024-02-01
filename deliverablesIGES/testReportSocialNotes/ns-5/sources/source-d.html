@@ -1,0 +1,598 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MaterialModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: MaterialModelDS (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MaterialModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,2%
+  </span>
+  <span class="absValue">
+    (283/307)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;
+&nbsp;public class MaterialModelDS {
+&nbsp;	
+<b class="fc">&nbsp;	public MaterialModelDS(DataSource ds) {</b>
+<b class="fc">&nbsp;		this.ds=ds;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public MaterialBean doRetrieveByKey(String code) throws SQLException {
+<b class="fc">&nbsp;		if(code==null||code.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Materiale WHERE CodiceMateriale=?;&quot;;</b>
+<b class="fc">&nbsp;		MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;		ResultSet rs=null;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			int codice=Integer.parseInt(code);</b>
+&nbsp;			//System.out.println(&quot;Codice in materilmodel &quot;+codice);
+<b class="fc">&nbsp;			ps.setInt(1, codice);</b>
+<b class="fc">&nbsp;			rs=ps.executeQuery();</b>
+&nbsp;			//System.out.println(&quot;ciao&quot;);
+<b class="fc">&nbsp;			if(rs.next()) {</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(rs!=null)</b>
+<b class="fc">&nbsp;					rs.close();</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return bean;</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;MaterialBean&gt; notValidated()throws SQLException{
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Materiale WHERE Hidden=true ;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; material=new LinkedList&lt;MaterialBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;				material.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return material;</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public void setPrice(int codiceMateriale,int price)throws SQLException {
+<b class="fc">&nbsp;		if(codiceMateriale&lt;0||price&lt;0)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String sql=&quot;UPDATE Materiale SET Costo=?,Hidden=false WHERE CodiceMateriale=?&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con = ds.getConnection();</b>
+<b class="fc">&nbsp;			ps = con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setInt(1, price);</b>
+<b class="fc">&nbsp;			ps.setInt(2, codiceMateriale);</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+<b class="fc">&nbsp;			System.out.println(&quot;Prezzo impostato&quot;);</b>
+&nbsp;		} finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;MaterialBean&gt;  doRetrieveByString(String str) throws SQLException {
+<b class="fc">&nbsp;		if(str==null||str.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+&nbsp;
+&nbsp;		
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Materiale WHERE Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso From Corso WHERE Nome LIKE ?);&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; material=new LinkedList&lt;MaterialBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ps.setString(1, &#39;%&#39;+str+&#39;%&#39;);</b>
+<b class="fc">&nbsp;			ps.setString(2, &#39;%&#39;+str+&#39;%&#39;);</b>
+&nbsp;			
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;				material.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return material;</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;MaterialBean&gt;  doRetrieveByUsername(String username) throws SQLException {
+<b class="fc">&nbsp;		if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		ResultSet rs=null;</b>
+&nbsp;		
+<b class="fc">&nbsp;		String sql=&quot;SELECT * FROM Materiale WHERE Username=? AND Hidden=false ORDER BY DataCaricamento desc;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; material=new LinkedList&lt;MaterialBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setString(1,username);</b>
+&nbsp;			
+<b class="fc">&nbsp;			rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;				material.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(rs!=null)</b>
+<b class="fc">&nbsp;					rs.close();</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return material;</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;MaterialBean&gt;  doRetrieveByParameters(String str,String ratingOrder, int rating) throws SQLException {
+<b class="fc">&nbsp;		if(str==null||str.equals(&quot;&quot;)||ratingOrder==null||ratingOrder.equals(&quot;&quot;)||rating&lt;0)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+&nbsp;		
+&nbsp;		
+&nbsp;		
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n&quot;</b>
+&nbsp;				+ &quot;FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n&quot;
+&nbsp;				+ &quot;WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n&quot;
+&nbsp;				+ &quot;GROUP BY CodiceMateriale\n&quot;
+&nbsp;				+ &quot;ORDER BY ValutazioneMedia;&quot;;
+&nbsp;		
+&nbsp;
+&nbsp;		
+<b class="fc">&nbsp;		if ((ratingOrder.compareTo(&quot;DESC&quot;)==0)) {</b>
+<b class="fc">&nbsp;			selectSQL=&quot;SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n&quot;</b>
+&nbsp;					+ &quot;FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n&quot;
+&nbsp;					+ &quot;WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n&quot;
+&nbsp;					+ &quot;GROUP BY CodiceMateriale\n&quot;
+&nbsp;					+ &quot;ORDER BY ValutazioneMedia DESC;&quot;;
+&nbsp;		}
+<b class="fc">&nbsp;		if ((ratingOrder.compareTo(&quot;ASC&quot;)==0)) {</b>
+<b class="fc">&nbsp;			selectSQL=&quot;SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n&quot;</b>
+&nbsp;					+ &quot;FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n&quot;
+&nbsp;					+ &quot;WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n&quot;
+&nbsp;					+ &quot;GROUP BY CodiceMateriale\n&quot;
+&nbsp;					+ &quot;ORDER BY ValutazioneMedia;&quot;;
+&nbsp;			}
+&nbsp;
+&nbsp;		
+<b class="fc">&nbsp;		if ((ratingOrder.compareTo(&quot;novalue&quot;)==0)) {</b>
+<b class="fc">&nbsp;			selectSQL=&quot;SELECT Materiale.CodiceMateriale AS CodiceMateriale, Materiale.DataCaricamento,Materiale.Keywords, Materiale.costo, Materiale.Descrizione, Materiale.Hidden, Materiale.Username, Materiale.CodiceCorso,Materiale.nomeFile, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n&quot;</b>
+&nbsp;					+ &quot;FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale\n&quot;
+&nbsp;					+ &quot;WHERE Materiale.Hidden = false AND ( Descrizione LIKE ? OR CodiceCorso IN (SELECT CodiceCorso from Corso WHERE Nome LIKE ?) )\n&quot;
+&nbsp;					+ &quot;GROUP BY CodiceMateriale&quot;;
+&nbsp;			}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;		
+&nbsp;		
+&nbsp;
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; material=new LinkedList&lt;MaterialBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+&nbsp;
+<b class="fc">&nbsp;			ps.setString(1, &#39;%&#39;+str+&#39;%&#39;);</b>
+<b class="fc">&nbsp;			ps.setString(2, &#39;%&#39;+str+&#39;%&#39;);</b>
+&nbsp;			
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+&nbsp;				
+<b class="fc">&nbsp;				if (rating!=0) {</b>
+<b class="fc">&nbsp;					if (rs.getInt(&quot;ValutazioneMedia&quot;)==rating) {</b>
+<b class="fc">&nbsp;					MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;					bean.setCodiceMateriale(rs.getInt(&quot;Materiale.CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;					bean.setDataCaricamento(rs.getDate(&quot;Materiale.DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;					bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;					bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;					bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;					bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;					bean.setCodiceCorso(rs.getInt(&quot;Materiale.CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;					bean.setUsername(rs.getString(&quot;Materiale.Username&quot;));</b>
+<b class="fc">&nbsp;					bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;					material.add(bean);</b>
+<b class="fc">&nbsp;					}</b>
+&nbsp;				}else {
+&nbsp;				
+<b class="fc">&nbsp;				MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;Materiale.CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;Materiale.DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;Materiale.CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Materiale.Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;				material.add(bean);</b>
+<b class="fc">&nbsp;				}</b>
+&nbsp;			}
+&nbsp;			
+&nbsp;		
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;		
+<b class="fc">&nbsp;		return material;</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;	
+&nbsp;	public int doRetrieveFeedback(int code) throws SQLException {
+<b class="fc">&nbsp;		if(code&lt;=0)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+&nbsp;	
+&nbsp;
+&nbsp;		
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT Materiale.CodiceMateriale AS CodiceMateriale, ROUND(AVG(Valutazione)) AS ValutazioneMedia\n&quot;</b>
+&nbsp;				+ &quot;FROM Materiale LEFT JOIN Feedback ON Materiale.CodiceMateriale = Feedback.CodiceMateriale \n&quot;
+&nbsp;				+ &quot;WHERE Materiale.CodiceMateriale = ? GROUP BY Materiale.CodiceMateriale;&quot;;
+&nbsp;		
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+&nbsp;
+<b class="fc">&nbsp;			ps.setInt(1, code);</b>
+&nbsp;			
+&nbsp;	
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+&nbsp;			
+<b class="fc">&nbsp;			if(rs.first()) {</b>
+<b class="fc">&nbsp;				return rs.getInt(&quot;ValutazioneMedia&quot;);</b>
+&nbsp;			}
+&nbsp;			
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return 0;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Collection&lt;MaterialBean&gt; doRetrieveByOrderDate() throws SQLException {
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		String selectSQL=&quot;SELECT * FROM Materiale WHERE Hidden=false ORDER BY DataCaricamento desc;&quot;;</b>
+<b class="fc">&nbsp;		Collection&lt;MaterialBean&gt; material=new LinkedList&lt;MaterialBean&gt;();</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(selectSQL);</b>
+<b class="fc">&nbsp;			ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			while(rs.next()) {</b>
+<b class="fc">&nbsp;				MaterialBean bean=new MaterialBean();</b>
+<b class="fc">&nbsp;				bean.setCodiceMateriale(rs.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;				bean.setDataCaricamento(rs.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;				bean.setKeywords(rs.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;				bean.setCosto(rs.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;				bean.setDescrizione(rs.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;				bean.setHidden(rs.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;				bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;				bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;				bean.setNomeFile(rs.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;				material.add(bean);</b>
+<b class="fc">&nbsp;			}</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+<b class="fc">&nbsp;		return material;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	public void doSave(MaterialBean item) throws SQLException {
+<b class="fc">&nbsp;		if(item==null)</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection connection = null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps = null;</b>
+&nbsp;
+<b class="fc">&nbsp;		String sql = &quot;INSERT INTO Materiale&quot; + &quot; (DataCaricamento,Keywords,Costo,Descrizione,Hidden,CodiceCorso,Username,nomeFile) VALUES (?, ?, ?, ?, ?, ?, ?, ?)&quot;;</b>
+&nbsp;		
+&nbsp;		try {
+<b class="fc">&nbsp;			connection = ds.getConnection();</b>
+<b class="fc">&nbsp;			ps = connection.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setDate(1, item.getDataCaricamento());</b>
+<b class="fc">&nbsp;			ps.setString(2, item.getKeywords());</b>
+<b class="fc">&nbsp;			ps.setInt(3, item.getCosto());</b>
+<b class="fc">&nbsp;			ps.setString(4, item.getDescrizione());</b>
+<b class="fc">&nbsp;			ps.setBoolean(5, item.isHidden());</b>
+<b class="fc">&nbsp;			ps.setInt(6, item.getCodiceCorso());</b>
+<b class="fc">&nbsp;			ps.setString(7, item.getUsername());</b>
+<b class="fc">&nbsp;			ps.setString(8, item.getNomeFile());</b>
+&nbsp;			
+&nbsp;		
+&nbsp;
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+<b class="fc">&nbsp;			System.out.println(&quot;Materiale inserito&quot;);</b>
+&nbsp;		} finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(connection!=null)</b>
+<b class="fc">&nbsp;					connection.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;	public int getQuantitaMaterialeCondiviso(String username)throws SQLException {
+<b class="fc">&nbsp;		if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection con=null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;		ResultSet rs=null;</b>
+<b class="fc">&nbsp;		String sql=&quot;SELECT count(*) as QuantitaMateriale FROM Materiale WHERE Username=? GROUP BY Username&quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			con=ds.getConnection();</b>
+<b class="fc">&nbsp;			ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setString(1, username);</b>
+<b class="fc">&nbsp;			rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;			if(rs.next())</b>
+<b class="fc">&nbsp;				return rs.getInt(&quot;QuantitaMateriale&quot;);</b>
+<b class="fc">&nbsp;			return 0;</b>
+&nbsp;		}finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(rs!=null)</b>
+<b class="fc">&nbsp;					rs.close();</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(con!=null)</b>
+<b class="fc">&nbsp;					con.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	public void doDelete(int codiceMateriale) throws SQLException {
+<b class="fc">&nbsp;		if(codiceMateriale&lt;0)</b>
+<b class="nc">&nbsp;			throw new NullPointerException();</b>
+<b class="fc">&nbsp;		Connection connection = null;</b>
+<b class="fc">&nbsp;		PreparedStatement ps = null;</b>
+&nbsp;
+<b class="fc">&nbsp;		String sql= &quot;DELETE FROM Materiale WHERE CodiceMateriale=? &quot;;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			connection = ds.getConnection();</b>
+<b class="fc">&nbsp;			ps = connection.prepareStatement(sql);</b>
+<b class="fc">&nbsp;			ps.setInt(1, codiceMateriale);</b>
+<b class="fc">&nbsp;			ps.executeUpdate();</b>
+&nbsp;		}
+&nbsp;		finally {
+<b class="nc">&nbsp;			try {</b>
+<b class="fc">&nbsp;				if(ps!=null)</b>
+<b class="fc">&nbsp;					ps.close();</b>
+&nbsp;			}
+&nbsp;			finally {
+<b class="fc">&nbsp;				if(connection!=null)</b>
+<b class="fc">&nbsp;					connection.close();</b>
+<b class="nc">&nbsp;			}</b>
+<b class="fc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	private DataSource ds;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

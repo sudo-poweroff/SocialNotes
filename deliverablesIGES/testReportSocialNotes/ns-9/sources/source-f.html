@@ -1,0 +1,525 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InteresseModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: InteresseModelDSTest (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InteresseModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,1%
+  </span>
+  <span class="absValue">
+    (33/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,5%
+  </span>
+  <span class="absValue">
+    (223/236)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import com.sun.source.tree.AssertTree;
+&nbsp;import materiale.CourseBean;
+&nbsp;import materiale.MaterialBean;
+&nbsp;import org.checkerframework.checker.units.qual.A;
+&nbsp;import org.checkerframework.checker.units.qual.C;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.DatabaseUnitException;
+&nbsp;import org.dbunit.dataset.DataSetException;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+<b class="fc">&nbsp;public class InteresseModelDSTest extends DataSourceBasedDBTestCase {</b>
+&nbsp;    private DataSource ds;
+&nbsp;    private InteresseModelDS interesseModel;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected DataSource getDataSource() {
+<b class="fc">&nbsp;        JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;        dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Interesse.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;        dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;        return dataSource;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;        return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Interesse.xml&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;        return DatabaseOperation.REFRESH;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;        return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @AfterClass
+<b class="nc">&nbsp;    public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;    @Before
+&nbsp;    public void setUp() throws Exception {
+<b class="fc">&nbsp;        super.setUp();</b>
+<b class="fc">&nbsp;        ds=this.getDataSource();</b>
+<b class="fc">&nbsp;        interesseModel=new InteresseModelDS(ds);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @After
+&nbsp;    public void tearDown() throws Exception {
+<b class="fc">&nbsp;        super.tearDown();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByUsernamePresent() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=interesseModel.doRetrieveByUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; expected= new ArrayList&lt;InteresseBean&gt;();</b>
+<b class="fc">&nbsp;        InteresseBean i2=new InteresseBean();</b>
+<b class="fc">&nbsp;        i2.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        i2.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;        i2.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        expected.add(i2);</b>
+<b class="fc">&nbsp;        InteresseBean i3=new InteresseBean();</b>
+<b class="fc">&nbsp;        i3.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        i3.setCodiceCorso(11);</b>
+<b class="fc">&nbsp;        i3.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        expected.add(i3);</b>
+<b class="fc">&nbsp;        InteresseBean i1=new InteresseBean();</b>
+<b class="fc">&nbsp;        i1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        i1.setCodiceCorso(46);</b>
+<b class="fc">&nbsp;        i1.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        expected.add(i1);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(expected.size(),interessi.size());</b>
+<b class="fc">&nbsp;        for(int i=0; i&lt;interessi.size();i++){</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getUsername(), expected.get(i).getUsername());</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByUsernameNotPresent() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=interesseModel.doRetrieveByUsername(&quot;ab&quot;);</b>
+<b class="fc">&nbsp;        assertEquals(interessi.size(),0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByUsernameNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;           interesseModel.doRetrieveByUsername(null);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByUsernameEmpty() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doRetrieveByUsername(&quot;&quot;);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByCorsoPresent() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=interesseModel.doRetrieveByCorso(3);</b>
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; expected= new ArrayList&lt;InteresseBean&gt;();</b>
+<b class="fc">&nbsp;        InteresseBean i1=new InteresseBean();</b>
+<b class="fc">&nbsp;        i1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        i1.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;        i1.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        expected.add(i1);</b>
+<b class="fc">&nbsp;        assertEquals(expected.size(),interessi.size());</b>
+<b class="fc">&nbsp;        for(int i=0; i&lt;interessi.size();i++){</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getUsername(), expected.get(i).getUsername());</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveByCorsoNotPresent() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=interesseModel.doRetrieveByCorso(70);</b>
+<b class="fc">&nbsp;        assertEquals(interessi.size(),0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoSave() throws Exception {
+<b class="fc">&nbsp;        InteresseBean interesse= new InteresseBean();</b>
+<b class="fc">&nbsp;        interesse.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        interesse.setCodiceCorso(20);</b>
+<b class="fc">&nbsp;        interesse.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        interesseModel.doSave(interesse);</b>
+<b class="fc">&nbsp;        ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/InteresseExpected.xml&quot;)).getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        ITable actual=this.getConnection().createDataSet().getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoSaveAlreadyExisits(){
+<b class="fc">&nbsp;        InteresseBean interesse= new InteresseBean();</b>
+<b class="fc">&nbsp;        interesse.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        interesse.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;        interesse.setDataInserimento(Date.valueOf(&quot;2023-10-13&quot;));</b>
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doSave(interesse);</b>
+<b class="fc">&nbsp;        }catch (SQLException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoSaveNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doSave(null);</b>
+<b class="nc">&nbsp;        }catch(IllegalArgumentException e){flag=true;}</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteressePresent() throws Exception {
+<b class="fc">&nbsp;        interesseModel.doDelete(&quot;sime00&quot;,3);</b>
+<b class="fc">&nbsp;        ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/InteresseExpectedDelete.xml&quot;)).getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        ITable actual=this.getConnection().createDataSet().getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteresseCorsoNotPresent() throws Exception {
+<b class="fc">&nbsp;        interesseModel.doDelete(&quot;sime00&quot;,70);</b>
+<b class="fc">&nbsp;        ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Interesse.xml&quot;)).getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        ITable actual=this.getConnection().createDataSet().getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteresseUsernameNotPresent() throws Exception {
+<b class="fc">&nbsp;        interesseModel.doDelete(&quot;ab&quot;,3);</b>
+<b class="fc">&nbsp;        ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Interesse.xml&quot;)).getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        ITable actual=this.getConnection().createDataSet().getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteresseUsernameNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doDelete(null,3);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteresseUsernameEmpty() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doDelete(&quot;&quot;,3);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoDeleteInteresseNotPresent() throws Exception {
+<b class="fc">&nbsp;        interesseModel.doDelete(&quot;ab&quot;,3);</b>
+<b class="fc">&nbsp;        ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Interesse.xml&quot;)).getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        ITable actual=this.getConnection().createDataSet().getTable(&quot;Interesse&quot;);</b>
+<b class="fc">&nbsp;        Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetriveNewInteressiOK() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt;newInteressi=interesseModel.doRetrieveNewInteressi(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt; expected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        CourseBean c1=new CourseBean();</b>
+<b class="fc">&nbsp;        c1.setCodiceCorso(20);</b>
+<b class="fc">&nbsp;        c1.setNome(&quot;BD&quot;);</b>
+<b class="fc">&nbsp;        expected.add(c1);</b>
+<b class="fc">&nbsp;        CourseBean c2=new CourseBean();</b>
+<b class="fc">&nbsp;        c2.setCodiceCorso(26);</b>
+<b class="fc">&nbsp;        c2.setNome(&quot;TSW&quot;);</b>
+<b class="fc">&nbsp;        expected.add(c2);</b>
+<b class="fc">&nbsp;        assertEquals(expected.size(),newInteressi.size());</b>
+<b class="fc">&nbsp;        for(int i=0; i&lt;newInteressi.size();i++){</b>
+<b class="fc">&nbsp;            assertEquals(newInteressi.get(i).getCodiceCorso(), expected.get(i).getCodiceCorso());</b>
+<b class="fc">&nbsp;            assertEquals(newInteressi.get(i).getNome(),expected.get(i).getNome());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetriveNewInteressiNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doRetrieveNewInteressi(null);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetriveNewInteressiEmpty() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doRetrieveNewInteressi(&quot;&quot;);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testGetInteressiOk() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt; interessi=interesseModel.getInteressi(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt; expected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        CourseBean c1=new CourseBean();</b>
+<b class="fc">&nbsp;        c1.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;        c1.setNome(&quot;programmazione1&quot;);</b>
+<b class="fc">&nbsp;        expected.add(c1);</b>
+<b class="fc">&nbsp;        CourseBean c2=new CourseBean();</b>
+<b class="fc">&nbsp;        c2.setCodiceCorso(11);</b>
+<b class="fc">&nbsp;        c2.setNome(&quot;ADE&quot;);</b>
+<b class="fc">&nbsp;        expected.add(c2);</b>
+<b class="fc">&nbsp;        CourseBean c3=new CourseBean();</b>
+<b class="fc">&nbsp;        c3.setCodiceCorso(46);</b>
+<b class="fc">&nbsp;        c3.setNome(&quot;IGES&quot;);</b>
+<b class="fc">&nbsp;        expected.add(c3);</b>
+<b class="fc">&nbsp;        for(int i=0; i&lt;interessi.size();i++){</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getCodiceCorso(), expected.get(i).getCodiceCorso());</b>
+<b class="fc">&nbsp;            assertEquals(interessi.get(i).getNome(),expected.get(i).getNome());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testGetInteressiUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt;interessi=interesseModel.getInteressi(&quot;ab&quot;);</b>
+<b class="fc">&nbsp;        assertEquals(interessi.size(),0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testGetInteressiUsernameNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.getInteressi(null);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testGetInteressiEmptyUsername() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.getInteressi(&quot;&quot;);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveMaterialByInteressiOk() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;MaterialBean&gt; materialByInteressi=interesseModel.doRetrieveMaterialByInteressi(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;        ArrayList&lt;MaterialBean&gt; expected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        MaterialBean m1=new MaterialBean();</b>
+<b class="fc">&nbsp;        m1.setCodiceMateriale(1);</b>
+<b class="fc">&nbsp;        m1.setDataCaricamento(Date.valueOf(&quot;2021-03-20&quot;));</b>
+<b class="fc">&nbsp;        m1.setCosto(10);</b>
+<b class="fc">&nbsp;        m1.setDescrizione(&quot;Appunti programmazione 1&quot;);</b>
+<b class="fc">&nbsp;        m1.setHidden(false);</b>
+<b class="fc">&nbsp;        m1.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;        m1.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;        m1.setNomeFile(&quot;appuntiP1.pdf&quot;);</b>
+<b class="fc">&nbsp;        expected.add(m1);</b>
+&nbsp;
+<b class="fc">&nbsp;        MaterialBean m2=new MaterialBean();</b>
+<b class="fc">&nbsp;        m2.setCodiceMateriale(3);</b>
+<b class="fc">&nbsp;        m2.setDataCaricamento(Date.valueOf(&quot;2021-08-26&quot;));</b>
+<b class="fc">&nbsp;        m2.setCosto(15);</b>
+<b class="fc">&nbsp;        m2.setDescrizione(&quot;lezione 16&quot;);</b>
+<b class="fc">&nbsp;        m2.setHidden(false);</b>
+<b class="fc">&nbsp;        m2.setCodiceCorso(46);</b>
+<b class="fc">&nbsp;        m2.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;        m2.setNomeFile(&quot;lezione16IGES.pdf&quot;);</b>
+<b class="fc">&nbsp;        expected.add(m2);</b>
+&nbsp;
+<b class="fc">&nbsp;        MaterialBean m3=new MaterialBean();</b>
+<b class="fc">&nbsp;        m3.setCodiceMateriale(6);</b>
+<b class="fc">&nbsp;        m3.setDataCaricamento(Date.valueOf(&quot;2021-04-26&quot;));</b>
+<b class="fc">&nbsp;        m3.setCosto(50);</b>
+<b class="fc">&nbsp;        m3.setDescrizione(&quot;lezione 20&quot;);</b>
+<b class="fc">&nbsp;        m3.setHidden(false);</b>
+<b class="fc">&nbsp;        m3.setCodiceCorso(46);</b>
+<b class="fc">&nbsp;        m3.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;        m3.setNomeFile(&quot;lezione20IGES.pdf&quot;);</b>
+<b class="fc">&nbsp;        expected.add(m3);</b>
+&nbsp;
+<b class="fc">&nbsp;        MaterialBean m4=new MaterialBean();</b>
+<b class="fc">&nbsp;        m4.setCodiceMateriale(4);</b>
+<b class="fc">&nbsp;        m4.setDataCaricamento(Date.valueOf(&quot;2021-01-03&quot;));</b>
+<b class="fc">&nbsp;        m4.setCosto(20);</b>
+<b class="fc">&nbsp;        m4.setDescrizione(&quot;lezione 17&quot;);</b>
+<b class="fc">&nbsp;        m4.setHidden(false);</b>
+<b class="fc">&nbsp;        m4.setCodiceCorso(46);</b>
+<b class="fc">&nbsp;        m4.setUsername(&quot;alfonso00&quot;);</b>
+<b class="fc">&nbsp;        m4.setNomeFile(&quot;lezione17IGES.pdf&quot;);</b>
+<b class="fc">&nbsp;        expected.add(m4);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(materialByInteressi.size(),expected.size());</b>
+<b class="fc">&nbsp;        for (int i=0;i&lt;materialByInteressi.size();i++) {</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getCodiceMateriale(),expected.get(i).getCodiceMateriale() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getDataCaricamento(),expected.get(i).getDataCaricamento() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getKeywords(),expected.get(i).getKeywords());</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getCosto(),expected.get(i).getCosto());</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getDescrizione(),expected.get(i).getDescrizione() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).isHidden(),expected.get(i).isHidden() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getUsername(),expected.get(i).getUsername() );</b>
+<b class="fc">&nbsp;            assertEquals(materialByInteressi.get(i).getNomeFile(), expected.get(i).getNomeFile());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveMaterialByInteressiUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;        ArrayList&lt;MaterialBean&gt; materialByInteressi=interesseModel.doRetrieveMaterialByInteressi(&quot;ab&quot;);</b>
+<b class="fc">&nbsp;        assertEquals(materialByInteressi.size(),0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveMaterialByInteressiUsernameNull() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doRetrieveMaterialByInteressi(null);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;           flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void testDoRetrieveMaterialByInteressiEmptyUsername() throws SQLException {
+<b class="fc">&nbsp;        boolean flag=false;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            interesseModel.doRetrieveMaterialByInteressi(&quot;&quot;);</b>
+<b class="fc">&nbsp;        }catch (IllegalArgumentException e){</b>
+<b class="fc">&nbsp;            flag=true;</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        assertTrue(flag);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

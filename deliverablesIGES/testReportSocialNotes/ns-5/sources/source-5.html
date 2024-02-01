@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FeedbackBean</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: FeedbackBean (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FeedbackBean</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78,6%
+  </span>
+  <span class="absValue">
+    (11/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,2%
+  </span>
+  <span class="absValue">
+    (16/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+&nbsp;public class FeedbackBean {
+&nbsp;
+<b class="fc">&nbsp;	public FeedbackBean() {</b>
+<b class="fc">&nbsp;		this.codiceMateriale=-1;</b>
+<b class="fc">&nbsp;		this.username=&quot;&quot;;</b>
+<b class="fc">&nbsp;		this.dataFeed=null;</b>
+<b class="fc">&nbsp;		this.commento=&quot;&quot;;</b>
+<b class="fc">&nbsp;		this.valutazione=-1;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public int getCodiceMateriale() {
+<b class="fc">&nbsp;		return codiceMateriale;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	public void setCodiceMateriale(int codiceMateriale) {
+<b class="fc">&nbsp;		this.codiceMateriale = codiceMateriale;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public String getUsername() {
+<b class="fc">&nbsp;		return username;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public void setUsername(String username) {
+<b class="fc">&nbsp;		this.username = username;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public Timestamp getDataFeed() {
+<b class="fc">&nbsp;		return dataFeed;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public void setDataFeed(Timestamp dataFeed) {
+<b class="fc">&nbsp;		this.dataFeed = dataFeed;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public String getCommento() {
+<b class="fc">&nbsp;		return commento;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public void setCommento(String commento) {
+<b class="fc">&nbsp;		this.commento = commento;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public int getValutazione() {
+<b class="fc">&nbsp;		return valutazione;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	public void setValutazione(int valutazione) {
+<b class="fc">&nbsp;		this.valutazione = valutazione;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public boolean isEmpty() {
+<b class="nc">&nbsp;		return this.codiceMateriale==-1;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	public boolean equals(Object obj) {
+<b class="nc">&nbsp;		return this.codiceMateriale==((FeedbackBean)obj).getCodiceMateriale()&amp;&amp;this.username.compareTo(((FeedbackBean)obj).getUsername())==0&amp;&amp;this.dataFeed.equals(((FeedbackBean)obj).getDataFeed());     </b>
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String toString() {
+<b class="nc">&nbsp;		return &quot;FeedbackBean [codiceMateriale=&quot; + codiceMateriale + &quot;, username=&quot; + username + &quot;, dataFeed=&quot; + dataFeed</b>
+&nbsp;				+ &quot;, commento=&quot; + commento + &quot;, valutazione=&quot; + valutazione + &quot;]&quot;;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private int codiceMateriale;
+&nbsp;    private String username;
+&nbsp;    private Timestamp dataFeed;
+&nbsp;    private String commento;
+&nbsp;    private int valutazione;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

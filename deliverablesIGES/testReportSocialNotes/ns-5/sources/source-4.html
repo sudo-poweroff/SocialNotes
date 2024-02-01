@@ -1,0 +1,325 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CourseModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: CourseModelDSTest (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CourseModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (19/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,9%
+  </span>
+  <span class="absValue">
+    (93/99)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;
+&nbsp;import java.io.ByteArrayInputStream;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class CourseModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;
+&nbsp;	private DataSource ds;
+&nbsp;	private CourseModelDS course;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;		dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Corso.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;		return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Corso.xml&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		course=new CourseModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyPresent() throws Exception {
+<b class="fc">&nbsp;		CourseBean cBean = course.doRetrieveByKey(&quot;6&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(cBean.getCodiceCorso(),6);</b>
+<b class="fc">&nbsp;		assertEquals(cBean.getNome(),&quot;cddc&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(cBean.getNomeDipartimento(),&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(cBean.getDenominazione(),&quot;Universita&#39; Degli Studi Di Salerno&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNotPresent() throws Exception {
+<b class="fc">&nbsp;		CourseBean cBean = course.doRetrieveByKey(&quot;7&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(cBean,null);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByVoidKey() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			course.doRetrieveByKey(&quot;&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;		} catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+&nbsp;
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			course.doRetrieveByKey(null);</b>
+&nbsp;
+<b class="fc">&nbsp;		} catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+&nbsp;
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByNamePresent() throws Exception  {
+<b class="fc">&nbsp;		int codiceCorso = course.doRetrieveByName(&quot;programmazione1&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(codiceCorso, 3);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByNameNotPresent() throws Exception  {
+<b class="fc">&nbsp;		int codiceCorso = course.doRetrieveByName(&quot;ADE3&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(codiceCorso, -1);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByVoidName() throws Exception  {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			course.doRetrieveByName(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByNameNull() throws Exception  {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			course.doRetrieveByName(null);</b>
+<b class="fc">&nbsp;		}catch (NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertEquals(flag, true);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception{
+<b class="fc">&nbsp;		CourseBean bean=new CourseBean();</b>
+<b class="fc">&nbsp;		bean.setCodiceCorso(1);</b>
+<b class="fc">&nbsp;		bean.setNome(&quot;Glottologia&quot;);</b>
+<b class="fc">&nbsp;		bean.setNomeDipartimento(&quot;Dipartimento di \&#39;Lettere Lingue Arti\&#39;. Italianistica e culture comparate&quot;);</b>
+<b class="fc">&nbsp;		bean.setDenominazione(&quot;Politecnico di Milano&quot;);</b>
+<b class="fc">&nbsp;		course.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/CorsoExpected.xml&quot;)).getTable(&quot;Corso&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Corso&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			course.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveAllPresent(){
+<b class="fc">&nbsp;		ArrayList&lt;CourseBean&gt; courses=course.doRetrieveAll();</b>
+<b class="fc">&nbsp;		ArrayList&lt;CourseBean&gt; expected= new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		CourseBean b1=new CourseBean();</b>
+<b class="fc">&nbsp;		b1.setCodiceCorso(3);</b>
+<b class="fc">&nbsp;		b1.setNome(&quot;programmazione1&quot;);</b>
+<b class="fc">&nbsp;		b1.setNomeDipartimento(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		b1.setDenominazione(&quot;Universita&#39; Degli Studi Di Salerno&quot;);</b>
+<b class="fc">&nbsp;		expected.add(b1);</b>
+&nbsp;
+<b class="fc">&nbsp;		CourseBean b2=new CourseBean();</b>
+<b class="fc">&nbsp;		b2.setCodiceCorso(4);</b>
+<b class="fc">&nbsp;		b2.setNome(&quot;architettura degli elaboratori&quot;);</b>
+<b class="fc">&nbsp;		b2.setNomeDipartimento(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		b2.setDenominazione(&quot;Universita&#39; Degli Studi Di Salerno&quot;);</b>
+<b class="fc">&nbsp;		expected.add(b2);</b>
+&nbsp;
+<b class="fc">&nbsp;		CourseBean b3=new CourseBean();</b>
+<b class="fc">&nbsp;		b3.setCodiceCorso(5);</b>
+<b class="fc">&nbsp;		b3.setNome(&quot;progettazione di algoritmi&quot;);</b>
+<b class="fc">&nbsp;		b3.setNomeDipartimento(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		b3.setDenominazione(&quot;Universita&#39; Degli Studi Di Salerno&quot;);</b>
+<b class="fc">&nbsp;		expected.add(b3);</b>
+&nbsp;
+<b class="fc">&nbsp;		CourseBean b4=new CourseBean();</b>
+<b class="fc">&nbsp;		b4.setCodiceCorso(6);</b>
+<b class="fc">&nbsp;		b4.setNome(&quot;cddc&quot;);</b>
+<b class="fc">&nbsp;		b4.setNomeDipartimento(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		b4.setDenominazione(&quot;Universita&#39; Degli Studi Di Salerno&quot;);</b>
+<b class="fc">&nbsp;		expected.add(b4);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(courses.size(),expected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;courses.size();i++){</b>
+<b class="fc">&nbsp;			assertEquals(courses.get(i).getCodiceCorso(),expected.get(i).getCodiceCorso());</b>
+<b class="fc">&nbsp;			assertEquals(courses.get(i).getNome(),expected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(courses.get(i).getNomeDipartimento(),expected.get(i).getNomeDipartimento());</b>
+<b class="fc">&nbsp;			assertEquals(courses.get(i).getDenominazione(),expected.get(i).getDenominazione());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveAllNotPresent() throws SQLException {
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Corso WHERE CodiceCorso IN (3,4,5,6)&quot;).execute();</b>
+<b class="fc">&nbsp;		ArrayList&lt;CourseBean&gt; courses=course.doRetrieveAll();</b>
+<b class="fc">&nbsp;		assertEquals(courses.size(),0);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FileModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: FileModelDSTest (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96,2%
+  </span>
+  <span class="absValue">
+    (50/52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;
+&nbsp;import java.io.ByteArrayInputStream;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.sql.Blob;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import javax.sql.rowset.serial.SerialBlob;
+&nbsp;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;
+&nbsp;import com.sun.source.tree.AssertTree;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class FileModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;	private DataSource ds;
+&nbsp;	private FileModelDS fileModel;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;		dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Files.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;		return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Files.xml&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		fileModel=new FileModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveBuKey()
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKey() throws SQLException, IOException {
+<b class="fc">&nbsp;		FileBean bean=fileModel.doRetrieveByKey(3);</b>
+<b class="fc">&nbsp;		assertEquals(bean.getFilename(), &quot;FIA&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(bean.getFormato(), &quot;pdf&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(bean.getDimensione(), 200);</b>
+<b class="fc">&nbsp;		assertEquals(bean.getIdFile(), 3);</b>
+&nbsp;
+<b class="fc">&nbsp;		InputStream is=bean.getContenuto();</b>
+<b class="fc">&nbsp;		InputStream stream = new ByteArrayInputStream(&quot;&#39;contenuto&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob blob = new SerialBlob(is.readAllBytes());</b>
+<b class="fc">&nbsp;		Blob blob2 = new SerialBlob(stream.readAllBytes());</b>
+<b class="fc">&nbsp;		String strBean = new String(blob.getBytes(1l, (int) blob.length()));</b>
+<b class="fc">&nbsp;		String strExpected = new String(blob2.getBytes(1l, (int) blob2.length())); </b>
+<b class="fc">&nbsp;		assertEquals(strBean, strExpected);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByKeyNotPresent() throws SQLException {
+<b class="fc">&nbsp;		FileBean bean=fileModel.doRetrieveByKey(10);</b>
+<b class="fc">&nbsp;		assertEquals(bean,null);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doSave()
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception{
+<b class="fc">&nbsp;		FileBean bean=new FileBean();</b>
+<b class="fc">&nbsp;		bean.setFilename(&quot;programmazione 1&quot;);</b>
+<b class="fc">&nbsp;		bean.setFormato(&quot;pdf&quot;);</b>
+<b class="fc">&nbsp;		bean.setDimensione(250);</b>
+<b class="fc">&nbsp;		bean.setIdFile(1);</b>
+<b class="fc">&nbsp;		bean.setContenuto(new ByteArrayInputStream(&quot;&#39;contenuto&#39;&quot;.getBytes()));</b>
+<b class="fc">&nbsp;		fileModel.doSave(bean);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/FilesExpected.xml&quot;)).getTable(&quot;Files&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Files&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoSaveNUll() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			fileModel.doSave(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	//TEST doRetrieveKey()
+&nbsp;	@Test 
+&nbsp;	public void testDoRetrieveKey() throws SQLException{
+<b class="fc">&nbsp;		int lastCode=fileModel.doRetrieveKey();</b>
+<b class="fc">&nbsp;		assertEquals(lastCode, 6);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveKeyNotPresent() throws SQLException {
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Files WHERE IdFile=3;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Files WHERE IdFile=4;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Files WHERE IdFile=5;&quot;).execute();</b>
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Files WHERE IdFile=6;&quot;).execute();</b>
+<b class="fc">&nbsp;		int lastCode=fileModel.doRetrieveKey();</b>
+<b class="fc">&nbsp;		assertEquals(lastCode, -1); </b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DownloadZip</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">acquisto</a>
+</div>
+
+<h1>Coverage Summary for Class: DownloadZip (acquisto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DownloadZip</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package acquisto;
+&nbsp;
+&nbsp;import java.io.*;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import java.util.zip.ZipEntry;
+&nbsp;import java.util.zip.ZipOutputStream;
+&nbsp;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import materiale.FileBean;
+&nbsp;import materiale.FileModelDS;
+&nbsp;import materiale.MaterialBean;
+&nbsp;import materiale.MaterialModelDS;
+&nbsp;import profilo.UserModelDS;
+&nbsp;
+&nbsp;@WebServlet(&quot;/DownloadZip&quot;)
+&nbsp;public class DownloadZip extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;
+&nbsp;	public DownloadZip() {
+<b class="nc">&nbsp;		super();</b>
+&nbsp;		// TODO Auto-generated constructor stub
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		HttpSession session = request.getSession(false);</b>
+<b class="nc">&nbsp;		if(session==null) {</b>
+<b class="nc">&nbsp;			response.sendRedirect(response.encodeURL(&quot;homepage.jsp&quot;));</b>
+&nbsp;		}
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;		MaterialModelDS mModel = new MaterialModelDS(ds);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;		String[] materials = request.getParameterValues(&quot;materiale&quot;);</b>
+<b class="nc">&nbsp;		response.setContentType(&quot;application/zip&quot;);</b>
+<b class="nc">&nbsp;		response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment; filename=\&quot;SocialNotes.zip\&quot;&quot;);</b>
+<b class="nc">&nbsp;		ZipOutputStream output = null;</b>
+<b class="nc">&nbsp;		byte[] buffer = new byte[16777];</b>
+&nbsp;
+<b class="nc">&nbsp;		if(materials!=null){</b>
+<b class="nc">&nbsp;			output = new ZipOutputStream(new BufferedOutputStream(response.getOutputStream(), 16777));</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				for (String m : materials) {</b>
+<b class="nc">&nbsp;					MaterialBean material = null;</b>
+&nbsp;					try {
+<b class="nc">&nbsp;						material = mModel.doRetrieveByKey(m);</b>
+<b class="nc">&nbsp;						String filePath = &quot;C:\\Users\\sdell\\projects\\SocialNotes\\material\\&quot; + material.getNomeFile();</b>
+&nbsp;
+<b class="nc">&nbsp;						File pdfFile = new File(filePath);</b>
+<b class="nc">&nbsp;						InputStream is = new FileInputStream(pdfFile);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;						output.putNextEntry(new ZipEntry(material.getNomeFile()));</b>
+<b class="nc">&nbsp;						for (int length = 0; (length = is.read(buffer)) &gt; 0; ) {</b>
+<b class="nc">&nbsp;							output.write(buffer, 0, length);</b>
+&nbsp;						}
+<b class="nc">&nbsp;						output.closeEntry();</b>
+<b class="nc">&nbsp;					} catch (SQLException e) {</b>
+<b class="nc">&nbsp;						e.printStackTrace();</b>
+<b class="nc">&nbsp;					} catch (Exception e) {</b>
+<b class="nc">&nbsp;						e.printStackTrace();</b>
+<b class="nc">&nbsp;					}</b>
+&nbsp;				}
+&nbsp;			}finally {
+<b class="nc">&nbsp;				output.close();</b>
+<b class="nc">&nbsp;			}</b>
+&nbsp;		}else {
+<b class="nc">&nbsp;			response.sendRedirect(response.encodeURL(&quot;storicoMateriale.jsp&quot;));</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

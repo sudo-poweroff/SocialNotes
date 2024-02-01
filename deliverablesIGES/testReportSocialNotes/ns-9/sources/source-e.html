@@ -1,0 +1,354 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InteresseModelDS</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: InteresseModelDS (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InteresseModelDS</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (171/184)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import materiale.CourseBean;
+&nbsp;import materiale.MaterialBean;
+&nbsp;import org.checkerframework.checker.units.qual.A;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;public class InteresseModelDS {
+&nbsp;    private DataSource ds;
+<b class="fc">&nbsp;    public InteresseModelDS(DataSource ds){</b>
+<b class="fc">&nbsp;        this.ds=ds;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void doSave(InteresseBean interesse)throws SQLException {
+<b class="fc">&nbsp;        if(interesse==null)</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        Connection con =null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;INSERT INTO Interesse(Username,CodiceCorso,DataInserimento) values (?,?,?);&quot;;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1,interesse.getUsername());</b>
+<b class="fc">&nbsp;            ps.setInt(2,interesse.getCodiceCorso());</b>
+<b class="fc">&nbsp;            ps.setDate(3,interesse.getDataInserimento());</b>
+<b class="fc">&nbsp;            ps.executeUpdate();</b>
+&nbsp;        }finally {
+<b class="fc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+&nbsp;
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public ArrayList&lt;InteresseBean&gt; doRetrieveByUsername(String username) throws SQLException {
+<b class="fc">&nbsp;        if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        ResultSet rs=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;SELECT * FROM Interesse WHERE Username=?&quot;;</b>
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=new ArrayList&lt;&gt;();</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1,username);</b>
+<b class="fc">&nbsp;            rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;            while(rs.next()){</b>
+<b class="fc">&nbsp;                InteresseBean bean=new InteresseBean();</b>
+<b class="fc">&nbsp;                bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;                bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                bean.setDataInserimento(rs.getDate(&quot;DataInserimento&quot;));</b>
+<b class="fc">&nbsp;                interessi.add(bean);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(rs!=null)</b>
+<b class="fc">&nbsp;                    rs.close();</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return interessi;</b>
+&nbsp;    }
+&nbsp;    public ArrayList&lt;InteresseBean&gt; doRetrieveByCorso(int codiceCorso) throws SQLException {
+<b class="fc">&nbsp;        if(codiceCorso&lt;0)</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        ResultSet rs=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;SELECT * FROM Interesse WHERE CodiceCorso=?&quot;;</b>
+<b class="fc">&nbsp;        ArrayList&lt;InteresseBean&gt; interessi=new ArrayList&lt;&gt;();</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setInt(1,codiceCorso);</b>
+<b class="fc">&nbsp;            rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;            while(rs.next()){</b>
+<b class="fc">&nbsp;                InteresseBean bean=new InteresseBean();</b>
+<b class="fc">&nbsp;                bean.setUsername(rs.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;                bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                bean.setDataInserimento(rs.getDate(&quot;DataInserimento&quot;));</b>
+<b class="fc">&nbsp;                interessi.add(bean);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(rs!=null)</b>
+<b class="fc">&nbsp;                    rs.close();</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return interessi;</b>
+&nbsp;    }
+&nbsp;    public  void doDelete(String username,int codiceCorso) throws SQLException {
+<b class="fc">&nbsp;        if(username==null||username.equals(&quot;&quot;)||codiceCorso&lt;0)</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;DELETE FROM Interesse WHERE Username=? AND CodiceCorso=?&quot;;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1, username);</b>
+<b class="fc">&nbsp;            ps.setInt(2,codiceCorso);</b>
+<b class="fc">&nbsp;            ps.executeUpdate();</b>
+&nbsp;
+&nbsp;        }finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;CourseBean&gt; doRetrieveNewInteressi(String Username) throws SQLException {
+<b class="fc">&nbsp;        if(Username==null||Username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt;newInteressi=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        ResultSet rs=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;SELECT CodiceCorso,Nome FROM corso WHERE codiceCorso NOT IN (SELECT CodiceCorso FROM interesse WHERE Username=?);&quot;;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1,Username);</b>
+<b class="fc">&nbsp;            rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;            while(rs.next()){</b>
+<b class="fc">&nbsp;                CourseBean bean=new CourseBean();</b>
+<b class="fc">&nbsp;                bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                bean.setNome(rs.getString(&quot;Nome&quot;));</b>
+<b class="fc">&nbsp;                newInteressi.add(bean);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(rs!=null)</b>
+<b class="fc">&nbsp;                    rs.close();</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return newInteressi;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;CourseBean&gt; getInteressi(String Username) throws SQLException {
+<b class="fc">&nbsp;        if(Username==null||Username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        ArrayList&lt;CourseBean&gt;interessi=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        ResultSet rs=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;SELECT CodiceCorso,Nome FROM corso WHERE codiceCorso IN (SELECT CodiceCorso FROM interesse WHERE Username=?);&quot;;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1,Username);</b>
+<b class="fc">&nbsp;            rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;            while(rs.next()){</b>
+<b class="fc">&nbsp;                CourseBean bean=new CourseBean();</b>
+<b class="fc">&nbsp;                bean.setCodiceCorso(rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                bean.setNome(rs.getString(&quot;Nome&quot;));</b>
+<b class="fc">&nbsp;                interessi.add(bean);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(rs!=null)</b>
+<b class="fc">&nbsp;                    rs.close();</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return interessi;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;MaterialBean&gt; doRetrieveMaterialByInteressi(String username) throws SQLException {
+<b class="fc">&nbsp;        if(username==null||username.equals(&quot;&quot;))</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;        ArrayList&lt;MaterialBean&gt; materials=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        Connection con=null;</b>
+<b class="fc">&nbsp;        PreparedStatement ps=null;</b>
+<b class="fc">&nbsp;        String sql=&quot;SELECT CodiceCorso FROM interesse WHERE Username=? ORDER BY DataInserimento DESC;&quot;;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            con=ds.getConnection();</b>
+<b class="fc">&nbsp;            ps=con.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            ps.setString(1,username);</b>
+<b class="fc">&nbsp;            ResultSet rs=ps.executeQuery();</b>
+<b class="fc">&nbsp;            int i=0;</b>
+<b class="fc">&nbsp;            while(rs.next()&amp;&amp;i&lt;3) {</b>
+<b class="fc">&nbsp;                PreparedStatement psMat=null;</b>
+<b class="fc">&nbsp;                String sqlMat=&quot;SELECT * FROM materiale WHERE CodiceCorso=? AND Username!=? AND Hidden=false ORDER BY DataCaricamento DESC LIMIT 3&quot;;</b>
+<b class="fc">&nbsp;                psMat=con.prepareStatement(sqlMat);</b>
+<b class="fc">&nbsp;                psMat.setInt(1,rs.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                psMat.setString(2,username);</b>
+<b class="fc">&nbsp;                ResultSet rsMat=psMat.executeQuery();</b>
+<b class="fc">&nbsp;                while(rsMat.next()) {</b>
+<b class="fc">&nbsp;                    MaterialBean bean = new MaterialBean();</b>
+<b class="fc">&nbsp;                    bean.setCodiceMateriale(rsMat.getInt(&quot;CodiceMateriale&quot;));</b>
+<b class="fc">&nbsp;                    bean.setDataCaricamento(rsMat.getDate(&quot;DataCaricamento&quot;));</b>
+<b class="fc">&nbsp;                    bean.setKeywords(rsMat.getString(&quot;Keywords&quot;));</b>
+<b class="fc">&nbsp;                    bean.setCosto(rsMat.getInt(&quot;Costo&quot;));</b>
+<b class="fc">&nbsp;                    bean.setDescrizione(rsMat.getString(&quot;Descrizione&quot;));</b>
+<b class="fc">&nbsp;                    bean.setHidden(rsMat.getBoolean(&quot;Hidden&quot;));</b>
+<b class="fc">&nbsp;                    bean.setCodiceCorso(rsMat.getInt(&quot;CodiceCorso&quot;));</b>
+<b class="fc">&nbsp;                    bean.setUsername(rsMat.getString(&quot;Username&quot;));</b>
+<b class="fc">&nbsp;                    bean.setNomeFile(rsMat.getString(&quot;nomeFile&quot;));</b>
+<b class="fc">&nbsp;                    materials.add(bean);</b>
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;                i++;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;        finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if(ps!=null)</b>
+<b class="fc">&nbsp;                    ps.close();</b>
+&nbsp;            }
+&nbsp;            finally {
+<b class="fc">&nbsp;                if(con!=null)</b>
+<b class="fc">&nbsp;                    con.close();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return materials;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

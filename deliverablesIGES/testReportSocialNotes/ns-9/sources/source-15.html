@@ -1,0 +1,164 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PrintImage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: PrintImage (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PrintImage</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.io.OutputStream;
+&nbsp;import java.sql.Blob;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import com.mysql.cj.Session;
+&nbsp;
+&nbsp;@WebServlet(&quot;/PrintImage&quot;)
+&nbsp;public class PrintImage extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;
+&nbsp;	public PrintImage() {
+<b class="nc">&nbsp;		super();</b>
+&nbsp;		// TODO Auto-generated constructor stub
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		response.setContentType(&quot;image/png&quot;);</b>
+<b class="nc">&nbsp;		String username=request.getParameter(&quot;username&quot;);</b>
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+&nbsp;		try{
+<b class="nc">&nbsp;			UserModelDS user=new UserModelDS(ds);</b>
+<b class="nc">&nbsp;			UserBean bean=user.doRetrieveByUsername(username);</b>
+&nbsp;			
+<b class="nc">&nbsp;			Blob image=bean.getImg();</b>
+<b class="nc">&nbsp;			InputStream is=image.getBinaryStream();</b>
+<b class="nc">&nbsp;			OutputStream outStream = response.getOutputStream();</b>
+<b class="nc">&nbsp;			byte[] buf = new byte[4096];</b>
+<b class="nc">&nbsp;			int len = -1;</b>
+&nbsp;
+&nbsp;			//Write the file contents to the servlet response
+&nbsp;			//Using a buffer of 4kb (configurable). This can be
+&nbsp;			//optimized based on web server and app server
+&nbsp;			//properties
+<b class="nc">&nbsp;			while ((len = is.read(buf)) != -1) {</b>
+<b class="nc">&nbsp;				outStream.write(buf, 0, len);</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			outStream.flush();</b>
+<b class="nc">&nbsp;			outStream.close();</b>
+<b class="nc">&nbsp;		}catch (Exception e){</b>
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;	
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

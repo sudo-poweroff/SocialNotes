@@ -1,0 +1,192 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > NewsUploadServlet</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">news</a>
+</div>
+
+<h1>Coverage Summary for Class: NewsUploadServlet (news)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NewsUploadServlet</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package news;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.MultipartConfig;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.servlet.http.Part;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;import materiale.FileBean;
+&nbsp;import materiale.FileModelDS;
+&nbsp;
+&nbsp;@WebServlet(&quot;/NewsUploadServlet&quot;)
+&nbsp;@MultipartConfig(maxFileSize = 1024*1024*50) 
+&nbsp;public class NewsUploadServlet extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;
+&nbsp;	public NewsUploadServlet() {
+<b class="nc">&nbsp;		super();</b>
+&nbsp;		// TODO Auto-generated constructor stub
+&nbsp;	}
+&nbsp;
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<b class="nc">&nbsp;		HttpSession session=request.getSession(true);</b>
+<b class="nc">&nbsp;		if(session.getAttribute(&quot;username&quot;)==null) {</b>
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/login.jsp&quot;);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		InputStream is = null;</b>
+<b class="nc">&nbsp;		FileBean file=new FileBean();</b>
+<b class="nc">&nbsp;		Part filePart = request.getPart(&quot;img&quot;);</b>
+<b class="nc">&nbsp;		if (filePart != null) {</b>
+<b class="nc">&nbsp;			file.setFilename(filePart.getSubmittedFileName());</b>
+<b class="nc">&nbsp;			file.setFormato(filePart.getContentType());</b>
+<b class="nc">&nbsp;			file.setDimensione((int)filePart.getSize());</b>
+<b class="nc">&nbsp;			is=filePart.getInputStream();</b>
+<b class="nc">&nbsp;			file.setContenuto(is);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		String titolo=request.getParameter(&quot;titolo&quot;);</b>
+<b class="nc">&nbsp;		String argomento=request.getParameter(&quot;argomento&quot;);</b>
+<b class="nc">&nbsp;		String contenuto=request.getParameter(&quot;contenuto&quot;);</b>
+<b class="nc">&nbsp;		Date dataCaricamento = new Date(System.currentTimeMillis());</b>
+<b class="nc">&nbsp;		NewsBean news=new NewsBean();</b>
+<b class="nc">&nbsp;		news.setTitolo(titolo);</b>
+<b class="nc">&nbsp;		news.setArgomento(argomento);</b>
+<b class="nc">&nbsp;		news.setContenuto(contenuto);</b>
+<b class="nc">&nbsp;		news.setDataCaricamento(dataCaricamento);</b>
+<b class="nc">&nbsp;		news.setUsername((String)session.getAttribute(&quot;username&quot;));</b>
+&nbsp;		
+&nbsp;
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;		FileModelDS fileModel= new FileModelDS(ds);</b>
+<b class="nc">&nbsp;		NewsModelDS newsModel=new NewsModelDS(ds);</b>
+<b class="nc">&nbsp;		ContentModelDS contentModel=new ContentModelDS(ds);</b>
+&nbsp;		try {
+<b class="nc">&nbsp;			ContentBean content=new ContentBean();</b>
+<b class="nc">&nbsp;				fileModel.doSave(file);</b>
+<b class="nc">&nbsp;			newsModel.doSave(news);</b>
+<b class="nc">&nbsp;			int idFile=fileModel.doRetrieveKey();</b>
+<b class="nc">&nbsp;			int codiceNews=newsModel.doRetrieveKey();</b>
+<b class="nc">&nbsp;			content.setIdFile(idFile);</b>
+<b class="nc">&nbsp;			content.setCodiceNews(codiceNews);</b>
+<b class="nc">&nbsp;			contentModel.doSave(content);</b>
+<b class="nc">&nbsp;			String success = &quot;Caricamento news effettuato&quot;;</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;success&quot;, success);</b>
+&nbsp;		} 
+<b class="nc">&nbsp;		catch (SQLException e) {</b>
+<b class="nc">&nbsp;			String error = &quot;Spiacenti, la registrazione delle informazioni nel database non è andata a buon fine.&quot;;</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;error&quot;, error);</b>
+&nbsp;			//Mando una alert 
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;		}</b>
+<b class="nc">&nbsp;		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/homepageNewsManager.jsp;jsessionid=&quot;+session.getId());</b>
+<b class="nc">&nbsp;		dispatcher.forward(request, response);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

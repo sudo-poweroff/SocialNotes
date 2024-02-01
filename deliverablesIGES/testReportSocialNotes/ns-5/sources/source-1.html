@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AddFeedback</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: AddFeedback (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AddFeedback</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;/**
+&nbsp; * Servlet implementation class AddFeedback
+&nbsp; */
+&nbsp;@WebServlet(&quot;/AddFeedback&quot;)
+&nbsp;public class AddFeedback extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;       
+&nbsp;    /**
+&nbsp;     * @see HttpServlet#HttpServlet()
+&nbsp;     */
+&nbsp;    public AddFeedback() {
+<b class="nc">&nbsp;        super();</b>
+&nbsp;        // TODO Auto-generated constructor stub
+&nbsp;    }
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+&nbsp;	 */
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// TODO Auto-generated method stub
+&nbsp;		
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+&nbsp;	 */
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// TODO Auto-generated method stub
+<b class="nc">&nbsp;		HttpSession session = request.getSession(false);</b>
+<b class="nc">&nbsp;		String urlHome = &quot;login.jsp&quot;;</b>
+<b class="nc">&nbsp;		if(session==null) {</b>
+<b class="nc">&nbsp;			response.sendRedirect(urlHome);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		String urlDocument = &quot;/documentPreview.jsp&quot;;</b>
+<b class="nc">&nbsp;		urlDocument = response.encodeURL(urlDocument);</b>
+<b class="nc">&nbsp;        int rating = 0;</b>
+<b class="nc">&nbsp;        if (request.getParameter(&quot;stars&quot;)!=null)</b>
+<b class="nc">&nbsp;		rating = Integer.parseInt(request.getParameter(&quot;stars&quot;));</b>
+&nbsp;        
+<b class="nc">&nbsp;		String commento = request.getParameter(&quot;commento&quot;);</b>
+<b class="nc">&nbsp;		int codMateriale = Integer.parseInt(request.getParameter(&quot;codmateriale&quot;));</b>
+<b class="nc">&nbsp;		Timestamp dataFeed = new Timestamp(System.currentTimeMillis());</b>
+<b class="nc">&nbsp;		String username = request.getParameter(&quot;username&quot;);</b>
+&nbsp;		
+<b class="nc">&nbsp;		System.out.println(&quot;STAMPA DATA: &quot;+dataFeed);</b>
+<b class="nc">&nbsp;		  DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+&nbsp;		
+<b class="nc">&nbsp;		FeedbackModelDS fModel = new FeedbackModelDS(ds);</b>
+<b class="nc">&nbsp;		FeedbackBean fBean = new FeedbackBean();</b>
+&nbsp;		
+<b class="nc">&nbsp;		System.out.println(&quot;Commento: &quot;+commento);</b>
+<b class="nc">&nbsp;	    fBean.setCodiceMateriale(codMateriale);</b>
+<b class="nc">&nbsp;	    fBean.setCommento(commento);</b>
+<b class="nc">&nbsp;	    fBean.setDataFeed(dataFeed);</b>
+<b class="nc">&nbsp;	    fBean.setUsername(username);</b>
+<b class="nc">&nbsp;	    fBean.setValutazione(rating);</b>
+&nbsp;	    
+&nbsp;	    try {
+<b class="nc">&nbsp;			fModel.doSave(fBean);</b>
+<b class="nc">&nbsp;			request.removeAttribute(&quot;stars&quot;);</b>
+<b class="nc">&nbsp;			request.removeAttribute(&quot;codice&quot;);</b>
+<b class="nc">&nbsp;			request.removeAttribute(&quot;username&quot;);</b>
+<b class="nc">&nbsp;			request.removeAttribute(&quot;commento&quot;);</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;codice&quot;, codMateriale);</b>
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(urlDocument);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+<b class="nc">&nbsp;		} catch (SQLException e) {</b>
+&nbsp;			// TODO Auto-generated catch block
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;		}</b>
+&nbsp;	
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

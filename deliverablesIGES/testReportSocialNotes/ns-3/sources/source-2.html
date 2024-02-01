@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ChatCreateServlet</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">chat</a>
+</div>
+
+<h1>Coverage Summary for Class: ChatCreateServlet (chat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChatCreateServlet</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/63)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package chat;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;@WebServlet(&quot;/ChatCreateServlet&quot;)
+&nbsp;public class ChatCreateServlet extends HttpServlet {
+&nbsp;	private static final long serialVersionUID = 1L;
+&nbsp;       
+&nbsp;    public ChatCreateServlet() {
+<b class="nc">&nbsp;        super();</b>
+&nbsp;        // TODO Auto-generated constructor stub
+&nbsp;    }
+&nbsp;
+&nbsp;    
+&nbsp;	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// TODO Auto-generated method stub
+<b class="nc">&nbsp;		response.getWriter().append(&quot;Served at: &quot;).append(request.getContextPath());</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;	
+<b class="nc">&nbsp;		HttpSession session = request.getSession(false);</b>
+<b class="nc">&nbsp;		String loginURL = &quot;login.jsp&quot;;</b>
+<b class="nc">&nbsp;		 String homepageURL = &quot;homepage.jsp&quot;;</b>
+<b class="nc">&nbsp;		 String chat = &quot;chat.jsp&quot;;</b>
+&nbsp;		
+<b class="nc">&nbsp;		if (session==null) {</b>
+<b class="nc">&nbsp;			loginURL = response.encodeURL(loginURL);</b>
+<b class="nc">&nbsp;			response.sendRedirect(loginURL);</b>
+&nbsp;			return;
+<b class="nc">&nbsp;		}if (session!=null) {</b>
+<b class="nc">&nbsp;			if ((session.getAttribute(&quot;username&quot;))!=null) {</b>
+<b class="nc">&nbsp;				if (((int)session.getAttribute(&quot;role&quot;))!=0) {</b>
+<b class="nc">&nbsp;					homepageURL = response.encodeURL(homepageURL);</b>
+<b class="nc">&nbsp;					  response.sendRedirect(homepageURL);</b>
+&nbsp;					  return;
+&nbsp;				}
+&nbsp;					
+&nbsp;			}
+&nbsp;		}
+<b class="nc">&nbsp;		String titoloChat = null;</b>
+<b class="nc">&nbsp;		String[] users = null;</b>
+<b class="nc">&nbsp;		 titoloChat = request.getParameter(&quot;titolo&quot;);</b>
+&nbsp;		 //users = request.getParameterValues(&quot;amici&quot;);
+<b class="nc">&nbsp;		 if(request.getParameterValues(&quot;amici&quot;)==null) {</b>
+<b class="nc">&nbsp;			 String error = &quot;Errore nella creazione della chat&quot;;</b>
+<b class="nc">&nbsp;			 request.setAttribute(&quot;error&quot;, error);</b>
+<b class="nc">&nbsp;			 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(response.encodeURL(&quot;/creaChat.jsp&quot;));</b>
+<b class="nc">&nbsp;			 dispatcher.forward(request, response);</b>
+&nbsp;			 return;
+&nbsp;		 }
+<b class="nc">&nbsp;		 users = request.getParameterValues(&quot;amici&quot;);</b>
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;		ChatModelDS chatModel = new ChatModelDS(ds);</b>
+<b class="nc">&nbsp;		ParticipationModelDS pModel = new ParticipationModelDS(ds);</b>
+&nbsp;		
+<b class="nc">&nbsp;			ChatBean chatBean = new ChatBean();</b>
+&nbsp;		
+&nbsp;		
+<b class="nc">&nbsp;		chatBean.setTitolo(titoloChat);</b>
+&nbsp;		try {
+<b class="nc">&nbsp;			chatModel.doSave(chatBean);</b>
+<b class="nc">&nbsp;			ChatBean ChatBeanNew = new ChatBean();</b>
+<b class="nc">&nbsp;			ChatBeanNew = chatModel.doRetrieveLast();</b>
+<b class="nc">&nbsp;			int chatID = ChatBeanNew.getChatID();</b>
+&nbsp;			
+<b class="nc">&nbsp;			ParticipationBean pBean = new ParticipationBean();</b>
+<b class="nc">&nbsp;			pBean.setUsername((String)session.getAttribute(&quot;username&quot;));</b>
+<b class="nc">&nbsp;			pBean.setChatID(chatID);</b>
+&nbsp;			
+&nbsp;			try { 
+<b class="nc">&nbsp;				pModel.doSave(pBean);</b>
+<b class="nc">&nbsp;			} catch (SQLException h) {</b>
+<b class="nc">&nbsp;				h.printStackTrace();</b>
+<b class="nc">&nbsp;			}</b>
+&nbsp;			
+<b class="nc">&nbsp;			for(String e: users) {</b>
+<b class="nc">&nbsp;				ParticipationBean pBeanNew = new ParticipationBean();</b>
+<b class="nc">&nbsp;				pBeanNew.setUsername(e);</b>
+<b class="nc">&nbsp;				pBeanNew.setChatID(chatID);</b>
+&nbsp;				
+&nbsp;				try { 
+<b class="nc">&nbsp;					pModel.doSave(pBeanNew);</b>
+<b class="nc">&nbsp;				} catch (SQLException h) {</b>
+<b class="nc">&nbsp;					h.printStackTrace();</b>
+<b class="nc">&nbsp;				}</b>
+&nbsp;				
+&nbsp;			}
+&nbsp;			
+<b class="nc">&nbsp;			MessageModelDS messageModel=new MessageModelDS(ds);</b>
+<b class="nc">&nbsp;			MessageBean firstMex=new MessageBean();</b>
+<b class="nc">&nbsp;			Timestamp invioMex = new Timestamp(System.currentTimeMillis());</b>
+<b class="nc">&nbsp;			String testo=&quot;&quot;+(String)session.getAttribute(&quot;username&quot;)+&quot; ha creato la chat&quot;;</b>
+<b class="nc">&nbsp;			firstMex.setTesto(testo);</b>
+<b class="nc">&nbsp;			firstMex.setDataInvio(invioMex);</b>
+<b class="nc">&nbsp;			firstMex.setUsername((String)session.getAttribute(&quot;username&quot;));</b>
+<b class="nc">&nbsp;			firstMex.setChatID(chatID);</b>
+&nbsp;			try { 
+<b class="nc">&nbsp;				messageModel.doSave(firstMex);</b>
+<b class="nc">&nbsp;			} catch (SQLException h) {</b>
+<b class="nc">&nbsp;				h.printStackTrace();</b>
+<b class="nc">&nbsp;			}</b>
+&nbsp;			
+<b class="nc">&nbsp;			chat = response.encodeURL(chat);</b>
+<b class="nc">&nbsp;			response.sendRedirect(chat);</b>
+&nbsp;			return;
+<b class="nc">&nbsp;		} catch (SQLException e) {</b>
+&nbsp;			// TODO Auto-generated catch block
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

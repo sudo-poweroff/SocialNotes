@@ -1,0 +1,2676 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserModelDSTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilo</a>
+</div>
+
+<h1>Coverage Summary for Class: UserModelDSTest (profilo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserModelDSTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99,4%
+  </span>
+  <span class="absValue">
+    (176/177)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89,9%
+  </span>
+  <span class="absValue">
+    (1358/1511)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilo;
+&nbsp;
+&nbsp;
+&nbsp;import java.io.ByteArrayInputStream;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.sql.*;
+&nbsp;import java.time.DateTimeException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;
+&nbsp;import javax.sql.DataSource;
+&nbsp;import javax.sql.rowset.serial.SerialBlob;
+&nbsp;import org.dbunit.Assertion;
+&nbsp;import org.dbunit.DataSourceBasedDBTestCase;
+&nbsp;import org.dbunit.dataset.DataSetException;
+&nbsp;import org.dbunit.dataset.IDataSet;
+&nbsp;import org.dbunit.dataset.ITable;
+&nbsp;import org.dbunit.dataset.SortedTable;
+&nbsp;import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+&nbsp;import org.dbunit.operation.DatabaseOperation;
+&nbsp;import org.h2.jdbcx.JdbcDataSource;
+&nbsp;import org.junit.After;
+&nbsp;import org.junit.AfterClass;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.Test;
+&nbsp;import static org.junit.jupiter.api.Assertions.assertThrows;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class UserModelDSTest extends DataSourceBasedDBTestCase{</b>
+&nbsp;
+&nbsp;	private DataSource ds;
+&nbsp;	private UserModelDS userModel;
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DataSource getDataSource() {
+<b class="fc">&nbsp;		JdbcDataSource dataSource = new JdbcDataSource();</b>
+<b class="fc">&nbsp;		dataSource.setURL(&quot;jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;init=runscript from &#39;classpath:db/init/Utente.sql&#39;&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setUser(&quot;supo-poweroff&quot;);</b>
+<b class="fc">&nbsp;		dataSource.setPassword(&quot;09134&quot;);</b>
+<b class="fc">&nbsp;		return dataSource;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected IDataSet getDataSet() throws Exception {
+<b class="fc">&nbsp;		return new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/init/Utente.xml&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getSetUpOperation(){
+<b class="fc">&nbsp;		return DatabaseOperation.REFRESH;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected DatabaseOperation getTearDownOperation() {
+<b class="fc">&nbsp;		return DatabaseOperation.DELETE_ALL;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@AfterClass
+<b class="nc">&nbsp;	public static void tearDownAfterClass() throws Exception{}</b>
+&nbsp;
+&nbsp;
+&nbsp;	@Before
+&nbsp;	public void setUp() throws Exception {
+<b class="fc">&nbsp;		super.setUp();</b>
+<b class="fc">&nbsp;		ds=this.getDataSource();</b>
+<b class="fc">&nbsp;		userModel=new UserModelDS(ds);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@After
+&nbsp;	public void tearDown() throws Exception {
+<b class="fc">&nbsp;		super.tearDown();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginPassNonCorretta() throws SQLException {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+<b class="fc">&nbsp;		assertFalse(userModel.checkPassword(&quot;sime00&quot;,&quot;Sime2&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginPassVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;sime00&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginPassNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;sime00&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserNonPresentePassVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;despacito&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserNonPresentePassNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;despacito&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserVuotoPassVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserVuotoPassNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserNullPassVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testCheckLoginUserNullPassNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.checkPassword(null,null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveByUsername
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernamePresente() throws SQLException {
+<b class="fc">&nbsp;		UserBean us=userModel.doRetrieveByUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getUsername(), &quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getNome(), &quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getCognome(),&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getEmail(), &quot;sime@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getPass(), &quot;Sime1&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getDataNascita(),Date.valueOf(&quot;2000-10-27&quot;));</b>
+<b class="fc">&nbsp;		assertEquals(us.getCoin(), 1200);</b>
+<b class="fc">&nbsp;		assertEquals(us.getBan(), Date.valueOf(&quot;2022-03-01&quot;));</b>
+<b class="fc">&nbsp;		assertEquals(us.getDenominazione(), &quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getDipName(), &quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getRuolo(), 0);</b>
+<b class="fc">&nbsp;    assertEquals(Timestamp.valueOf(&quot;2011-11-11 00:00:00.0&quot;), new Timestamp(us.getBloccato().getTime()));</b>
+<b class="fc">&nbsp;		assertEquals(us.isVerificato(), false); //CR2</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		UserBean us=userModel.doRetrieveByUsername(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertNull(us);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByUsername(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByUsername(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveByEmail()
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByEmailPresente() throws SQLException {
+<b class="fc">&nbsp;		UserBean us=userModel.doRetrieveByEmail(&quot;sime@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getUsername(), &quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getNome(), &quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getCognome(),&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getEmail(), &quot;sime@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getPass(), &quot;Sime1&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getDataNascita(),Date.valueOf(&quot;2000-10-27&quot;));</b>
+<b class="fc">&nbsp;		assertEquals(us.getCoin(), 1200);</b>
+<b class="fc">&nbsp;		assertEquals(us.getBan(), Date.valueOf(&quot;2022-03-01&quot;));</b>
+<b class="fc">&nbsp;		assertEquals(us.getDenominazione(), &quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getDipName(), &quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(us.getRuolo(), 0);</b>
+<b class="fc">&nbsp;    assertNull(us.getBloccato());</b>
+<b class="fc">&nbsp;		assertEquals(us.isVerificato(), false); //CR2</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByEmailNonPresente() throws SQLException {
+<b class="fc">&nbsp;		UserBean us=userModel.doRetrieveByEmail(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertNull(us);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByEmailVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByEmail(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveByEmailNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByEmail(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveUsers()
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveUsersPresenti() throws SQLException, IOException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveUsers();</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setEmail(&quot;sime@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us1.setPass(&quot;Sime1&quot;);</b>
+<b class="fc">&nbsp;		us1.setCoin(1200);</b>
+<b class="fc">&nbsp;		us1.setDataNascita(Date.valueOf(&quot;2000-10-27&quot;));</b>
+<b class="fc">&nbsp;		us1.setBan(Date.valueOf(&quot;2022-03-01&quot;));</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us1.setRuolo(0);</b>
+<b class="fc">&nbsp;		InputStream stream1=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b1=new SerialBlob(stream1.readAllBytes());</b>
+<b class="fc">&nbsp;		us1.setImg(b1);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+&nbsp;
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us2.setEmail(&quot;fry@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us2.setPass(&quot;Fry1&quot;);</b>
+<b class="fc">&nbsp;		us2.setDataNascita(Date.valueOf(&quot;2000-05-18&quot;));</b>
+<b class="fc">&nbsp;		us2.setCoin(1100);</b>
+<b class="fc">&nbsp;		us2.setBan(Date.valueOf(&quot;2022-01-27&quot;));</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us2.setRuolo(0);</b>
+<b class="fc">&nbsp;		InputStream stream2=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b2=new SerialBlob(stream2.readAllBytes());</b>
+<b class="fc">&nbsp;		us2.setImg(b2);</b>
+&nbsp;
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;califano87&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Alfonso&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Califano&quot;);</b>
+<b class="fc">&nbsp;		us3.setEmail(&quot;califano87@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us3.setPass(&quot;Califano87&quot;);</b>
+<b class="fc">&nbsp;		us3.setDataNascita(Date.valueOf(&quot;2000-05-17&quot;));</b>
+<b class="fc">&nbsp;		us3.setCoin(900);</b>
+<b class="fc">&nbsp;		us3.setBan(Date.valueOf(&quot;2022-02-06&quot;));</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us3.setRuolo(0);</b>
+<b class="fc">&nbsp;		InputStream stream3=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b3=new SerialBlob(stream3.readAllBytes());</b>
+<b class="fc">&nbsp;		us3.setImg(b3);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+&nbsp;
+<b class="fc">&nbsp;		UserBean us4=new UserBean();</b>
+<b class="fc">&nbsp;		us4.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us4.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us4.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us4.setEmail(&quot;sim@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us4.setPass(&quot;Sim1&quot;);</b>
+<b class="fc">&nbsp;		us4.setCoin(200);</b>
+<b class="fc">&nbsp;		us4.setDataNascita(Date.valueOf(&quot;2000-08-27&quot;));</b>
+<b class="fc">&nbsp;		us4.setBan(Date.valueOf(&quot;2022-01-25&quot;));</b>
+<b class="fc">&nbsp;		us4.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us4.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us4.setRuolo(0);</b>
+<b class="fc">&nbsp;		InputStream stream4=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b4=new SerialBlob(stream4.readAllBytes());</b>
+<b class="fc">&nbsp;		us4.setImg(b4);</b>
+<b class="fc">&nbsp;		aspected.add(us4);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getEmail(),aspected.get(i).getEmail());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getPass(),aspected.get(i).getPass());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDataNascita(),aspected.get(i).getDataNascita());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCoin(),aspected.get(i).getCoin());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getBan(),aspected.get(i).getBan());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getRuolo(),aspected.get(i).getRuolo());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoRetrieveUsersNonPresenti() throws SQLException {
+<b class="fc">&nbsp;		ds.getConnection().prepareStatement(&quot;DELETE FROM Utente WHERE Ruolo=0;&quot;).execute();</b>
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt;users=userModel.doRetrieveUsers();</b>
+<b class="fc">&nbsp;		assertEquals(users.size(), 0);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doRetrieveByParameterUser()
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;ASC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCNoRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;DESC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCNoRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;novalue&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVNoRating() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyRating() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyNoRating() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;sim&quot;, &quot;&quot;, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullRating() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;sim&quot;,null, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullNoRating() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;sim&quot;,null, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;ASC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCNoRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;DESC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCNoRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;novalue&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVNoRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		assertEquals(result.size(), aspected.size());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyNoRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;despacito&quot;, &quot;&quot;, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;despacito&quot;,null, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullNoRatingUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;despacito&quot;,null, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;ASC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCNoRatingUserVuoto() throws SQLException {
+&nbsp;		Collection&lt;UserBean&gt; result;
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us4=new UserBean();</b>
+<b class="fc">&nbsp;		us4.setUsername(&quot;califano87&quot;);</b>
+<b class="fc">&nbsp;		us4.setNome(&quot;Alfonso&quot;);</b>
+<b class="fc">&nbsp;		us4.setCognome(&quot;Califano&quot;);</b>
+<b class="fc">&nbsp;		us4.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us4.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us4);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;DESC&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCNoRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us4=new UserBean();</b>
+<b class="fc">&nbsp;		us4.setUsername(&quot;califano87&quot;);</b>
+<b class="fc">&nbsp;		us4.setNome(&quot;Alfonso&quot;);</b>
+<b class="fc">&nbsp;		us4.setCognome(&quot;Califano&quot;);</b>
+<b class="fc">&nbsp;		us4.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us4.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		aspected.add(us4);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;novalue&quot;, 5);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVNoRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		Collection&lt;UserBean&gt; result=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		result=userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; rs=new ArrayList&lt;&gt;(result);</b>
+<b class="fc">&nbsp;		ArrayList&lt;UserBean&gt; aspected=new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us2=new UserBean();</b>
+<b class="fc">&nbsp;		us2.setUsername(&quot;sim&quot;);</b>
+<b class="fc">&nbsp;		us2.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us2.setCognome(&quot;Rossi&quot;);</b>
+<b class="fc">&nbsp;		us2.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us2.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us3=new UserBean();</b>
+<b class="fc">&nbsp;		us3.setUsername(&quot;fry&quot;);</b>
+<b class="fc">&nbsp;		us3.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us3.setCognome(&quot;Di Lauro&quot;);</b>
+<b class="fc">&nbsp;		us3.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us3.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		UserBean us4=new UserBean();</b>
+<b class="fc">&nbsp;		us4.setUsername(&quot;califano87&quot;);</b>
+<b class="fc">&nbsp;		us4.setNome(&quot;Alfonso&quot;);</b>
+<b class="fc">&nbsp;		us4.setCognome(&quot;Califano&quot;);</b>
+<b class="fc">&nbsp;		us4.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us4.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		aspected.add(us4);</b>
+<b class="fc">&nbsp;		aspected.add(us3);</b>
+<b class="fc">&nbsp;		aspected.add(us2);</b>
+<b class="fc">&nbsp;		aspected.add(us1);</b>
+&nbsp;
+<b class="fc">&nbsp;		assertEquals(rs.size(), aspected.size());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;result.size();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getUsername(),aspected.get(i).getUsername());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getNome(),aspected.get(i).getNome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getCognome(),aspected.get(i).getCognome());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDenominazione(),aspected.get(i).getDenominazione());</b>
+<b class="fc">&nbsp;			assertEquals(rs.get(i).getDipName(),aspected.get(i).getDipName());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyNoRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;&quot;, &quot;&quot;, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;&quot;,null, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullNoRatingUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(&quot;&quot;,null, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;ASC&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderASCNoRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;ASC&quot;,0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;DESC&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderDESCNoRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;DESC&quot;,0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;novalue&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNVNoRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;novalue&quot;,0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;&quot;, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderEmptyNoRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null, &quot;&quot;, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null,null, 5);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testMotoreRicercaROrderNullNoRatingUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doRetrieveByParametersUser(null,null, 0);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//TEST doSave()
+&nbsp;	@Test
+&nbsp;	public void testDoSave() throws Exception{//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+<b class="fc">&nbsp;		UserBean us1=new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;ciccioCicogna&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Francesco&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Cicogna&quot;);</b>
+<b class="fc">&nbsp;		us1.setEmail(&quot;ciccioCicogna@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us1.setPass(&quot;Ciccio1&quot;);</b>
+<b class="fc">&nbsp;		us1.setCoin(50);</b>
+<b class="fc">&nbsp;		us1.setDataNascita(Date.valueOf(&quot;2001-04-10&quot;));</b>
+<b class="fc">&nbsp;		us1.setBan(Date.valueOf(&quot;2021-09-10&quot;));</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us1.setRuolo(0);</b>
+<b class="fc">&nbsp;		us1.setBloccato(null);</b>
+<b class="fc">&nbsp;		us1.setVerificato(false); //CR2</b>
+<b class="fc">&nbsp;		InputStream stream1=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b1=new SerialBlob(stream1.readAllBytes());</b>
+<b class="fc">&nbsp;		us1.setImg(b1);</b>
+<b class="fc">&nbsp;		userModel.doSave(us1);</b>
+<b class="nc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpected.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoSaveAlreadyExists() throws IOException, SQLException {
+<b class="fc">&nbsp;		boolean flag = false;</b>
+<b class="fc">&nbsp;		UserBean us1 = new UserBean();</b>
+<b class="fc">&nbsp;		us1.setUsername(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		us1.setNome(&quot;Simone&quot;);</b>
+<b class="fc">&nbsp;		us1.setCognome(&quot;Della Porta&quot;);</b>
+<b class="fc">&nbsp;		us1.setEmail(&quot;sime@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		us1.setPass(&quot;Sime1&quot;);</b>
+<b class="fc">&nbsp;		us1.setCoin(1200);</b>
+<b class="fc">&nbsp;		us1.setDataNascita(Date.valueOf(&quot;2000-10-27&quot;));</b>
+<b class="fc">&nbsp;		us1.setBan(Date.valueOf(&quot;2022-03-01&quot;));</b>
+<b class="fc">&nbsp;		us1.setDenominazione(&quot;Universita degli studi di Salerno&quot;);</b>
+<b class="fc">&nbsp;		us1.setDipName(&quot;Dipartimento di Informatica&quot;);</b>
+<b class="fc">&nbsp;		us1.setRuolo(0);</b>
+<b class="fc">&nbsp;		us1.setBloccato(null);</b>
+<b class="fc">&nbsp;		us1.setVerificato(false);</b>
+<b class="fc">&nbsp;		InputStream stream1=new ByteArrayInputStream(&quot;&#39;Img&#39;&quot;.getBytes());</b>
+<b class="fc">&nbsp;		Blob b1=new SerialBlob(stream1.readAllBytes());</b>
+<b class="fc">&nbsp;		us1.setImg(b1);</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doSave(us1);</b>
+<b class="fc">&nbsp;		} catch (SQLException e) {</b>
+<b class="fc">&nbsp;			flag = true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoSaveNull() throws SQLException {
+<b class="fc">&nbsp;		assertThrows(NullPointerException.class, ()-&gt;{userModel.doSave(null);});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//TEST manageBan()
+&nbsp;	@Test
+&nbsp;	public void testManageBanDatiValidi() throws Exception {
+<b class="fc">&nbsp;		userModel.manageBan(&quot;sime00&quot;,Date.valueOf(&quot;2023-12-15&quot;));</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBan.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Verificato&quot;).toString(), tbactual.getValue(i, &quot;Verificato&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Bloccato&quot;).toString(),tbactual.getValue(i, &quot;Bloccato&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanDataNonValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;sime00&quot;,Date.valueOf(&quot;2022-01-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanDataNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;sime00&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNonPresente() throws Exception {
+<b class="fc">&nbsp;		userModel.manageBan(&quot;despacito&quot;,Date.valueOf(&quot;2023-12-15&quot;));</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBanUsernameNonPresente.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNonPresenteDataNonValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;despacito&quot;,Date.valueOf(&quot;2022-01-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNonPresenteDataNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;despacito&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameVuotoDataValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;&quot;,Date.valueOf(&quot;2022-03-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameVuotoDataNonValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;&quot;,Date.valueOf(&quot;2022-01-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameVuotoDataNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNullDataValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(null,Date.valueOf(&quot;2022-03-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNullDataNonValida() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(null,Date.valueOf(&quot;2022-01-15&quot;));</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testManageBanUsernameNullDataNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.manageBan(null,null);</b>
+<b class="fc">&nbsp;		}catch(IllegalArgumentException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoUpdateBloccatoUsername() throws Exception {
+<b class="fc">&nbsp;		String username = &quot;califano87&quot;;</b>
+<b class="fc">&nbsp;		Timestamp blockdate = Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;);</b>
+<b class="fc">&nbsp;		userModel.doUpdateBloccato(username, blockdate);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBloccatoUpdate.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected = new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual = new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Bloccato&quot;).toString(),tbactual.getValue(i, &quot;Bloccato&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoUpdateBloccatoEmail() throws Exception{
+<b class="fc">&nbsp;		String email = &quot;califano87@gmail.com&quot;;</b>
+<b class="fc">&nbsp;		Timestamp blockdate = Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;);</b>
+<b class="fc">&nbsp;		userModel.doUpdateBloccato(email, blockdate);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBloccatoUpdate.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected = new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual = new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Bloccato&quot;).toString(),tbactual.getValue(i, &quot;Bloccato&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;	@Test(expected = SQLException.class)
+&nbsp;	public void testDoUpdateBloccatoNotExistingUsername() throws Exception {
+<b class="fc">&nbsp;		String username = &quot;pip&quot;;</b>
+<b class="fc">&nbsp;		Timestamp blockdate = Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;);</b>
+<b class="fc">&nbsp;		userModel.doUpdateBloccato(username, blockdate);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBloccatoUpdate.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected = new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual = new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Bloccato&quot;).toString(),tbactual.getValue(i, &quot;Bloccato&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;	@Test(expected = SQLException.class)
+&nbsp;	public void testDoUpdateBloccatoNotExistingEmail() throws Exception {
+<b class="fc">&nbsp;		String email = &quot;a@aasdasdasd.aa&quot;;</b>
+<b class="fc">&nbsp;		Timestamp blockdate = Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;);</b>
+<b class="fc">&nbsp;		userModel.doUpdateBloccato(email, blockdate);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedBloccatoUpdate.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected = new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual = new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Bloccato&quot;).toString(),tbactual.getValue(i, &quot;Bloccato&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoUpdateBloccatoEmptyUsernameOrEmail() throws IllegalArgumentException {
+<b class="fc">&nbsp;		assertThrows(IllegalArgumentException.class, () -&gt; {userModel.doUpdateBloccato(&quot;&quot;, Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;));});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoUpdateBloccatoNullUsernameOrEmail() throws NullPointerException {
+<b class="fc">&nbsp;		assertThrows(IllegalArgumentException.class, () -&gt; {userModel.doUpdateBloccato(null, Timestamp.valueOf(&quot;2023-12-25 00:00:00.0&quot;));});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void testDoUpdateUsernameOrEmailWithInvalidDate() throws NullPointerException {
+<b class="fc">&nbsp;		assertThrows(IllegalArgumentException.class, () -&gt; {userModel.doUpdateBloccato(&quot;califano87&quot;, null);});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doUpdateCoin()
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinDatiValidi() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateCoin(&quot;sime00&quot;,1500);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedCoin.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinNegativi() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(&quot;sime00&quot;,-1);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinUsernameNonPresente() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateCoin(&quot;despacito&quot;,1500);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedCoinUsNotPresent.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinNegativiUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(&quot;despacito&quot;,-1);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(&quot;&quot;,10);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinUsernameVuotoCoinNegativi() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(&quot;&quot;,-10);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(null,10);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateCoinUsernameNullCoinNegativi() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateCoin(null,-10);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doUpdatePassword()
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePassword() throws Exception {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+<b class="fc">&nbsp;		userModel.doUpdatePassword(&quot;sime00&quot;,&quot;Sime2&quot;);</b>
+<b class="nc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedPass.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="nc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="nc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="nc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;sime00&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;sime00&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordUsernameNonPresente() throws Exception {//da errore perchè la funzione AES_ENCRYPT di MySql non è supportata da JUnit
+<b class="fc">&nbsp;		userModel.doUpdatePassword(&quot;despacito&quot;, &quot;Sime2&quot;);</b>
+<b class="nc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedPassUsNotPresent.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="nc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="nc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="nc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="nc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="nc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordVuotaUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;despacito&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordNullUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;despacito&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;&quot;,&quot;Sime2&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordVuotaUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordNullUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(null,&quot;Sime2&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordVuotaUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(null, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdatePasswordNullUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdatePassword(null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doUpdateEmail()
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmail() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateEmail(&quot;sime00&quot;, &quot;sime00@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedEmail.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailVuota() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;sime00&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;sime00&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailUsernameNonPresente() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateEmail(&quot;despacito&quot;, &quot;sime00@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedEmailUsNotPresent.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailVuotaUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;despacito&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailNullUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;despacito&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;&quot;,&quot;sime00@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailVuotaUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailNullUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=true;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=true;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(null,&quot;sime00@gmail.com&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailVuotaUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(null,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateEmailNullUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateEmail(null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEST doUpdateDepartment()
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartment() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedDepartment.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniVuota() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;Dipartimento di ingegneria&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniVuota() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,null,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniVuota() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,null,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;sime00&quot;,null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedDepartmentUsNotPresent.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniVuotaUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniNullUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;Dipartimento di ingegneria&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniVuotaUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniNullUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUserNotPresent() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,null,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniVuotaUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,null,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniNullUserNotPresent() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;despacito&quot;,null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniVuotaUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;Dipartimento di ingegneria&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniNullUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;Dipartimento di ingegneria&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniVuotaUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniNullUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUserVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,null,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniVuotaUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,null,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniNullUserVuoto() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(&quot;&quot;,null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;Dipartimento di ingegneria&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniVuotaUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;Dipartimento di ingegneria&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentUniNullUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;Dipartimento di ingegneria&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;&quot;,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniVuotaUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;&quot;,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentVuotoUniNullUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,&quot;&quot;,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUserNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,null,&quot;Unina&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniVuotaUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,null,&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateDepartmentNullUniNullUserNull() throws Exception {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.doUpdateDepartment(null,null,null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	//TEst doUpdateImage()
+&nbsp;	@Test 
+&nbsp;	public void testDoUpdateImage() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateImage(&quot;sime00&quot;, new ByteArrayInputStream(&quot;&#39;newImg&#39;&quot;.getBytes()));</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedImage.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(&quot;sime00&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test 
+&nbsp;	public void testDoUpdateImageUserNonPresente() throws Exception {
+<b class="fc">&nbsp;		userModel.doUpdateImage(&quot;despacito&quot;, new ByteArrayInputStream(&quot;&#39;newImg&#39;&quot;.getBytes()));</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedImageUserNotPresent.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		Assertion.assertEquals(new SortedTable(expected),new SortedTable(actual));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageNullUserNonPresente() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(&quot;despacito&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageUserVuoto() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(&quot;&quot;, new ByteArrayInputStream(&quot;&#39;newImg&#39;&quot;.getBytes()));</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageNullUserVuoto() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(&quot;&quot;, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageUserNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(null, new ByteArrayInputStream(&quot;&#39;newImg&#39;&quot;.getBytes()));</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateImageNullUserNull() throws Exception{
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try{
+<b class="fc">&nbsp;			userModel.doUpdateImage(null, null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//Test doUpdateVerificato() CR2
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateVerificatoOK() throws Exception{
+<b class="fc">&nbsp;		userModel.doUpdateVerificato(&quot;fry@gmail.com&quot;, true);</b>
+<b class="fc">&nbsp;		ITable expected =new FlatXmlDataSetBuilder().build(this.getClass().getClassLoader().getResourceAsStream(&quot;db/expected/UtenteExpectedVerificato.xml&quot;)).getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		ITable actual=this.getConnection().createDataSet().getTable(&quot;Utente&quot;);</b>
+<b class="fc">&nbsp;		SortedTable tbexpected=new SortedTable(expected);</b>
+<b class="fc">&nbsp;		SortedTable tbactual=new SortedTable(actual);</b>
+<b class="fc">&nbsp;		assertEquals(tbexpected.getRowCount(), tbactual.getRowCount());</b>
+<b class="fc">&nbsp;		for(int i=0;i&lt;tbexpected.getRowCount();i++) {</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Username&quot;), tbactual.getValue(i, &quot;Username&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Nome&quot;), tbactual.getValue(i, &quot;Nome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Cognome&quot;), tbactual.getValue(i, &quot;Cognome&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Email&quot;), tbactual.getValue(i, &quot;Email&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Pass&quot;), tbactual.getValue(i, &quot;Pass&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;DataNascita&quot;).toString(),tbactual.getValue(i, &quot;DataNascita&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Coin&quot;).toString(), tbactual.getValue(i, &quot;Coin&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ban&quot;).toString(), tbactual.getValue(i, &quot;Ban&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Denominazione&quot;), tbactual.getValue(i, &quot;Denominazione&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;dipName&quot;), tbactual.getValue(i, &quot;dipName&quot;));</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Ruolo&quot;).toString(), tbactual.getValue(i, &quot;Ruolo&quot;).toString());</b>
+<b class="fc">&nbsp;			assertEquals(tbexpected.getValue(i, &quot;Verificato&quot;).toString(), tbactual.getValue(i, &quot;Verificato&quot;).toString()); //CR2</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test(expected = SQLException.class)
+&nbsp;	public void testDoUpdateVerificatoUtenteNonPresente() throws Exception{
+<b class="fc">&nbsp;		userModel.doUpdateVerificato(&quot;prova@gmail.com&quot;, true);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateVerificatoUtenteNull() throws Exception{
+<b class="fc">&nbsp;		assertThrows(IllegalArgumentException.class, ()-&gt;{userModel.doUpdateVerificato(null, true);});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testDoUpdateVerificatoUtenteEmpty() throws Exception{
+<b class="fc">&nbsp;		assertThrows(IllegalArgumentException.class, ()-&gt;{userModel.doUpdateVerificato(&quot;&quot;, true);});</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	//TEST getValutazione()
+&nbsp;	@Test
+&nbsp;	public void testGetValutazioneUsernamePresente() throws SQLException {
+<b class="fc">&nbsp;		float valutazione=userModel.getValutazione(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(valutazione, 5.0F);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetValutazioneUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		float valutazione=userModel.getValutazione(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(valutazione, -1.0F);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetValutazioneUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.getValutazione(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetValutazioneUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.getValutazione(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;	//TEST getRole()
+&nbsp;	@Test
+&nbsp;	public void testGetRoleUsernamePresente() throws SQLException {
+<b class="fc">&nbsp;		int role=userModel.getRole(&quot;sime00&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(role, 0);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetRoleUsernameNonPresente() throws SQLException {
+<b class="fc">&nbsp;		int role=userModel.getRole(&quot;despacito&quot;);</b>
+<b class="fc">&nbsp;		assertEquals(role, -1);</b>
+&nbsp;
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetRoleUsernameVuoto() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.getRole(&quot;&quot;);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Test
+&nbsp;	public void testGetRoleUsernameNull() throws SQLException {
+<b class="fc">&nbsp;		boolean flag=false;</b>
+&nbsp;		try {
+<b class="fc">&nbsp;			userModel.getRole(null);</b>
+<b class="fc">&nbsp;		}catch(NullPointerException e) {</b>
+<b class="fc">&nbsp;			flag=true;</b>
+<b class="nc">&nbsp;		}</b>
+<b class="fc">&nbsp;		assertTrue(flag);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

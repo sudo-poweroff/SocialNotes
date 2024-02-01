@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ModificaImmagineTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">profilosistema</a>
+</div>
+
+<h1>Coverage Summary for Class: ModificaImmagineTest (profilosistema)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ModificaImmagineTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (34/34)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package profilosistema;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.After;
+&nbsp;import static org.junit.Assert.*;
+&nbsp;import static org.hamcrest.CoreMatchers.is;
+&nbsp;import org.openqa.selenium.By;
+&nbsp;import org.openqa.selenium.WebDriver;
+&nbsp;import org.openqa.selenium.chrome.ChromeOptions;
+&nbsp;import org.openqa.selenium.chrome.ChromeDriver;
+&nbsp;import org.openqa.selenium.Dimension;
+&nbsp;import org.openqa.selenium.WebElement;
+&nbsp;import org.openqa.selenium.JavascriptExecutor;
+&nbsp;import org.openqa.selenium.Keys;
+&nbsp;import java.util.*;
+<b class="fc">&nbsp;public class ModificaImmagineTest {</b>
+&nbsp;  private WebDriver driver;
+&nbsp;  private Map&lt;String, Object&gt; vars;
+&nbsp;  JavascriptExecutor js;
+&nbsp;  @Before
+&nbsp;  public void setUp() {
+<b class="fc">&nbsp;    System.setProperty(&quot;webdriver.chrome.driver&quot;,&quot;test/materialesistema/chromedriver.exe&quot;);</b>
+&nbsp;    //System.setProperty(&quot;webdriver.chrome.driver&quot;,&quot;test/materialesistema/chromedriver.exe&quot;);
+<b class="fc">&nbsp;    driver = new ChromeDriver(new ChromeOptions().addArguments(&quot;--remote-allow-origins=*&quot;));</b>
+<b class="fc">&nbsp;    js = (JavascriptExecutor) driver;</b>
+&nbsp;  }
+&nbsp;  @After
+&nbsp;  public void tearDown() {
+<b class="fc">&nbsp;    driver.quit();</b>
+&nbsp;  }
+&nbsp;  @Test
+&nbsp;  public void testModificaImmagineImgNonValida() {
+<b class="fc">&nbsp;    driver.get(&quot;http://127.0.0.1:8080/SocialNotes/&quot;);</b>
+<b class="fc">&nbsp;    driver.manage().window().setSize(new Dimension(1936, 1056));</b>
+<b class="fc">&nbsp;    driver.findElement(By.linkText(&quot;Accedi&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputEmail&quot;)).sendKeys(&quot;califano03&quot;);</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputPassword&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(&quot;Califano03&quot;);</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(Keys.ENTER);</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.bi-person-lines-fill&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.linkText(&quot;Modifica profilo&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.editable-main-row .grid__item &gt; .btn&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;p:nth-child(1)&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;picture&quot;)).sendKeys(&quot;C:\\fakepath\\Lezione03_06_2020.pdf&quot;);</b>
+<b class="fc">&nbsp;    assertThat(driver.switchTo().alert().getText(), is(&quot;Tipo del file non valido&quot;));</b>
+&nbsp;  }
+&nbsp;  @Test
+&nbsp;  public void testModificaImmagineImgValida() {
+<b class="fc">&nbsp;    driver.get(&quot;http://127.0.0.1:8080/SocialNotes/&quot;);</b>
+<b class="fc">&nbsp;    driver.manage().window().setSize(new Dimension(1936, 1056));</b>
+<b class="fc">&nbsp;    driver.findElement(By.linkText(&quot;Accedi&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputEmail&quot;)).sendKeys(&quot;califano03&quot;);</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(&quot;Califano03&quot;);</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;inputPassword&quot;)).sendKeys(Keys.ENTER);</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;navbarDropdown&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.bi-person-lines-fill&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.bi-person-lines-fill&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.linkText(&quot;Modifica profilo&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.editable-main-row .grid__item &gt; .btn&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;p:nth-child(1)&quot;)).click();</b>
+<b class="fc">&nbsp;    driver.findElement(By.id(&quot;picture&quot;)).sendKeys(&quot;C:\\fakepath\\unisa.png&quot;);</b>
+<b class="fc">&nbsp;    driver.findElement(By.cssSelector(&quot;.btn--primary&quot;)).click();</b>
+&nbsp;    {
+<b class="fc">&nbsp;      List&lt;WebElement&gt; elements = driver.findElements(By.cssSelector(&quot;.alert&quot;));</b>
+<b class="fc">&nbsp;      assert(elements.size() &gt; 0);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>

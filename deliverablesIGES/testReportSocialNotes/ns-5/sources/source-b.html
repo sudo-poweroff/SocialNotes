@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FileUploadServlet</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">materiale</a>
+</div>
+
+<h1>Coverage Summary for Class: FileUploadServlet (materiale)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileUploadServlet</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/68)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package materiale;
+&nbsp;
+&nbsp;import java.io.*;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.ServletContext;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.annotation.MultipartConfig;
+&nbsp;import javax.servlet.annotation.WebServlet;
+&nbsp;import javax.servlet.http.HttpServlet;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import javax.servlet.http.Part;
+&nbsp;import javax.sql.DataSource;
+&nbsp;
+&nbsp;@WebServlet(&quot;/FileUploadServlet&quot;)
+&nbsp;@MultipartConfig(maxFileSize = 1024*1024*50)  
+<b class="nc">&nbsp;public class FileUploadServlet extends HttpServlet {</b>
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * 
+&nbsp;	 */
+&nbsp;	private static final long serialVersionUID = -4001419296020204828L;
+&nbsp;
+&nbsp;	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+&nbsp;		// gets values of text fields
+&nbsp;		//String description = request.getParameter(&quot;Descrizione&quot;);
+<b class="nc">&nbsp;		HttpSession session=request.getSession(true);</b>
+<b class="nc">&nbsp;		if(session.getAttribute(&quot;username&quot;)==null) {</b>
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/login.jsp&quot;);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		InputStream is = null; // input stream of the upload file</b>
+&nbsp;
+&nbsp;		// obtains the upload file part in this multipart request
+<b class="nc">&nbsp;		MaterialBean material=new MaterialBean();</b>
+<b class="nc">&nbsp;		Part filePart = request.getPart(&quot;Contenuto&quot;);</b>
+<b class="nc">&nbsp;		if (filePart != null) {</b>
+&nbsp;			//salvataggio del file nella cartella del server
+<b class="nc">&nbsp;			String relativePath=&quot;WebContent\\material\\&quot;;</b>
+<b class="nc">&nbsp;			ServletContext context = request.getServletContext();</b>
+<b class="nc">&nbsp;			String absolutePath = context.getRealPath(&quot;&quot;);</b>
+<b class="nc">&nbsp;			String[] path=absolutePath.split(&quot;\\\\&quot;);</b>
+<b class="nc">&nbsp;			String effectivePath=&quot;&quot;;</b>
+<b class="nc">&nbsp;			for(int i=0;i&lt;path.length-3;i++)</b>
+<b class="nc">&nbsp;				effectivePath+=path[i]+&quot;\\&quot;;</b>
+<b class="nc">&nbsp;			effectivePath+=relativePath;</b>
+<b class="nc">&nbsp;			File directory = new File(effectivePath);</b>
+&nbsp;
+&nbsp;			//ottengo il numero di file salvati nella directory per evitare di avere errori in fase di salvataggio dovuti a file con lo stesso nome
+<b class="nc">&nbsp;			int fileCount=0;</b>
+<b class="nc">&nbsp;			if (directory.exists() &amp;&amp; directory.isDirectory()) {</b>
+<b class="nc">&nbsp;				File[] files = directory.listFiles();</b>
+<b class="nc">&nbsp;				fileCount = files.length;</b>
+<b class="nc">&nbsp;				fileCount++;</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			//ottengo il nome del file e lo salvo nella cartella del server
+<b class="nc">&nbsp;			String fileName = filePart.getSubmittedFileName();</b>
+<b class="nc">&nbsp;			fileName=fileName.substring(0,fileName.length()-4)+&quot;_&quot;+fileCount+&quot;.pdf&quot;;</b>
+<b class="nc">&nbsp;			String filePath = effectivePath + File.separator + fileName;</b>
+<b class="nc">&nbsp;			try (InputStream input = filePart.getInputStream();</b>
+<b class="nc">&nbsp;				 OutputStream output = new FileOutputStream(filePath)) {</b>
+&nbsp;
+<b class="nc">&nbsp;				byte[] buffer = new byte[1024];</b>
+&nbsp;				int length;
+<b class="nc">&nbsp;				while ((length = input.read(buffer)) &gt; 0) {</b>
+<b class="nc">&nbsp;					output.write(buffer, 0, length);</b>
+&nbsp;				}
+<b class="nc">&nbsp;			}</b>
+&nbsp;
+&nbsp;			//inserimento informazioni nel materialBean
+<b class="nc">&nbsp;			Date dataCaricamento = new Date(System.currentTimeMillis());</b>
+<b class="nc">&nbsp;			material.setDataCaricamento(dataCaricamento);</b>
+<b class="nc">&nbsp;			String descrizione=request.getParameter(&quot;Descrizione&quot;);</b>
+<b class="nc">&nbsp;			material.setDescrizione(descrizione);</b>
+<b class="nc">&nbsp;			material.setHidden(true);</b>
+&nbsp;
+&nbsp;			//ottengo la chiave esterna codiceCorso
+<b class="nc">&nbsp;			DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;			CourseModelDS course=new CourseModelDS(ds);</b>
+<b class="nc">&nbsp;			String nome=request.getParameter(&quot;Corso&quot;);</b>
+<b class="nc">&nbsp;			int codiceCorso=course.doRetrieveByName(nome);</b>
+<b class="nc">&nbsp;			if(codiceCorso==-1) {</b>
+<b class="nc">&nbsp;				CourseBean newCourse=new CourseBean();</b>
+<b class="nc">&nbsp;				newCourse.setNome(nome);</b>
+<b class="nc">&nbsp;				newCourse.setNomeDipartimento((String) session.getAttribute(&quot;dipName&quot;));</b>
+<b class="nc">&nbsp;				newCourse.setDenominazione((String) session.getAttribute(&quot;denominazione&quot;));</b>
+&nbsp;				try {
+<b class="nc">&nbsp;					course.doSave(newCourse);</b>
+<b class="nc">&nbsp;				} catch (SQLException e) {</b>
+<b class="nc">&nbsp;					e.printStackTrace();</b>
+<b class="nc">&nbsp;				}</b>
+<b class="nc">&nbsp;				codiceCorso=course.doRetrieveByName(nome);</b>
+&nbsp;			}
+&nbsp;			//continuo inserimento dati
+<b class="nc">&nbsp;			material.setCodiceCorso(codiceCorso);</b>
+<b class="nc">&nbsp;			material.setUsername((String)session.getAttribute(&quot;username&quot;));</b>
+<b class="nc">&nbsp;			material.setNomeFile(fileName);</b>
+&nbsp;
+&nbsp;		}
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;		DataSource ds=(DataSource)getServletContext().getAttribute(&quot;DataSource&quot;);</b>
+<b class="nc">&nbsp;		MaterialModelDS materialModel=new MaterialModelDS(ds);</b>
+&nbsp;		try {
+<b class="nc">&nbsp;			materialModel.doSave(material);</b>
+<b class="nc">&nbsp;			String success = &quot;Il materiale è stato caricato correttamente!&quot;;</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;success&quot;, success);</b>
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/homepage_user.jsp&quot;);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+&nbsp;		} 
+<b class="nc">&nbsp;		catch (SQLException e) {</b>
+<b class="nc">&nbsp;			String error = &quot;Spiacenti, la registrazione delle informazioni nel database non è andata a buon fine.&quot;;</b>
+<b class="nc">&nbsp;			request.setAttribute(&quot;error&quot;, error);</b>
+&nbsp;			//Mando una alert 
+<b class="nc">&nbsp;			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(&quot;/homepage_user.jsp&quot;);</b>
+<b class="nc">&nbsp;			dispatcher.forward(request, response);</b>
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;		} </b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-28 21:22</div>
+</div>
+</body>
+</html>
