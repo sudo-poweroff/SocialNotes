@@ -24,6 +24,13 @@ To run our website you should follow these steps:
 * Deploy the website on the Tomcat server;
 * Start the server and open your browser on the following URL: `http://localhost:8080/SocialNotes`
 
+## 🗒 Testing guide
+You can run tests on your IDE with standard test run configuration.
+Alternatively, to run tests you should follow these steps:
+* Locate `test/run_test.sh`;
+* Edit Java home, project directory and test class according to your configuration;
+* Execute the `test/run_test.sh` file.
+
 ## 👨🏻‍💻 Contributors
 <a href="https://github.com/sudo-poweroff/SocialNotes/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=sudo-poweroff/SocialNotes" />
