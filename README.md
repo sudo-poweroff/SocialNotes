@@ -8,11 +8,11 @@ For these reasons, SocialNotes was created to provide university students with a
 To install, compile, build, run and test our website you should have these requirements on your machine:
 * MySQL vers. = 8.1.0;
 * MySQLWorkbench (optional);
-* Java 11;
+* Java 19;
 * Tomcat vers. = 9.0.80;
 
 __Requirements for testing__:
-* JUnit 5;
+* JUnit 4.13.2;
 * Selenium IDE vers. = 3.17.2;
 * ChromeDriver vers. = 117.0.5938.92
 
